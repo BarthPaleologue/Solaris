@@ -266,6 +266,8 @@ h1 {
     display: none;
     z-index: 200;
     max-width: 90%;
+    top: 0;
+    left: 0;
 }
 
 #zoombox img {

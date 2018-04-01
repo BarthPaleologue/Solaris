@@ -61,7 +61,9 @@
         $("#qualcontrol img").on("click",function(e) {
             $("#zoombox img").attr("src",$(this).attr("src"));
             $("#download").attr("href",$(this).attr("src"));
-            $("#zoombox").fadeToggle(200,() => $("#zoombox").center());
+            $("#zoombox").fadeToggle(200);
+            $("#zoombox").center();
+            $("#zoombox").center();
             $("#download").animate({"bottom":"1%"},200);
             currentImage = $(this).index()+1;
         });
@@ -92,11 +94,10 @@
                 return this.each(function() {
                     var top = ($(window).height() - $(this).outerHeight()) / 2;
                     var left = ($(window).width() - $(this).outerWidth()) / 2;
-                    $(this).css({position:'absolute', margin:0, top: (top > 0 ? top : 0)+'px', left: (left > 0 ? left : 0)+'px'});
+                    $(this).css({position:'absolute', top: top+'px', left: left+'px'});
                 });
             }
         }); 
-         $("#zoombox").center();
 
     </script>
     <script>
