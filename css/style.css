@@ -596,6 +596,11 @@ nav li ul li ul {
     transform: scale(1);
 }
 
+#copyright img {
+    border-radius: 100%;
+    width: 60px;
+}
+
 #copyright:hover {
     opacity: 1;
     transform: scale(1.1);
