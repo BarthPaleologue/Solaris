@@ -11,6 +11,7 @@
     <meta name="description" content="" />
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
     <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../common-style.css" />
     <link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
     <style>
         #name {font-size:150% !important}
