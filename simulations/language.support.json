@@ -1,0 +1,64 @@
+{
+    "en": {
+        /// TOOLBAR
+        "dg": "Disable Godrays [G]",
+        "eg": "Enable Godrays [G]",
+        "efxaa": "Enable FXAA [F]",
+        "dfxaa": "Disable FXAA [F]",
+        "ts": "Take a Screenshot [P]",
+        "el": "Show labels [N]",
+        "dl": "Hide labels [N]",
+        "eo": "Show orbits [O]",
+        "do": "Disable orbits [O]",
+        "ea": "Show asteroids [H]",
+        "da": "Hide asteroids [H]",
+        /// INFO
+        "bt": "to the Sun",
+        "nt": "to ",
+        "cncl": "Cancel",
+        "dne": "Done",
+        /// SETTINGS
+        "st": "Settings",
+        "wp": "Wheel precision",
+        "fs": "Free mode speed",
+        "s": "Mouse sensibility",
+        "mt": "Time speed",
+        "trs": "Transition speed",
+        "ctr": "Contrast",
+        /// LOADING
+        "tg": " objects to load...",
+        "ca": " is loading",
+        "ln": "Launching"
+    },
+    "fr": {
+        /// TOOLBAR
+        "dg": "Désactiver Godrays [G]",
+        "eg": "Activer Godrays [G]",
+        "efxaa": "Activer FXAA [F]",
+        "dfxaa": "Désactiver FXAA [F]",
+        "ts": "Faire une capture d'écran [P]",
+        "el": "Afficher les noms des astres [N]",
+        "dl": "Cacher les noms des astres [N]",
+        "eo": "Afficher orbites [O]",
+        "do": "Cacher orbites [O]",
+        "ea": "Afficher les astéroides [H]",
+        "da": "Masquer les astéroides [H]",
+        /// INFO
+        "bt": "au Soleil",
+        "nt": "à ",
+        "cncl": "Annuler",
+        "dne": "Appliquer",
+        /// SETTINGS
+        "st": "Paramètres",
+        "wp": "Précision de la roulette",
+        "fs": "Vitesse en mode libre",
+        "s": "Sensibilité de la souris",
+        "mt": "Vitesse du temps",
+        "trs": "Vitesse des transitions",
+        "ctr": "Contraste",
+        /// LOADING
+        "tg": "  objets à charger restants",
+        "ca": " est en train de charger",
+        "ln": "Lancement"
+    }
+}

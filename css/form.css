@@ -1,0 +1,88 @@
+form {
+    width: 70%;
+    overflow: auto;
+    height: 75%;
+    margin: 0 auto;
+    line-height: 2em;
+    overflow-x: hidden;
+}
+
+form input[type="email"],
+form textarea {
+    max-width: 95%;
+    min-width: 95%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #55595c;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 3px;
+}
+
+form textarea {
+    font-family: sans-serif;
+    min-height: 200px;
+    max-height: 200px;
+}
+
+input[type="submit"],
+input[type="reset"] {
+    color: #fff;
+    background: #0275d8;
+    border-color: #0275d8;
+    display: inline-block;
+    line-height: 1.25;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    margin-top: 15px;
+    transition: background 0.5s;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background: #025aa5;
+}
+
+label,
+form p {
+    color: white;
+    font-family: space;
+}
+
+h1 {
+    line-height: 2em;
+}
+
+.success,
+.alert {
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    right: 20%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-family: Space;
+    padding: 20px;
+}
+
+.alert {
+    background-color: #f44336;
+}
+
+.success {
+    background-color: #4CAF50;
+}
+
+strong {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: normal;
+    letter-spacing: .2em;
+}

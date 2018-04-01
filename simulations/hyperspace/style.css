@@ -1,0 +1,33 @@
+#info {
+    display: none;
+}
+
+#menu>li,
+#menu li ul {
+    width: 19.7%;
+}
+
+#engage p {
+    background: rgba(0, 0, 128, .9) !important;
+    color: white;
+    transition: .5s;
+}
+
+#engage p:hover {
+    background: rgba(0, 0, 128, .2) !important;
+}
+
+@media screen and (max-width:1170px) {
+    #menu>li:not(#exit):not(#engage) * {
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    #exit,
+    #engage {
+        width: 39% !important;
+    }
+    #engage {
+        width: 59% !important;
+    }
+}

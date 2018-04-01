@@ -1,0 +1,28 @@
+#info {
+    display: none;
+}
+
+#name {
+    letter-spacing: 0.15em;
+    vertical-align: middle;
+}
+
+@media screen and (min-width:1100px) {
+    #menu>li,
+    #menu li ul {
+        width: 16.4%;
+    }
+}
+
+@media screen and (max-width:1100px) {
+    #menu>li:not(#exit):not(#astras),
+    #date {
+        display: none !important;
+        width: 0%;
+        height: 0%;
+    }
+    #exit,
+    #astras {
+        width: 49% !important;
+    }
+}
