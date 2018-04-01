@@ -96,6 +96,7 @@
                 });
             }
         }); 
+         $("#zoombox").center();
 
     </script>
     <script>
