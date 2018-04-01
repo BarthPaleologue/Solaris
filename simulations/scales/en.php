@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
     <style>
-        #name {font-size:170%}
+        #name {font-size:170% !important}
     </style>
     <?php
         $compteur = fopen("../../compteur.txt","r+");
