@@ -831,6 +831,7 @@ function createScene(quality = "high") {
 
         assetsManager.onFinish = tasks => { /// Quand les assets sont prêts
             $("#titre, #loading, #visite").fadeOut(); /// On supprime le GUI de loading
+            $("#info").remove();
             $("#loading .text").text(TEXT[lang].ln); /// On display un Lancement
             $("#loading .point").text("..."); /// +...
             scene.executeWhenReady(() => { /// Quand la scène est prête
@@ -881,6 +882,5 @@ $("#binfos").on("click", e => $("#infos").slideToggle(100));
 $('#infos,#setters').draggable();
 $("#full-exit").fadeOut();
 $("#fps").fadeOut();
-$("#info").remove();
 
 ///// Copyright © 2015 Projet Solaris - N° de dépôt 764IS3 ///////////////////////////////////////////////////////////////////////////
