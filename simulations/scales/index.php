@@ -12,7 +12,9 @@
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
-    <link rel="stylesheet" href="../solaris/style.css" />
+    <style>
+        #name {font-size:170%}
+    </style>
     <?php
         $compteur = fopen("../../compteur.txt","r+");
         $visites = fgets($compteur);
