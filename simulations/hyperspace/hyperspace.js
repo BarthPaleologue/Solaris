@@ -260,5 +260,3 @@ $("#views").hover(e => $("#cam-list").slideToggle(100));
 $("#settings").on("click", e => $("#setters").slideToggle());
 $("#full-exit").fadeOut();
 $("#info").remove();
-
-///// Copyright © 2015 Projet Solaris - N° de dépôt 764IS3 ////////////////////////////////////////////////////////////////////////////

@@ -593,5 +593,3 @@ $('#infos,#setters').draggable();
 $("#full-exit").fadeOut();
 $("#fps").fadeOut();
 $("#info").remove();
-
-///// Copyright © 2015 Projet Solaris - N° de dépôt 764IS3 ////////////////////////////////////////////////////////////////////////////

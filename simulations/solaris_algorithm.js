@@ -882,5 +882,3 @@ $("#binfos").on("click", e => $("#infos").slideToggle(100));
 $('#infos,#setters').draggable();
 $("#full-exit").fadeOut();
 $("#fps").fadeOut();
-
-///// Copyright © 2015 Projet Solaris - N° de dépôt 764IS3 ///////////////////////////////////////////////////////////////////////////

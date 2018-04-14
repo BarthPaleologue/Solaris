@@ -4,11 +4,11 @@
 
 <head>
     <?php echo("<style>body{background:url('bg/background".rand(1,count(glob('bg/*.*'))).".png');}</style>");?>
-    <title>Projet Solaris - Simulations Stellaires en 3D WebGL</title>
+    <title>Projet Solaris - Simulations Spatiales en 3D WebGL</title>
     <meta charset="utf-8" />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="Cache-control" content="public">
-    <meta name="description" content="Le Projet Solaris est une collection de simulations stellaires 3D online qui vous permettent d'explorer l'espace comme si vous y étiez !" />
+    <meta name="description" content="Le Projet Solaris est une collection de simulations spatiales 3D online qui vous permettent d'explorer l'espace comme si vous y étiez !" />
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel="dns-prefetch" href="http://www.copyright01.com/">
     <link rel="dns-prefetch" href="http://www.twitter.com/">
