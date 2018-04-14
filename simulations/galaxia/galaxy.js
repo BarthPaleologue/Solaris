@@ -236,25 +236,27 @@ function createGalaxy(nb) {
 
     $("#tscreen").on("click", e => BABYLON.Tools.CreateScreenshotUsingRenderTarget(engine, scene.activeCamera, { precision: 1 }));
 
+    function switchTo(newCamera) { /// fonction permettant de switch de caméra facilement
+        scene.activeCamera.detachControl(canvas);
+        newCamera.attachControl(canvas);
+        scene.activeCamera = newCamera;
+        zoomOn = true;
+    }
+
     $("#free").on("click", e => {
-        e.preventDefault();
-        scene.activeCamera = camfree;
-        camfree.attachControl(canvas);
+        switchTo(camfree);
         $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
     });
     $("#freed").on("click", e => {
-        e.preventDefault();
-        scene.activeCamera = camfreed;
-        camfreed.attachControl(canvas);
+        switchTo(camfreed);
         $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
     });
     $("#plan").on("click", e => {
-        scene.activeCamera = camAstras;
+        switchTo(camAstras);
         camAstras.attachControl(canvas);
     });
     $("#pland").on("click", e => {
-        scene.activeCamera = camAstrasd;
-        camAstrasd.attachControl(canvas);
+        switchTo(camAstrasd);
         camAstrasd.radius = camAstras.radius;
         camAstrasd.position = camAstras.position;
     });

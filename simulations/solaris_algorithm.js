@@ -479,7 +479,7 @@ function createScene(quality = "high") {
 
         $("#tscreen").on("click", e => BABYLON.Tools.CreateScreenshotUsingRenderTarget(engine, scene.activeCamera, { precision: 1 })); // Screenshot avec la caméra active
 
-        function swithTo(newCamera) { /// fonction permettant de switch de caméra facilement
+        function switchTo(newCamera) { /// fonction permettant de switch de caméra facilement
             scene.activeCamera.detachControl(canvas);
             newCamera.attachControl(canvas);
             scene.activeCamera = newCamera;
@@ -487,19 +487,19 @@ function createScene(quality = "high") {
         }
 
         $("#free").on("click", e => { // Switch sur la caméra libre
-            swithTo(camfree);
+            switchTo(camfree);
             $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
         });
         $("#freed").on("click", e => { // Switch sur la caméra libre anaglyphe
-            swithTo(camfreed);
+            switchTo(camfreed);
             $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
         });
         $("#freevr").on("click", e => { // Switch sur la caméra libre VR
-            swithTo(camfreeVR);
+            switchTo(camfreeVR);
             $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
         });
-        $("#plan").on("click", e => swithTo(camAstras)); // Swicth sur la caméra planétaire
-        $("#pland").on("click", e => swithTo(camAstrasd)); // Switch sur la caméra planétaire anaglyphe
+        $("#plan").on("click", e => switchTo(camAstras)); // Swicth sur la caméra planétaire
+        $("#pland").on("click", e => switchTo(camAstrasd)); // Switch sur la caméra planétaire anaglyphe
 
         /// Slider gérant la précision du zoom de la roulette de la caméra planétaire   
         var modiCam = .5 * scale;

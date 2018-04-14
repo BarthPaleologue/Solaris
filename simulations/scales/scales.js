@@ -250,7 +250,7 @@ function createScales(quality) {
             }
         });
 
-        function swithTo(newCamera) {
+        function switchTo(newCamera) {
             scene.activeCamera.detachControl(canvas);
             newCamera.attachControl(canvas);
             scene.activeCamera = newCamera;
@@ -258,15 +258,15 @@ function createScales(quality) {
         }
 
         $("#free").on("click", e => {
-            swithTo(camfree);
+            switchTo(camfree);
             $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
         });
         $("#freed").on("click", e => {
-            swithTo(camfreed);
+            switchTo(camfreed);
             $("#zqsd").fadeIn(1000, () => setTimeout(() => $("#zqsd").fadeOut(1000), 1500));
         });
-        $("#plan").on("click", e => swithTo(camAstras));
-        $("#pland").on("click", e => swithTo(camAstrasd));
+        $("#plan").on("click", e => switchTo(camAstras));
+        $("#pland").on("click", e => switchTo(camAstrasd));
 
         var SPEED = 100 * scale * freeSpeedCoeff; /// Vitesse des caméras libres
 
