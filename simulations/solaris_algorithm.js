@@ -225,7 +225,7 @@ function createScene(quality = "high") {
 
     function addRingsTo(astre, texture, size, angleX, angleZ, alpha, scene) { // ajouter des anneaux à un astre
         let rings = new BABYLON.Mesh.CreateGround("ringsOf" + astre, size * scale, size * scale, 2, scene);
-        createMat("ringMatOf" + astre, rings, "../data/" + texture, "diffuse", true, scene);
+        createMat("ringMatOf" + astre, rings, "../data/rings/" + texture, "diffuse", true, scene);
         rings.material.specularColor = new BABYLON.Color3(1, 1, 1);
         rings.material.emissiveColor = new BABYLON.Color3(.6, .6, .6);
         rings.material.backFaceCulling = false;
@@ -239,7 +239,7 @@ function createScene(quality = "high") {
         let diametre = astres[getIndexOf(astre)].diametre * 1.005; // diamètre légèrement supérieur
         let clouds = new BABYLON.Mesh.CreateSphere("atmosphereOf" + astre, 32, diametre, scene);
         let cloudMat = new BABYLON.StandardMaterial("cloudMatOf" + astre, scene);
-        cloudMat.opacityTexture = new BABYLON.Texture("../data/" + texture, scene);
+        cloudMat.opacityTexture = new BABYLON.Texture("../data/atm/" + texture, scene);
         cloudMat.opacityTexture.getAlphaFromRGB = true;
         //cloudMat.backFaceCulling = false;
 
@@ -256,7 +256,7 @@ function createScene(quality = "high") {
 
     function createPulsar(astre, emitRate = 20000) { // créer un jet d'émission aux pôles d'un astre tel un pulsar
         let particleSystem = new BABYLON.ParticleSystem("particlesOf" + astre.id, 100000, scene);
-        particleSystem.particleTexture = new BABYLON.Texture("../data/flare.png", scene);
+        particleSystem.particleTexture = new BABYLON.Texture("../data/particles/flare.png", scene);
         particleSystem.emitter = astre; // objet émétteur
         particleSystem.minEmitBox = new BABYLON.Vector3(-.2, 0, 0); // Définition de
         particleSystem.maxEmitBox = new BABYLON.Vector3(.2, 0, 0); // la zone d'apparition
@@ -322,7 +322,7 @@ function createScene(quality = "high") {
         astre.rotation.z = astres[i].angularSelf * Math.PI / 180 + Math.PI; // inclinaison de l'astre
         addLabel(astre, astres[i].parent); // ajout d'une étiquette à l'astre
         createMat(astres[i].name + "Material", scene.getMeshByID(astres[i].name), "../data/" + astres[i].texture, astres[i].textureType, false, scene); // création du matériel pour l'astre
-        if (isDefined(astres[i].specular)) astre.material.specularTexture = new BABYLON.Texture("../data/" + astres[i].specular, scene); // si texture de reflet en plus
+        if (isDefined(astres[i].specular)) astre.material.specularTexture = new BABYLON.Texture("../data/specular/" + astres[i].specular, scene); // si texture de reflet en plus
         if (isDefined(astres[i].emissive)) { // si texture d'émission en plus
             astre.material.emissiveTexture = new BABYLON.Texture("../data/" + astres[i].emissive, scene);
             astre.material.emissiveTexture.level = .5; // pas trop fort quand même
@@ -366,8 +366,8 @@ function createScene(quality = "high") {
         if (isDefined(astres[i].atm)) addAtmosphereTo(astres[i].name, astres[i].atm.texture, astres[i].atm.opacity, scene); // on ajoute une atmosphère si besoin
 
         if (i >= beginNavIndex) { // si l'astre est navigable
-            if (!isDefined(astres[i].parent)) $("#astra-list").append("<div id='" + astres[i].name + "' class='planete'><img src='../../icons/" + astres[i].icon + "'/><p>" + astres[i].name + "</p></div>"); // si c'est une planète
-            else $("#astra-list").append("<div id='" + astres[i].name + "' class='satellite'><img src='../../icons/" + astres[i].icon + "'/><p>" + astres[i].name + "</p></div>"); // si c'est un satellite
+            if (!isDefined(astres[i].parent)) $("#astra-list").append("<div id='" + astres[i].name + "' class='planete'><img src='../data/icons/" + astres[i].icon + "'/><p>" + astres[i].name + "</p></div>"); // si c'est une planète
+            else $("#astra-list").append("<div id='" + astres[i].name + "' class='satellite'><img src='../data/icons/" + astres[i].icon + "'/><p>" + astres[i].name + "</p></div>"); // si c'est un satellite
         }
 
         $("#loading .text").html(Math.round(((parseInt(i) + 1) / (astres.length + belts.length)) * 100) + "%"); // on affiche la progression du chargement en %

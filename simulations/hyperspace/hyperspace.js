@@ -96,8 +96,8 @@ function createHyperSpace() {
         starField.addShape(star, 300000, { positionFunction: myPositionFunction });
         var mesh = starField.buildMesh();
         var mat = new BABYLON.StandardMaterial("mat1", scene);
-        mat.emissiveTexture = new BABYLON.Texture("data/flare4.png", scene);
-        mat.opacityTexture = new BABYLON.Texture("data/flare4.png", scene);
+        mat.emissiveTexture = new BABYLON.Texture("../data/particles/star5.png", scene);
+        mat.opacityTexture = new BABYLON.Texture("../data/particles/star5.png", scene);
         mat.opacityTexture.getAlphaFromRGB = true;
         mat.emissiveColor = new BABYLON.Color3.White();
         mat.backFaceCulling = false;

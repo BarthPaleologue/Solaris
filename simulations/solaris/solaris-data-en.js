@@ -244,7 +244,7 @@ var astres = [{
         icon: "Saturne.png",
         diametre: 9 * scale,
         distance: 2218.13 * scale,
-        texture: "saturn.png",
+        texture: "saturn.jpg",
         textureType: "diffuse",
         positionDebut: Math.random() * 10000,
         atm: {

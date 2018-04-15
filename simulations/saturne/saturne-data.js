@@ -39,7 +39,7 @@ const astres = [{
         diametre: 2000 * scale,
         distance: 100000 * scale,
         realdistance: 1427000000,
-        texture: "saturn.png",
+        texture: "saturn.jpg",
         textureType: "diffuse",
         positionDebut: Math.random() * 10000,
         atm: {

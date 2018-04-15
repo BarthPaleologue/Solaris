@@ -159,7 +159,7 @@ function createGalaxy(nb) {
     InitializeStars(yellow);
     InitializeStars(cloud);
 
-    const starTexture = new BABYLON.Texture("data/flare6.jpg", scene);
+    const starTexture = new BABYLON.Texture("../data/particles/star1.jpg", scene);
 
     var blue_stars = new BABYLON.ParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
     blue_stars.particleTexture = starTexture;
@@ -198,7 +198,7 @@ function createGalaxy(nb) {
     yellow_stars.start();
 
     var nuages = new BABYLON.ParticleSystem("clouds", Math.round((nbstars / 4)), scene);
-    nuages.particleTexture = new BABYLON.Texture("data/cloud.jpg", scene);
+    nuages.particleTexture = new BABYLON.Texture("../data/particles/gazCloud.jpg", scene);
     nuages.emitter = origin;
     nuages.updateFunction = particles => {
         for (let i in particles) {

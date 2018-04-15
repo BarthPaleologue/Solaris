@@ -45,24 +45,24 @@
         </li>
         <li id="astras"><p>Astres</p>
             <ul id="astra-list" style="max-height:1200% !important;">
-                <div id="Japet" class="planete"><img src="../../icons/Japet.png" /><p>Japet</p></div>
-                <div id="Lune" class="planete"><img src="../../icons/Lune.png" /><p>Lune</p></div>
-                <div id="Mercure" class="planete"><img src="../../icons/Mercure.png" /><p>Mercure</p></div>
-                <div id="Mars" class="planete"><img src="../../icons/Mars.png" /><p>Mars</p></div>
-                <div id="Terre" class="planete"><img src="../../icons/Terre.png" /><p>Terre</p></div>
-                <div id="Neptune" class="planete"><img src="../../icons/Neptune.png" /><p>Neptune</p></div>
-                <div id="Saturne" class="planete"><img src="../../icons/Saturne.png" /><p>Saturne</p></div>
-                <div id="Jupiter" class="planete"><img src="../../icons/Jupiter.png" /><p>Jupiter</p></div>
-                <div id="Soleil" class="planete"><img src="../../icons/Soleil.png" /><p>Soleil</p></div>
-                <div id="Altair" class="planete"><img src="../../icons/Altair.png" /><p>Altair</p></div>
-                <div id="Pollux" class="planete"><img src="../../icons/Pollux.png" /><p>Pollux</p></div>
-                <div id="Arcturus" class="planete"><img src="../../icons/Arcturus.png" /><p>Arcturus</p></div>
-                <div id="Aldébaran" class="planete"><img src="../../icons/Aldebaran.png" /><p>Aldébaran</p></div>
-                <div id="Rigel" class="planete"><img src="../../icons/Rigel.png" /><p>Rigel</p></div>
-                <div id="R Doradus" class="planete"><img src="../../icons/RDoradus.png" /><p>R Doradus</p></div>
-                <div id="V382 Carinae" class="planete"><img src="../../icons/Carinae.png" /><p>V382 Carinae</p></div>
-                <div id="Bételgeuse" class="planete"><img src="../../icons/Betelgeuse.png" /><p>Bételgeuse</p></div>
-                <div id="UY Scutti" class="planete"><img src="../../icons/uyscutti.png" /><p>UY Scutti</p></div>
+                <div id="Japet" class="planete"><img src="../data/icons/Japet.png" /><p>Japet</p></div>
+                <div id="Lune" class="planete"><img src="../data/icons/Lune.png" /><p>Lune</p></div>
+                <div id="Mercure" class="planete"><img src="../data/icons/Mercure.png" /><p>Mercure</p></div>
+                <div id="Mars" class="planete"><img src="../data/icons/Mars.png" /><p>Mars</p></div>
+                <div id="Terre" class="planete"><img src="../data/icons/Terre.png" /><p>Terre</p></div>
+                <div id="Neptune" class="planete"><img src="../data/icons/Neptune.png" /><p>Neptune</p></div>
+                <div id="Saturne" class="planete"><img src="../data/icons/Saturne.png" /><p>Saturne</p></div>
+                <div id="Jupiter" class="planete"><img src="../data/icons/Jupiter.png" /><p>Jupiter</p></div>
+                <div id="Soleil" class="planete"><img src="../data/icons/Soleil.png" /><p>Soleil</p></div>
+                <div id="Altair" class="planete"><img src="../data/icons/Altair.png" /><p>Altair</p></div>
+                <div id="Pollux" class="planete"><img src="../data/icons/Pollux.png" /><p>Pollux</p></div>
+                <div id="Arcturus" class="planete"><img src="../data/icons/Arcturus.png" /><p>Arcturus</p></div>
+                <div id="Aldébaran" class="planete"><img src="../data/icons/Aldebaran.png" /><p>Aldébaran</p></div>
+                <div id="Rigel" class="planete"><img src="../data/icons/Rigel.png" /><p>Rigel</p></div>
+                <div id="R Doradus" class="planete"><img src="../data/icons/RDoradus.png" /><p>R Doradus</p></div>
+                <div id="V382 Carinae" class="planete"><img src="../data/icons/Carinae.png" /><p>V382 Carinae</p></div>
+                <div id="Bételgeuse" class="planete"><img src="../data/icons/Betelgeuse.png" /><p>Bételgeuse</p></div>
+                <div id="UY Scutti" class="planete"><img src="../data/icons/uyscutti.png" /><p>UY Scutti</p></div>
             </ul>
         </li>
         <li id="settings"><p>Paramètres</p></li>

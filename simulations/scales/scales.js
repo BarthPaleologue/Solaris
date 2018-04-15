@@ -192,8 +192,8 @@ function createScales(quality) {
             camAstras.detachPostProcess(godrays);
             godraysTab.push([astre, godrays]);
         }
-        if (isDefined(astres[i].rings)) addRingsTo(astres[i].name, "../data/" + astres[i].rings.texture, astres[i].rings.size, 0, -astres[i].angularSelf * Math.PI / 180, astres[i].rings.alpha, scene);
-        if (isDefined(astres[i].atm)) createAtmosphereTo(astres[i].name, "../data/" + astres[i].atm.texture, astres[i].atm.opacity, scene);
+        if (isDefined(astres[i].rings)) addRingsTo(astres[i].name, "../data/rings/" + astres[i].rings.texture, astres[i].rings.size, 0, -astres[i].angularSelf * Math.PI / 180, astres[i].rings.alpha, scene);
+        if (isDefined(astres[i].atm)) createAtmosphereTo(astres[i].name, "../data/atm/" + astres[i].atm.texture, astres[i].atm.opacity, scene);
 
         distance += astres[i].rayon + 3;
         if (isDefined(astres[i].rings)) distance += astres[i].rings.size / 2; /// si anneaux...
