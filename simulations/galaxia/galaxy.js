@@ -45,7 +45,7 @@ function createGalaxy(nb) {
     camAstras.angularSensibilityY = 2000;
     camAstras.maxZ = 10000000;
     camAstras.wheelPrecision = 0.1000;
-    camAstras.lowerRadiusLimit = 200 * (nbstars / 32000);
+    camAstras.lowerRadiusLimit = 100 * (nbstars / 32000);
     camAstras.upperRadiusLimit = 30000;
     scene.activeCamera = camAstras;
     camAstras.attachControl(canvas);
@@ -55,7 +55,7 @@ function createGalaxy(nb) {
     camAstrasd.angularSensibilityY = 2000;
     camAstrasd.maxZ = 10000000;
     camAstrasd.wheelPrecision = 0.1000;
-    camAstrasd.lowerRadiusLimit = 200 * (nbstars / 32000);
+    camAstrasd.lowerRadiusLimit = 100 * (nbstars / 32000);
     camAstrasd.upperRadiusLimit = 30000;
     camAstrasd.maxZ = 10000000;
 
