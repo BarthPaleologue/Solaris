@@ -28,6 +28,10 @@ function randomBoolean(x = 2) {
     return getRandomInt(1, x) == 1;
 }
 
+function probability(p = 50) {
+    return getRandomInt(0, 100) <= p;
+}
+
 function getRandomFromSeed(seed) {
     return ((seed * 9301 + 49297) % 233280) / 233280;
 }

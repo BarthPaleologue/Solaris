@@ -136,15 +136,17 @@ function createGalaxy(nb) {
             var angle = Math.round(getRandom(0, 2 * Math.PI) / armSeparationDistance) * armSeparationDistance + armOffset + rotation; /// Séparation des bras + ajout du facteur de rotation
 
             var starX = Math.cos(angle) * distance + getRandom(0, Math.sqrt(Math.abs(armOffset))); /// Trigonométrie de base
-            var starY = Math.sin(angle) * distance + getRandom(0, Math.sqrt(Math.abs(armOffset))); /// Idem
-            var starZ = getRandom(-10, 10) / (distance); /// Hauteur pseudo aléatoire
-            if (Math.abs(starZ) > 4) starZ = 0; /// Si trop élevée, est envoyée au milieu de la galaxie
-            if (distance < 40 && randomBoolean()) starZ = 1e100; /// On jette la moitié du bulbe à la poubelle
+            var starZ = Math.sin(angle) * distance + getRandom(0, Math.sqrt(Math.abs(armOffset))); /// Idem
+            var starY = getRandom(-10, 10) / (distance); /// Hauteur pseudo aléatoire
+            if (Math.abs(starY) > 4) starY = 0; /// Si trop élevée, est envoyée au milieu de la galaxie
+            if (distance < 40 && probability(70)) starY = 1e100; /// On jette la moitié du bulbe à la poubelle
 
             if (array == blue || array == yellow) {
                 starX += getRandom(-dispersion, dispersion);
-                starY += getRandom(-dispersion, dispersion);
-                starZ += getRandom(-dispersion, dispersion) / 2;
+                starY += getRandom(-dispersion, dispersion) / 2;
+                starZ += getRandom(-dispersion, dispersion);
+            } else {
+                starY += getRandom(-5, 5) / 3;
             }
             array[i] = [starX, starY, starZ];
         }
@@ -163,8 +165,8 @@ function createGalaxy(nb) {
         for (let i in particles) {
             var particle = particles[i];
             particle.position.x = blue[i][0] * density;
-            particle.position.z = blue[i][1] * density;
-            particle.position.y = blue[i][2] * density;
+            particle.position.y = blue[i][1] * density;
+            particle.position.z = blue[i][2] * density;
         }
     }
     blue_stars.color1 = new BABYLON.Color4(0.1, 0.8, 1.0, 1);
@@ -181,8 +183,8 @@ function createGalaxy(nb) {
         for (let i in particles) {
             var particle = particles[i];
             particle.position.x = yellow[i][0] * density;
-            particle.position.z = yellow[i][1] * density;
-            particle.position.y = yellow[i][2] * density;
+            particle.position.y = yellow[i][1] * density;
+            particle.position.z = yellow[i][2] * density;
         }
     }
     yellow_stars.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1);
@@ -199,8 +201,8 @@ function createGalaxy(nb) {
         for (let i in particles) {
             var particle = particles[i];
             particle.position.x = cloud[i][0] * density;
-            particle.position.z = cloud[i][1] * density;
-            particle.position.y = cloud[i][2] * density;
+            particle.position.y = cloud[i][1] * density;
+            particle.position.z = cloud[i][2] * density;
         }
     }
     nuages.color1 = new BABYLON.Color4(70 / 256, 66 / 256, 122 / 256, .1);
