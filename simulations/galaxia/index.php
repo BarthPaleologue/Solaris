@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <meta name="robots" content="index" />
-    <meta name="description" content="" />
+    <meta name="description" content="Le Générateur de Galaxies du Projet Solaris vous permet de créer des Galaxies Spirales paramétrables." />
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="style.css" />
@@ -96,8 +96,6 @@
         <br/><br/><br/>
         <div id="generate">Générer !</div>
     </div>
-
-
 
     <?php include("../../includes/fr/footer.html"); ?>
 

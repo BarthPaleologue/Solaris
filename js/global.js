@@ -41,7 +41,7 @@ function isDefined(variable) {
 }
 
 function createSlider(element, handle, basevalue = 0, min = 0, max = 10, slide = () => {}) {
-    let slider = element.slider({
+    return element.slider({
         create: () => handle.text(basevalue),
         range: "min",
         min: min,
@@ -49,7 +49,6 @@ function createSlider(element, handle, basevalue = 0, min = 0, max = 10, slide =
         value: basevalue,
         slide: slide
     });
-    return slider;
 }
 
 function createBelt(name, nb, nearest, farthest, yDivergence, size, parent, texture, scene) {

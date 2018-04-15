@@ -33,14 +33,12 @@ function createGalaxy(nb) {
         $("#menu li ul").css("width", "50%");
     }
 
-    var light = new BABYLON.PointLight("lux", new BABYLON.Vector3.Zero(), scene);
-
-    var boule = new BABYLON.Mesh.CreateSphere("boule", 1, 1e-100, scene);
-    boule.visibility = 0;
+    var origin = new BABYLON.Mesh.CreateSphere("origin", 1, 1e-100, scene);
+    origin.visibility = 0;
 
     const nbstars = nb;
 
-    var camAstras = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0.000001, 0.000001, 600 * (nbstars / 32000), boule, scene);
+    var camAstras = new BABYLON.ArcRotateCamera("ArcRotateCamera", 0.000001, 0.000001, 600 * (nbstars / 32000), origin, scene);
     camAstras.angularSensibilityX = 2000;
     camAstras.angularSensibilityY = 2000;
     camAstras.maxZ = 10000000;
@@ -50,7 +48,7 @@ function createGalaxy(nb) {
     scene.activeCamera = camAstras;
     camAstras.attachControl(canvas);
 
-    var camAstrasd = new BABYLON.AnaglyphArcRotateCamera("ArcRotateCamera", 0.000001, 0.000001, 600 * (nbstars / 32000), boule, 0.33, scene);
+    var camAstrasd = new BABYLON.AnaglyphArcRotateCamera("ArcRotateCamera", 0.000001, 0.000001, 600 * (nbstars / 32000), origin, 0.33, scene);
     camAstrasd.angularSensibilityX = 2000;
     camAstrasd.angularSensibilityY = 2000;
     camAstrasd.maxZ = 10000000;
@@ -84,45 +82,50 @@ function createGalaxy(nb) {
     pipeline.bloomEnabled = true;
     pipeline.imageProcessing.toneMappingEnabled = true;
 
-    var starPositions = [];
-    var numArms = 5;
+    var numArms = 5; /// Nombre de bras
     var armSeparationDistance = (2 * Math.PI) / numArms; /// division du cercle trigonométrique en numArms parties
-    var armlength = 10;
-    var armOffsetMax = 3 * armlength;
-    var rotationFactor = .05;
-    var largeCoeff = 3;
-    var dispersion = 5;
-    var density = (2 * nbstars) / 32000;
+    var armlength = 10; /// Longueur des bras
+    var armOffsetMax = 3 * armlength; /// Largeur max des bras
+    var rotationFactor = .05; /// Rotation des bras
+    var largeCoeff = 3; /// Multiplicateur de largeur des bras
+    var dispersion = 5; /// Eloignement des étoiles par rapport aux bras
+    var density = (2 * nbstars) / 32000; /// densité de la galaxie en fonction du nombre d'étoiles
 
-    $("#genere, #trandom").on("click", e => {
+    $("#genere, #trandom").on("click", e => { /// Génération Aléatoire
         numArms = getRandomInt(4, 7);
         armslider.slider("value", numArms);
         armshandle.text(numArms);
         armSeparationDistance = 2 * Math.PI / numArms;
+
         largeCoeff = getRandom(.9, 1.4);
         largeslider.slider("value", largeCoeff * 10);
         largehandle.text(Math.round(largeCoeff * 10));
-        armlength = largeCoeff * 5; //getRandomInt(8, 12);
+
+        armlength = largeCoeff * 5;
         if (armlength < 8) armlength = 8;
         longueurslider.slider("value", armlength);
         longueurhandle.text(Math.round(armlength));
+
         rotationFactor = getRandomInt(80, 150) / 2000;
         enrouslider.slider("value", rotationFactor * 2000);
         enrouhandle.text(rotationFactor * 2000);
+
         density = (10 * (nbstars / 32000)) / getRandomInt(5, 8);
         densityslider.slider("value", (1 / density) * 10);
         denshandle.text(Math.round((1 / density) * 10));
+
         dispersion = getRandomInt(2, 6);
         dispslider.slider("value", dispersion);
         disphandle.text(dispersion);
+
         InitializeStars(blue);
         InitializeStars(yellow);
         InitializeStars(cloud);
     });
 
-    var blue = [];
-    var yellow = [];
-    var cloud = [];
+    var blue = []; /// étoiles bleues
+    var yellow = []; /// étoiles jaunes
+    var cloud = []; /// nuages de gaz
 
     function InitializeStars(array) {
         for (let i = 0; i < nbstars; i++) {
@@ -156,11 +159,11 @@ function createGalaxy(nb) {
     InitializeStars(yellow);
     InitializeStars(cloud);
 
-    const starTexture = new BABYLON.Texture("data/high/flare6.jpg", scene);
+    const starTexture = new BABYLON.Texture("data/flare6.jpg", scene);
 
     var blue_stars = new BABYLON.ParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
     blue_stars.particleTexture = starTexture;
-    blue_stars.emitter = boule;
+    blue_stars.emitter = origin;
     blue_stars.updateFunction = particles => {
         for (let i in particles) {
             var particle = particles[i];
@@ -178,7 +181,7 @@ function createGalaxy(nb) {
 
     var yellow_stars = new BABYLON.ParticleSystem("yellow_stars", Math.round(nbstars / 2), scene);
     yellow_stars.particleTexture = starTexture;
-    yellow_stars.emitter = boule;
+    yellow_stars.emitter = origin;
     yellow_stars.updateFunction = particles => {
         for (let i in particles) {
             var particle = particles[i];
@@ -195,8 +198,8 @@ function createGalaxy(nb) {
     yellow_stars.start();
 
     var nuages = new BABYLON.ParticleSystem("clouds", Math.round((nbstars / 4)), scene);
-    nuages.particleTexture = new BABYLON.Texture("data/high/cloud.jpg", scene);
-    nuages.emitter = boule;
+    nuages.particleTexture = new BABYLON.Texture("data/cloud.jpg", scene);
+    nuages.emitter = origin;
     nuages.updateFunction = particles => {
         for (let i in particles) {
             var particle = particles[i];
@@ -236,7 +239,10 @@ function createGalaxy(nb) {
     $("#bar").css("width", "100%");
     $("#fps").fadeOut(1);
 
-    $("#tscreen").on("click", e => BABYLON.Tools.CreateScreenshotUsingRenderTarget(engine, scene.activeCamera, { precision: 1 }));
+    $("#tscreen").on("click", e => {
+        scene.render();
+        BABYLON.Tools.CreateScreenshot(engine, scene.activeCamera, { precision: 1 });
+    });
 
     function switchTo(newCamera) { /// fonction permettant de switch de caméra facilement
         scene.activeCamera.detachControl(canvas);
@@ -264,17 +270,17 @@ function createGalaxy(nb) {
     });
 
     document.onkeydown = e => {
-        if (e.keyCode == 32) {
+        if (e.keyCode == 32) { /// SPACEBAR
             e.preventDefault();
             camfree.cameraDirection.y += camfree.speed / 20;
             camfreed.cameraDirection.y += camfreed.speed / 20;
         }
-        if (e.keyCode == 16) {
+        if (e.keyCode == 16) { /// SHIFT
             e.preventDefault();
             camfree.cameraDirection.y -= camfree.speed / 20;
             camfreed.cameraDirection.y -= camfreed.speed / 20;
         }
-        if (e.keyCode == 71) {
+        if (e.keyCode == 71) { /// G
             e.preventDefault();
             $("#trandom").trigger("click");
         }
@@ -376,9 +382,6 @@ function createGalaxy(nb) {
 }
 
 $("#fullscreen").hover(e => $("#screen-list").slideToggle(100));
-
 $("#views").hover(e => $("#cam-list").slideToggle(100));
-
 $("#settings").on("click", e => $("#setters").slideToggle(100));
-
 $("#info").remove();

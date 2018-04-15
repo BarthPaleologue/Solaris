@@ -18,18 +18,14 @@ function createHyperSpace() {
     if (!/iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent)) {
 
         $("#all").on("click", e => {
-            $("#full-exit").fadeIn();
-            $("#all,#not-all").fadeOut();
+            $("#full-exit,#all,#not-all").fadeToggle();
             screenfull.toggle($("body")[0]);
         });
 
-        $("#not-all").on("click", e => {
-            screenfull.toggle(canvas);
-        });
+        $("#not-all").on("click", e => screenfull.toggle(canvas));
 
         $("#full-exit").on("click", e => {
-            $("#full-exit").fadeOut();
-            $("#all,#not-all").fadeIn();
+            $("#full-exit,#all,#not-all").fadeToggle();
             screenfull.exit();
         });
 
@@ -39,40 +35,15 @@ function createHyperSpace() {
         $("#menu li ul").css("width", "50%");
     }
 
-    function createMat(name, object, textureUrl, textureType, alpha, scene) {
-        var material = new BABYLON.StandardMaterial(name, scene);
-        if (textureType == "diffuse") {
-            var textureTask = assetsManager.addTextureTask("image task", textureUrl);
-            textureTask.onSuccess = task => {
-                material.diffuseTexture = task.texture;
-                material.diffuseTexture.hasAlpha = alpha;
-            }
-        } else if (textureType == "emissive") {
-            var textureTask = assetsManager.addTextureTask("image task", textureUrl);
-            textureTask.onSuccess = task => material.emissiveTexture = task.texture;
-        }
-        object.material = material;
-    }
-
-    var camfree = new BABYLON.FreeCamera("camfree1", new BABYLON.Vector3(-4500, 0, 0), scene);
+    var camfree = new BABYLON.FreeCamera("camfree", new BABYLON.Vector3(-5000, 0, 0), scene);
     camfree.rotation.y = Math.PI / 2;
-    camfree.checkCollisions = true;
-    camfree.keysUp.push(90); // Z 		 
-    camfree.keysLeft.push(81); // Q
-    camfree.keysDown.push(83); // S 
-    camfree.keysRight.push(68); // D
+    camfree.minZ = .0001;
+    camfree.noRotationConstraint = true;
+    camfree.upVector = new BABYLON.Vector3(1, 0.2, -1);
     scene.activecamfree = camfree;
-    camfree.minZ = .0001
-    camfree.angularSensibility = 1e100;
-    camfree.attachControl(canvas);
 
-    var camfreed = new BABYLON.AnaglyphFreeCamera("camfreed", new BABYLON.Vector3(-4500, 0, 0), 0.033, scene);
+    var camfreed = new BABYLON.AnaglyphFreeCamera("camfreed", new BABYLON.Vector3(-5000, 0, 0), 0.033, scene);
     camfreed.rotation.y = Math.PI / 2;
-    camfreed.checkCollisions = true;
-    camfreed.keysUp.push(90); // Z 		 
-    camfreed.keysLeft.push(81); // Q
-    camfreed.keysDown.push(83); // S 
-    camfreed.keysRight.push(68); // D
     camfreed.minZ = .0001;
     camfreed.angularSensibility = 1e100;
 
@@ -84,7 +55,7 @@ function createHyperSpace() {
     skybox.material = skyboxMaterial;
     skybox.rotation.y = .8;
 
-    $("#loading .text").html("Loading");
+    $("#loading .text").html(TEXT[lang].ln);
     $(".point").html("...");
     document.getElementById("bar").style.width = "100%";
 
@@ -121,28 +92,22 @@ function createHyperSpace() {
     star.rotation.x = Math.PI / 2;
 
     setTimeout(() => {
-        var stars1 = new BABYLON.SolidParticleSystem('stars', scene);
-        stars1.addShape(star, 300000, { positionFunction: myPositionFunction });
-        var mesh = stars1.buildMesh();
+        var starField = new BABYLON.SolidParticleSystem('stars', scene);
+        starField.addShape(star, 300000, { positionFunction: myPositionFunction });
+        var mesh = starField.buildMesh();
         var mat = new BABYLON.StandardMaterial("mat1", scene);
-        mat.emissiveTexture = new BABYLON.Texture("data/high/flare4.png", scene);
-        mat.opacityTexture = new BABYLON.Texture("data/high/flare4.png", scene);
+        mat.emissiveTexture = new BABYLON.Texture("data/flare4.png", scene);
+        mat.opacityTexture = new BABYLON.Texture("data/flare4.png", scene);
         mat.opacityTexture.getAlphaFromRGB = true;
         mat.emissiveColor = new BABYLON.Color3.White();
         mat.backFaceCulling = false;
         mesh.material = mat;
-        stars1.setParticles();
+        starField.setParticles();
     }, 1000);
 
     setTimeout(() => {
-        $("#free").on("click", e => {
-            scene.activeCamera = camfree;
-            camfree.attachControl(canvas);
-        });
-        $("#freed").on("click", e => {
-            scene.activeCamera = camfreed;
-            camfreed.attachControl(canvas);
-        });
+        $("#free").on("click", e => scene.activeCamera = camfree);
+        $("#freed").on("click", e => scene.activeCamera = camfreed);
 
         var coeffspeed = 1;
         var freehandle = $("#freehandle");
@@ -206,20 +171,21 @@ function createHyperSpace() {
         }
         $("#fps").fadeOut(1);
 
+        let g = Math.PI / 2;
         scene.registerBeforeRender(() => {
-            if (camfree.position.x > -3500) {
-                camfree.position.x = -5000;
-                if (skybox.position.x >= -4500) skybox.position.x -= 1500;
-                else skybox.position.x = 0;
-            }
+            if (camfree.position.x > -3500) camfree.position.x = -5000;
             if (camfreed.position.x > -3500) camfreed.position.x = -5000;
             if (hyperspace) {
+                g += .002;
+                camfree.rotation.x = Math.cos(g) / 4;
                 if (speed < 0.2) speed += 0.0005 * transcoeff;
                 if (camfree.fov < fovmax) camfree.fov += 0.008 * transcoeff;
                 if (camfreed.fov < fovmax) camfreed.fov += 0.008 * transcoeff;
                 if (camfree.fov > fovmax) camfree.fov -= 0.008 * transcoeff;
                 if (camfreed.fov > fovmax) camfreed.fov -= 0.008 * transcoeff;
             } else {
+                camfree.rotation.x -= (Math.PI / 2 - Math.acos(camfree.rotation.x)) / 10;
+                g += (Math.PI / 2 - g) / 5;
                 if (speed > 0.1 / 100) speed -= 0.003 * transcoeff;
                 if (speed <= 0) speed += 0.001;
                 if (camfree.fov > 0.4) camfree.fov -= 0.1 * transcoeff;
@@ -240,7 +206,7 @@ function createHyperSpace() {
         }
 
         $("#titre, #loading").fadeOut(() => setTimeout(() => assetsManager.load(), 100));
-    }, 3000);
+    }, 2000);
     return scene;
 }
 
@@ -254,9 +220,7 @@ if ($("#settings p").text() == "Paramètres") var lang = "fr";
 else var lang = "en";
 
 $("#fullscreen").hover(e => $("#screen-list").slideToggle(100));
-
 $("#views").hover(e => $("#cam-list").slideToggle(100));
-
 $("#settings").on("click", e => $("#setters").slideToggle());
 $("#full-exit").fadeOut();
 $("#info").remove();

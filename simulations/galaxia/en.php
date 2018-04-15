@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <meta name="robots" content="index" />
-    <meta name="description" content="" />
+    <meta name="description" content="The Galaxy Generator allows you to create spiral galaxies and to configure them as you want." />
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="style.css" />
