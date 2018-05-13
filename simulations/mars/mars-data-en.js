@@ -52,7 +52,7 @@ const astres = [{
         satellites: 2,
         rotation: "24&nbsp;hours&nbsp;36&nbsp;minutes",
         revolution: "686&nbsp;days",
-        description: "Also called \"The red planet\", Mars is the last telluric planet of our solar system<span class='point'>.</span> It's been a long time since Mars has lost its atmosphere, but scientists are almost sure there was water and perhaps even life on it<span class='point'>.</span>"
+        description: "Also called \"The red planet\", Mars is the last telluric planet of our solar system<span class='point'>.</span> Mars has almost completely lost its atmosphere because of the lack of magnetic field, but scientists think there was water and perhaps even life on it<span class='point'>.</span>"
     },
 ];
 

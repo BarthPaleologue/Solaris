@@ -52,7 +52,7 @@ const astres = [{
         satellites: 2,
         rotation: "24&nbsp;heures&nbsp;36&nbsp;minutes",
         revolution: "686&nbsp;jours",
-        description: "Surnommée \"La Planète Rouge\", Mars est la dernière planète tellurique de notre système solaire<br/>Cela fait bien longtemps que Mars a perdu son athmosphère, mais les scientifiques pensent que Mars a pu abriter de l'eau liquide et donc potentiellement de la vie à une époque lointaine"
+        description: "Surnommée \"La Planète Rouge\", Mars est la dernière planète tellurique de notre système solaire<span class='point'>.</span> Mars a presque entièrement perdu son atmosphère du fait de l'absence de champ magnétique, mais les scientifiques pensent que Mars a pu abriter de l'eau liquide et donc potentiellement de la vie à une époque lointaine<span class='point'>.</span>"
     },
 ];
 
