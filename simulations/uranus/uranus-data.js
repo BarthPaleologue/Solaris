@@ -103,7 +103,7 @@ const astres = [{
         satellites: 0,
         rotation: "2,52 jours&nbsp;(synchrone)",
         revolution: "2,52&nbsp;jours&nbsp;(synchrone)",
-        description: "Satellite d'Uranus ayant la particularité de posséder un plan orbital perpendiculaire au plan du système solaire<span class='point'>.</span> Ariel est la plus briante des lunes d'Uranus<span class='point'>.</span>"
+        description: "Satellite d'Uranus ayant la particularité de posséder un plan orbital perpendiculaire au plan du système solaire<span class='point'>.</span> Ariel est la plus brillante des lunes d'Uranus<span class='point'>.</span>"
     },
     {
         name: "Umbriel",
