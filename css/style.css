@@ -76,14 +76,26 @@ h1 {
     transition: 0.25s;
     cursor: pointer;
     transform: scale(1);
-    box-shadow: 0px 0px 10px white;
-    animation: shadows 1s infinite alternate linear;
+    box-shadow: 0 0 10px 0 rgba(255, 255, 255, .4);
+    animation: pulse 2s infinite linear;
 }
 
 #start:hover {
     background: transparent;
     color: white;
     transform: scale(1.1);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, .5);
+    }
+    70% {
+        box-shadow: 0 0 15px 15px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0);
+    }
 }
 
 

@@ -54,9 +54,9 @@ const astres = [{
         coeffrotation: 1,
         annee: 365.25,
         satellites: 1,
-        rotation: "23&nbsp;hours&nbsp;56&nbsp;minutes",
-        revolution: "365<span class='point'>.</span>25&nbsp;days",
-        description: "The Earth is the only planet of the solar system with liquid water on its surface<span class='point'>.</span> It is also the only planet of the solar system which has ever hosted life and an intelligent civilization - as far as we know<span class='point'>.</span>"
+        rotation: "23&nbsp;heures&nbsp;56&nbsp;minutes",
+        revolution: "365,25&nbsp;jours",
+        description: "La Terre est le seul astre de notre système solaire possédant de l'eau liquide à sa surface<span class='point'>.</span> La Terre est égalment la seule planète du système solaire à avoir vu se développer la vie et une civilisation intelligente<span class='point'>.</span>"
     },
     {
         name: "Lune",
@@ -74,11 +74,9 @@ const astres = [{
         coeffrotation: 0,
         annee: 29.5,
         satellites: 0,
-        rotation: "29,5&nbsp;days&nbsp;(synchronous)",
-        revolution: "29,5&nbsp;days",
-        rotation: "29<span class='point'>.</span>5&nbsp;days&nbsp;(synchronous)",
-        revolution: "29<span class='point'>.</span>5&nbsp;days&nbsp;(synchronous)",
-        description: "The Moon is the only companion of the Earth<span class='point'>.</span> It was formed after the Earth collided with a protoplanet during the solar system's genesis : a part of the debris is said to have formed the Moon<span class='point'>.</span> The Moon is also responsible for the tides on Earth<span class='point'>.</span> Moreover, the Moon's attraction power is slowing down the Earth's rotation speed on itself<span class='point'>.</span> The Moon is the only celestial body Humanity has ever set foot on, except the Earth, of course<span class='point'>.</span>"
+        rotation: "29,5&nbsp;jours&nbsp;(synchrone)",
+        revolution: "29,5&nbsp;jours&nbsp;(synchrone)",
+        description: "La Lune est le compagnon inséparable de la Terre<span class='point'>.</span> La Lune s'est formée, dit-on, de l'impact d'une planète avec la Terre lors de la formation du système solaire, une partie des débris auraient alors formé la Lune<span class='point'>.</span> Le Satellite de la Terre est responsable des marées et du ralentissement de la vitesse de rotation de la Terre sur elle même<span class='point'>.</span> La Lune est seul astre à ce jour à avoir été foulé par l'Homme avec la Terre bien sûr<span class='point'>.</span>"
     }
 ];
 
