@@ -209,7 +209,7 @@ function createGalaxy(nb) {
         }
     }
     nuages.color1 = new BABYLON.Color4(70 / 256, 66 / 256, 122 / 256, .1);
-    nuages.color2 = new BABYLON.Color4(63 / 256, 34 / 256, 4 / 256, .1);
+    nuages.color2 = new BABYLON.Color4(63 / 256, 34 / 256, getRandom(4, 200) / 256, .1);
     nuages.minSize = 8 * (nbstars / 32000);
     nuages.maxSize = 10 * (nbstars / 32000);
     nuages.updateSpeed = 1;
