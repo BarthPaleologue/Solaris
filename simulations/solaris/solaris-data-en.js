@@ -109,6 +109,7 @@ var astres = [{
         angularSelf: 6.687,
         coeffrevolution: 0,
         coeffrotation: 0,
+        initialRotation: Math.PI,
         annee: 29.5,
         satellites: 0,
         rotation: "29<span class='point'>.</span>5&nbsp;days&nbsp;(synchronous)",

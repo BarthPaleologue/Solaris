@@ -11,19 +11,24 @@ $.getScript("../../js/screenfull.js");
 $.getScript("https://code.jquery.com/pep/0.4.3/pep.js");
 $.getScript("http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js");
 
-////////////////////////////// SOLARIS_ALGORITHM v1.5.0 ////////////////////////////////////////////////////////
+////////////////////////////// SOLARIS_ALGORITHM v1.5.2 ////////////////////////////////////////////////////////
+
+const audio = new Audio("../ambient.mp3");
+audio.load();
+audio.autoplay = true;
+audio.loop = true;
 
 function createScene(quality = "high") {
 
-    var scene = new BABYLON.Scene(engine);
-    scene.clearColor = new BABYLON.Color3(0, 0, 0);
+    var scene = new BABYLON.Scene(engine); // Définit la scène
+    scene.clearColor = new BABYLON.Color3(0, 0, 0); // Couleur par défaut du fond de la scène
 
     const SCENE_SIZE = 500000; /// Définit la taille de la skybox et les limites des caméras
     const MAIN_DELAY = 75; /// Délai en ms entre le chargement de chaque astre
 
-    var assetsManager = new BABYLON.AssetsManager(scene);
+    var assetsManager = new BABYLON.AssetsManager(scene); // Va contenir tous les matériaux
 
-    var godraysTab = [];
+    var godraysTab = []; // Va contenir les effets de godrays
 
     ///////////////// Caméras
 
@@ -59,15 +64,15 @@ function createScene(quality = "high") {
 
     var skybox = new BABYLON.Mesh.CreateBox("skyBox", SCENE_SIZE, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.backFaceCulling = false; // Texture à l'intérieur de la skybox
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../data/skybox5/skybox", scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3.White();
     skyboxMaterial.specularColor = new BABYLON.Color3.Black();
     skybox.material = skyboxMaterial;
-    skybox.material.freeze();
-    skybox.infiniteDistance = true;
-    skybox.isPickable = false;
+    skybox.material.freeze(); // économie de ressources
+    skybox.infiniteDistance = true; // impossible d'atteindre en vol libre
+    skybox.isPickable = false; // n'est pas clickable
 
     var centerView = new BABYLON.Mesh.CreateSphere("centerView", 1, 1e-100, scene); // point d'attache des caméras lors d'un changement d'astre
 
@@ -181,6 +186,10 @@ function createScene(quality = "high") {
         if (map[78]) { /// N
             e.preventDefault();
             $("#tlabel").trigger("click"); /// Toggle labels
+        }
+        if (map[77]) { /// M
+            e.preventDefault();
+            $("#tsound").trigger("click"); /// Toggle sound
         }
         if (map[75]) { /// K
             e.preventDefault();
@@ -320,6 +329,7 @@ function createScene(quality = "high") {
         let astre = new BABYLON.Mesh.CreateSphere(astres[i].name, 32, astres[i].diametre, scene); // création de l'objet astre
         astre.position.x = astres[i].distance; // positionnement de l'astre
         astre.rotation.z = astres[i].angularSelf * Math.PI / 180 + Math.PI; // inclinaison de l'astre
+        if (isDefined(astres[i].initialRotation)) scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, astres[i].initialRotation, BABYLON.Space.LOCAL);
         addLabel(astre, astres[i].parent); // ajout d'une étiquette à l'astre
         createMat(astres[i].name + "Material", scene.getMeshByID(astres[i].name), "../data/" + astres[i].texture, astres[i].textureType, false, scene); // création du matériel pour l'astre
         if (isDefined(astres[i].specular)) astre.material.specularTexture = new BABYLON.Texture("../data/specular/" + astres[i].specular, scene); // si texture de reflet en plus
@@ -346,8 +356,7 @@ function createScene(quality = "high") {
                 light.excludedMeshes.push(godraysTab[j][0]);
             }
         }
-        if (astres[i].pulsar) createPulsar(astre); // si souhaité, l'astre devient un pulsar
-        else astre.rotate(BABYLON.Axis.Y, astres[i].positionDebut, BABYLON.Space.LOCAL); // sinon on donne une rotation random pour l'astre (saisons)
+        astres[i].pulsar ? createPulsar(astre) : astre.rotate(BABYLON.Axis.Y, astres[i].positionDebut, BABYLON.Space.LOCAL) // si souhaité, l'astre devient un pulsar
 
         let centreorbit = new BABYLON.Mesh.CreateSphere(astres[i].name + "-centerorbit", 1, 1e-100, scene); // on crée un point d'attache orbital
         centreorbit.rotation.z = (astres[i].angularOrbit) * Math.PI / 180; // prend l'inclinaison de l'orbite
@@ -477,6 +486,22 @@ function createScene(quality = "high") {
             areLabelsEnabled = !areLabelsEnabled;
         });
 
+        $("#tsound").on("click", e => {
+            if (audio.volume == 1) {
+                for (let i = 0; i <= 100; i++) {
+                    setTimeout(() => audio.volume = 1 - i / 100, i * 20); // the sound fades out
+                }
+                $("#tsound").attr("src", "../../toolbar/nomute.png");
+                $("#tsound").attr("title", TEXT[lang].mute);
+            } else {
+                for (let i = 0; i <= 100; i++) {
+                    setTimeout(() => audio.volume = i / 100, i * 20); // the sound fades in
+                }
+                $("#tsound").attr("src", "../../toolbar/mute.png");
+                $("#tsound").attr("title", TEXT[lang].nomute);
+            }
+        });
+
         $("#tscreen").on("click", e => BABYLON.Tools.CreateScreenshotUsingRenderTarget(engine, scene.activeCamera, { precision: 1 })); // Screenshot avec la caméra active
 
         function switchTo(newCamera) { /// fonction permettant de switch de caméra facilement
@@ -595,8 +620,7 @@ function createScene(quality = "high") {
 
         $("#astra-list div").click(function(e) { // gère le click sur le sélecteur d'astre
             let mesh = scene.getMeshByID($(this).attr("id")); /// $(this) nécessite une fonction normale (donc pas de fonction fléchée malheureusement)
-            if (mesh != cible) goTo(mesh);
-            else zoomOn = true;
+            mesh != cible ? goTo(mesh) : zoomOn = true;
         });
 
         var changement = false;

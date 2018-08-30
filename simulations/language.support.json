@@ -12,6 +12,8 @@
         "do": "Disable orbits [O]",
         "ea": "Show asteroids [H]",
         "da": "Hide asteroids [H]",
+        "nomute": "Stop music [M]",
+        "mute": "Play music [M]",
         /// INFO
         "bt": "to the Sun",
         "nt": "to ",
@@ -43,6 +45,8 @@
         "do": "Cacher orbites [O]",
         "ea": "Afficher les astéroides [H]",
         "da": "Masquer les astéroides [H]",
+        "nomute": "Eteindre la musique [M]",
+        "mute": "Allumer musique [M]",
         /// INFO
         "bt": "au Soleil",
         "nt": "à ",
