@@ -8,6 +8,13 @@ $.getScript("https://code.jquery.com/pep/0.4.3/pep.js");
 
 ////////////////////////////// SCALES_ALGORITHM v2.0 ////////////////////////////////////////////////////////////
 
+const audio = new Audio("../ambient.mp3");
+audio.load();
+audio.autoplay = true;
+audio.loop = true;
+
+const mobile = /iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent);
+
 function createScales(quality) {
 
     var scene = new BABYLON.Scene(engine);
@@ -57,12 +64,14 @@ function createScales(quality) {
         screenfull.exit();
     });
 
-    var mobile = false;
-    if (/iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent)) {
-        $("#binfos,#views,#fullscreen,#settings").fadeOut(10);
-        $("#exit,#astras").css("width", "49.7%");
+    if (mobile) {
+        $("#views,#fullscreen,#settings").fadeOut(10);
+        $("#binfos p").text("I");
         $("#menu li ul").css("width", "50%");
-        mobile = true;
+        $("#astras>p").click(e => $("#astra-list").slideToggle(100));
+        $(document).click(function(e) {
+            if (!$(e.target).is('#astras, #astra-list, #astras p')) $('#astra-list').slideUp(100);
+        });
     }
 
     function createMat(name, object, textureUrl, textureType, alpha, scene) {
@@ -250,6 +259,22 @@ function createScales(quality) {
             }
         });
 
+        $("#tsound").on("click", e => {
+            if (audio.volume == 1) {
+                for (let i = 0; i <= 100; i++) {
+                    setTimeout(() => audio.volume = 1 - i / 100, i * 20); // the sound fades out
+                }
+                $("#tsound").attr("src", "../../toolbar/nomute.png");
+                $("#tsound").attr("title", TEXT[lang].mute);
+            } else {
+                for (let i = 0; i <= 100; i++) {
+                    setTimeout(() => audio.volume = i / 100, i * 20); // the sound fades in
+                }
+                $("#tsound").attr("src", "../../toolbar/mute.png");
+                $("#tsound").attr("title", TEXT[lang].nomute);
+            }
+        });
+
         function switchTo(newCamera) {
             scene.activeCamera.detachControl(canvas);
             newCamera.attachControl(canvas);
@@ -345,9 +370,17 @@ function createScales(quality) {
                 e.preventDefault();
                 $("#tlabel").trigger("click"); /// Toggle labels
             }
+            if (map[77]) { /// M
+                e.preventDefault();
+                $("#tsound").trigger("click"); /// Toggle sound
+            }
             if (map[75]) { /// K
                 e.preventDefault();
                 $("#fps").fadeToggle(100); /// Toggle FPS
+            }
+            if (map[73]) { /// I
+                e.preventDefault();
+                $("#binfos").trigger("click"); /// Toggle Information pannel
             }
         });
         $(document).keyup(e => map[e.keyCode] = false);
@@ -579,17 +612,18 @@ var req = $.getScript("../language.support.json", data => {
 if ($("#settings p").text() == "Paramètres") var lang = "fr";
 else var lang = "en";
 
-$("#astras").hover(e => $("#astra-list").slideToggle(100));
+if (!mobile) $("#astras").hover(e => $("#astra-list").slideToggle(100));
 
 $("#fullscreen").hover(e => $("#screen-list").slideToggle(100));
 
 $("#views").hover(e => $("#cam-list").slideToggle(100));
 
-$("#settings").on("click", e => $("#setters").slideToggle(100));
+$("#settings").on("click", e => $("#setters").toggleClass("hiddenSetters"));
+$("#binfos").on("click", e => $("#infos").toggleClass("hiddenInfos"));
 
-$("#binfos").on("click", e => $("#infos").slideToggle(100));
+$("#infos").addClass("hiddenInfos").slideDown(10);
+$("#setters").addClass("hiddenSetters").slideDown(10);
 
-$('#infos,#setters').draggable();
 $("#full-exit").fadeOut();
 $("#fps").fadeOut();
 $("#info").remove();

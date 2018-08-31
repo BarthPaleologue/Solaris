@@ -25,6 +25,22 @@
 
     <div id="news-content-block">
         <div>
+            <p><u>Version 2<span class="point">.</span>9</u></p>
+            <p>- Added an ambient music
+            <br/>- You can now disable the ambient music by pressing [M]
+            <br/>- You can now toggle the information pannel by pressing [I]
+            <br/>- You can now set a new date by pressing [T]
+            <br/>- Improved interface on PC
+            <br/>- Improved interface on mobile
+            <br/>- You can now access the information pannel on mobile
+            <br/>- Improved Galaxies
+            <br/>- Little Fixes
+            <br/>- Added new backgrounds
+            <br/>- Change patch note's font (seriously, that was unreadable ^^)
+            </p>
+        </div>
+        <hr/>
+        <div>
             <p><u>Version 2<span class="point">.</span>8</u></p>
             <p>- Added seasons on planets
             <br/>- You can now disable asteroid belts by pressing [H]

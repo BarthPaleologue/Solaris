@@ -3,6 +3,11 @@
 /// <reference path="../../ts/jquery-ui.d.ts" />
 /// <reference path="../../js/global.js" />
 
+const audio = new Audio("../ambient.mp3");
+audio.load();
+audio.autoplay = true;
+audio.loop = true;
+
 function createGalaxy(nb) {
 
     var scene = new BABYLON.Scene(engine);
@@ -28,9 +33,7 @@ function createGalaxy(nb) {
         $("#full-exit").fadeOut(1);
 
     } else {
-        $("#views,#fullscreen,#settings").fadeOut(1);
-        $("#exit,#astras").css("width", "49.7%");
-        $("#menu li ul").css("width", "50%");
+        $("#views,#fullscreen").fadeOut(1);
     }
 
     var origin = new BABYLON.Mesh.CreateSphere("origin", 1, 1e-100, scene);
@@ -269,6 +272,22 @@ function createGalaxy(nb) {
         camAstrasd.position = camAstras.position;
     });
 
+    $("#tsound").on("click", e => {
+        if (audio.volume == 1) {
+            for (let i = 0; i <= 100; i++) {
+                setTimeout(() => audio.volume = 1 - i / 100, i * 20); // the sound fades out
+            }
+            $("#tsound").attr("src", "../../toolbar/nomute.png");
+            $("#tsound").attr("title", TEXT[lang].mute);
+        } else {
+            for (let i = 0; i <= 100; i++) {
+                setTimeout(() => audio.volume = i / 100, i * 20); // the sound fades in
+            }
+            $("#tsound").attr("src", "../../toolbar/mute.png");
+            $("#tsound").attr("title", TEXT[lang].nomute);
+        }
+    });
+
     document.onkeydown = e => {
         if (e.keyCode == 32) { /// SPACEBAR
             e.preventDefault();
@@ -287,6 +306,10 @@ function createGalaxy(nb) {
         if (e.keyCode == 75) { /// K
             e.preventDefault();
             $("#fps").fadeToggle(100); /// Toggle FPS
+        }
+        if (e.keyCode == 77) { /// M
+            e.preventDefault();
+            $("#tsound").trigger("click"); /// Toggle sound
         }
     };
 
@@ -383,5 +406,6 @@ function createGalaxy(nb) {
 
 $("#fullscreen").hover(e => $("#screen-list").slideToggle(100));
 $("#views").hover(e => $("#cam-list").slideToggle(100));
-$("#settings").on("click", e => $("#setters").slideToggle(100));
+$("#settings").on("click", e => $("#setters").toggleClass("hiddenSetters"));
+
 $("#info").remove();

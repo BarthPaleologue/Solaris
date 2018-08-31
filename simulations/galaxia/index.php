@@ -84,8 +84,9 @@
     </div>
 
     <div id="toolbar">
-        <img id="tscreen" src="../../toolbar/screenshot.png" width=50 height=50 title="Screenshot" />
-        <img id="trandom" src="../../toolbar/random.png" width=50 height=50 title="Galaxie Aléatoire" />
+        <img id="tscreen" src="../../toolbar/screenshot.png" width=50 height=50 title="Screenshot [S]" />
+        <img id="trandom" src="../../toolbar/random.png" width=50 height=50 title="Galaxie Aléatoire [G]" />
+        <img id="tsound" src="../../toolbar/mute.png" width=50 height=50 title="Eteindre Musique [M]" />
     </div>
 
     <canvas id="renderCanvas"></canvas>

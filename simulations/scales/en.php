@@ -110,6 +110,7 @@
         <img id="tfxaa" src="../../toolbar/noantialiasing.png" width=50 height=50 title="Enable FXAA [F]" />
         <img id="tzoom" src="../../toolbar/zoom.png" width=50 height=50 title="Zoom on current target [C]" />
         <img style="border-radius:100%;" id="tgodrays" src="../../toolbar/godrays.png" width=50 height=50 title="Remove Godrays [G]" />
+        <img id="tsound" src="../../toolbar/mute.png" width=50 height=50 title="Stop Music [M]" />
     </div>
 
     <?php include("../../includes/fr/loading.html"); ?>

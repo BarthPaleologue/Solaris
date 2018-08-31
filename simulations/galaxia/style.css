@@ -43,8 +43,8 @@
 }
 
 #generate {
-    width: 15%;
-    margin-left: 42%;
+    width: 170px;
+    margin: 0 auto;
     background: green;
     border: 1px solid green;
     color: white;
@@ -67,6 +67,6 @@
     }
     #exit,
     #settings {
-        width: 49.7% !important;
+        width: 49% !important;
     }
 }

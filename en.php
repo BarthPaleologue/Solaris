@@ -37,19 +37,18 @@
     <div id="news">
         <p><a href="news-en.php">What's new ?</a></p>
         <div id="news-content">
-            <p>Version 2<span class="point">.</span>8
-            <br/>- Added seasons on planets
-            <br/>- You can now disable asteroid belts by pressing [H]
-            <br/>- You can now take a screenshot by pressing [P]
-            <br/>- You can now display FPS number by pressing [K]
-            <br/>- Added a gallery in which you can find all backgrounds of Solaris, downloadfree, reusefree
-            <br/>- Improved Saturn's rings in "Saturn and its satellites"
-            <br/>- Improved Galaxy generator
-            <br/>- Planet's labels are now bigger than satellite's labels
-            <br/>- Added new backgrounds
+            <p>Version 2<span class="point">.</span>9
+            <br/>- Added an ambient music
+            <br/>- You can now disable the ambient music by pressing [M]
+            <br/>- You can now toggle the information pannel by pressing [I]
+            <br/>- You can now set a new date by pressing [T]
+            <br/>- Improved interface on PC
             <br/>- Improved interface on mobile
-            <br/>- Improved feedback page
-            <br/>- Bugs have been fixed
+            <br/>- You can now access the information pannel on mobile
+            <br/>- Improved Galaxies
+            <br/>- Little Fixes
+            <br/>- Added new backgrounds
+            <br/>- Change patch note's font (seriously, that was unreadable ^^)
             </p>
         </div>
     </div>

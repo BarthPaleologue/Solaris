@@ -18,6 +18,8 @@ audio.load();
 audio.autoplay = true;
 audio.loop = true;
 
+const mobile = /iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent);
+
 function createScene(quality = "high") {
 
     var scene = new BABYLON.Scene(engine); // Définit la scène
@@ -90,12 +92,15 @@ function createScene(quality = "high") {
         screenfull.exit();
     });
 
-    var mobile = false;
-    if (/iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent)) {
-        $("#binfos,#views,#fullscreen,#settings").fadeOut(10);
-        $("#exit,#astras").css("width", "49.7%");
+
+    if (mobile) {
+        $("#views,#fullscreen,#settings").fadeOut(10);
+        $("#binfos p").text("I");
         $("#menu li ul").css("width", "50%");
-        mobile = true;
+        $("#astras>p").click(e => $("#astra-list").slideToggle(100));
+        $(document).click(function(e) {
+            if (!$(e.target).is('#astras, #astra-list, #astras p')) $('#astra-list').slideUp(100);
+        });
     }
 
     //// Zoom sur l'astre cible        
@@ -194,6 +199,14 @@ function createScene(quality = "high") {
         if (map[75]) { /// K
             e.preventDefault();
             $("#fps").fadeToggle(100); /// Toggle FPS
+        }
+        if (map[73]) { /// I
+            e.preventDefault();
+            $("#binfos").trigger("click"); /// Toggle Information pannel
+        }
+        if (map[84]) { /// T
+            e.preventDefault();
+            $("#date").trigger("click"); /// Toggle Information pannel
         }
     });
     $(document).keyup(e => map[e.keyCode] = false); // Lorsque l'on relache une touche
@@ -860,7 +873,7 @@ function createScene(quality = "high") {
             $("#loading .point").text("..."); /// +...
             scene.executeWhenReady(() => { /// Quand la scène est prête
                 $("#menu").animate({ "top": "0px" }, 500); /// On affiche le menu
-                if (!mobile) $("#infos, #setters").slideDown(); /// On déploie les panneaux
+                if (!mobile) $("#infos").toggleClass("hiddenInfos"), $("#setters").toggleClass("hiddenSetters"); /// On déploie les panneaux
                 $("#toolbar").fadeIn(); /// On affiche la toolbar
                 $(canvas).css("opacity", 1); /// On affiche le canvas
                 goTo(cible); /// On focus la caméra sur le bon astre
@@ -893,16 +906,17 @@ var req = $.getScript("../language.support.json", data => {
 if ($("#settings p").text() == "Paramètres") var lang = "fr";
 else var lang = "en";
 
-$("#astras").hover(e => $("#astra-list").slideToggle(100));
+if (!mobile) $("#astras").hover(e => $("#astra-list").slideToggle(100));
 
 $("#fullscreen").hover(e => $("#screen-list").fadeToggle(100));
 
 $("#views").hover(e => $("#cam-list").fadeToggle(100));
 
-$("#settings").on("click", e => $("#setters").slideToggle(100));
+$("#settings").on("click", e => $("#setters").toggleClass("hiddenSetters"));
+$("#binfos").on("click", e => $("#infos").toggleClass("hiddenInfos"));
 
-$("#binfos").on("click", e => $("#infos").slideToggle(100));
+$("#infos").addClass("hiddenInfos").slideDown(10);
+$("#setters").addClass("hiddenSetters").slideDown(10);
 
-$('#infos,#setters').draggable();
 $("#full-exit").fadeOut();
 $("#fps").fadeOut();

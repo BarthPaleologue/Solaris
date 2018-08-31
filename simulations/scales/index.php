@@ -111,6 +111,7 @@
         <img id="tfxaa" src="../../toolbar/noantialiasing.png" width=50 height=50 title="Activer l'Anticrénelage [F]" />
         <img id="tzoom" src="../../toolbar/zoom.png" width=50 height=50 title="Zoomer sur l'astre cible [C]" />
         <img style="border-radius:100%;" id="tgodrays" src="../../toolbar/godrays.png" width=50 height=50 title="Enlever les godrays [G]" />
+        <img id="tsound" src="../../toolbar/mute.png" width=50 height=50 title="Eteindre Musique [M]" />
     </div>
 
     <?php include("../../includes/fr/loading.html"); ?>

@@ -41,19 +41,18 @@
     <div id="news">
         <p><a href="news.php">Quoi de neuf ?</a></p>
         <div id="news-content">
-            <p>Version 2<span class="point">.</span>8
-            <br/>- Ajout des saisons pour toutes les planètes
-            <br/>- Ajout d'une option pour activer/désactiver les astéroides [H]
-            <br/>- Ajout d'un raccourci pour prendre un screenshot [P]
-            <br/>- Presser la touche [K] permet d'afficher le nombre de FPS
-            <br/>- Ajout d'une galerie contenant tous les fond d'écrans utilisés par Solaris en HD, gratuit à télécharger et à utiliser
-            <br/>- Améliorations des anneaux de Saturne dans "Saturne et ses satellites"
-            <br/>- Amélioration du générateur de galaxies
-            <br/>- Les noms des planètes apparaissent plus gros que ceux des satellites
-            <br/>- Ajout de nouveaux fonds d'écran
+            <p>Version 2<span class="point">.</span>9
+            <br/>- Ajout d'une musique d'ambiance
+            <br/>- Ajout d'un raccourci pour couper la musique d'ambiance [M]
+            <br/>- Vous pouvez désormais cacher le panneau d'informations en appuyant sur [I]
+            <br/>- Vous pouvez paramétrer la date en appuyant sur [T]
+            <br/>- Amélioration de l'interface sur PC
             <br/>- Amélioration de l'interface sur mobile
-            <br/>- Amélioration de la page de feedback
-            <br/>- Correction de bugs
+            <br/>- Vous pouvez désormais accéder au panneau d'informations sur mobile
+            <br/>- Amélioration des galaxies
+            <br/>- Petites corrections
+            <br/>- Ajout de nouveaux fonds d'écran
+            <br/>- Changement de la police de patch note (sérieusement, c'était illisible ^^)
             </p>
         </div>
     </div>

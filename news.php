@@ -25,6 +25,22 @@
 
     <div id="news-content-block">
         <div>
+            <p><u>Version 2<span class="point">.</span>9</u></p>
+            <p>- Ajout d'une musique d'ambiance
+            <br/>- Ajout d'un raccourci pour couper la musique d'ambiance [M]
+            <br/>- Vous pouvez désormais cacher le panneau d'informations en appuyant sur [I]
+            <br/>- Vous pouvez paramétrer la date en appuyant sur [T]
+            <br/>- Amélioration de l'interface sur PC
+            <br/>- Amélioration de l'interface sur mobile
+            <br/>- Vous pouvez désormais accéder au panneau d'informations sur mobile
+            <br/>- Amélioration des galaxies
+            <br/>- Petites corrections
+            <br/>- Ajout de nouveaux fonds d'écran
+            <br/>- Changement de la police de patch note (sérieusement, c'était illisible ^^)
+            </p>
+        </div>
+        <hr/>
+        <div>
             <p><u>Version 2<span class="point">.</span>8</u></p>
             <p>- Ajout des saisons pour toutes les planètes
             <br/>- Ajout d'une option pour activer/désactiver les astéroides [H]

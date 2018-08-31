@@ -125,7 +125,7 @@ var astres = [{
         textureType: "diffuse",
         positionDebut: Math.random() * 10000,
         atm: {
-            opacity: .2,
+            opacity: .1,
             texture: "black.png"
         },
         angularOrbit: 1.8506,
