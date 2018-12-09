@@ -1,32 +1,32 @@
-const scale = 5;
+const scale = 5; // Facteur d'agrandissement du système
 
-const distanceCoeff = 1 / 232.54;
+const distanceCoeff = 1 / 232.54; // permet de convertir les distances selon une échelle 1 = 1UA
 
-const timeQuotient = 10000;
+const timeQuotient = 10000; // Facteur de ralentissement du temps
 
-const firstTarget = "Soleil";
+const firstTarget = "Soleil"; // Astre d'attache au lancement de la simu
 
-const diametreFormule = 1 / 12756;
-const distanceFormule = 1 / 149600000;
+const diametreFormule = 1 / 12756; // on divise le diamètre de l'astre par ce coefficient pour trouver la vraie valeur
+const distanceFormule = 1 / 149600000; // permet de passer des UA aux km
 
-const freeSpeedCoeff = .01;
+const freeSpeedCoeff = .01; // Facteur de régulation de la vitesse des caméras libres
 
 const beginNavIndex = 0; // index de l'astre de départ pour la liste des destinations en navigation avec les flèches
 
 const astres = [{
-        name: "Soleil",
-        icon: "Soleil.png",
-        diametre: 109 * scale,
-        distance: 0 * scale,
-        texture: "sun.jpg",
-        textureType: "emissive",
-        godrays: true,
-        positionDebut: Math.random() * 10000,
-        angularOrbit: 0,
-        angularSelf: 7.25,
-        coeffrotation: 1 / 27,
-        annee: 1000,
-        satellites: "Toutes les planètes du système solaire",
+        name: "Soleil", // Nom de l'astre
+        icon: "Soleil.png", // Icone dans le menu de sélection
+        diametre: 109 * scale, // Diamètre par rapport à la Terre
+        distance: 0 * scale, // Distance à l'astre parent
+        texture: "sun.jpg", // Texture de l'astre
+        textureType: "emissive", // Type de texture emissive pour étoiles diffuse pour planètes
+        godrays: true, // L'astre émet des rayons lumineux
+        positionDebut: Math.random() * 10000, // Positionnement sur l'orbite
+        angularOrbit: 0, // Inclinaison de l'orbite par rapport à l'écliptique
+        angularSelf: 7.25, // Inclinaison de l'Astre sur lui-même
+        coeffrotation: 1 / 27, // Vitesse de rotation de l'astre sur lui même (1/nb de jours terrestres)
+        annee: 1000, // Période orbitale en jours terrestres
+        satellites: "Toutes les planètes du système solaire", // Nb de satellites
         rotation: "27&nbsp;jours",
         revolution: "Négligable autour du barycentre",
         description: "Le Soleil est l'étoile de notre système solaire, il se situe en son centre et toutes les planètes orbitent autour de lui<span class='point'>.</span>"
@@ -35,13 +35,12 @@ const astres = [{
         name: "Mercure",
         icon: "Mercure.png",
         diametre: 0.382 * scale,
-        distance: (30 * 3) * scale,
+        distance: 90 * scale,
         texture: "mercure.jpg",
         textureType: "diffuse",
         positionDebut: Math.random() * 10000,
         angularOrbit: 7.005,
         angularSelf: 0.0352,
-        coeffrevolution: 4.2,
         coeffrotation: 1 / 58,
         annee: 88,
         satellites: 0,
@@ -63,7 +62,6 @@ const astres = [{
         },
         angularOrbit: 3.39,
         angularSelf: 177.36,
-        coeffrevolution: 1.175,
         coeffrotation: .0041037952,
         annee: 224.7,
         satellites: 0,
@@ -87,7 +85,6 @@ const astres = [{
         },
         angularOrbit: 0,
         angularSelf: 23.43,
-        coeffrevolution: 1,
         coeffrotation: 1,
         annee: 365.25,
         satellites: 1,
@@ -107,7 +104,6 @@ const astres = [{
         parent: "La Terre",
         angularOrbit: 5.145,
         angularSelf: 6.687,
-        coeffrevolution: 0,
         coeffrotation: 0,
         initialRotation: Math.PI,
         annee: 29.5,
@@ -125,12 +121,11 @@ const astres = [{
         textureType: "diffuse",
         positionDebut: Math.random() * 10000,
         atm: {
-            opacity: .1,
+            opacity: .2,
             texture: "black.png",
         },
         angularOrbit: 1.8506,
         angularSelf: 25.19,
-        coeffrevolution: 0.811,
         coeffrotation: 0.972899729,
         annee: 686,
         satellites: 2,
@@ -152,7 +147,6 @@ const astres = [{
         },
         angularOrbit: 1.304,
         angularSelf: 3.12,
-        coeffrevolution: 0.043,
         coeffrotation: 2.4338983051,
         annee: 11 * 365.25 + 314,
         satellites: 69,
@@ -172,7 +166,6 @@ const astres = [{
         parent: "Jupiter",
         angularOrbit: 0.036 + 3.12,
         angularSelf: 0,
-        coeffrevolution: 0,
         coeffrotation: 0,
         annee: 1.769,
         satellites: 0,
@@ -192,7 +185,6 @@ const astres = [{
         parent: "Jupiter",
         angularOrbit: 0.469 + 3.12,
         angularSelf: 0,
-        coeffrevolution: 0,
         coeffrotation: 0,
         annee: 3.551181,
         satellites: 0,
@@ -212,7 +204,6 @@ const astres = [{
         parent: "Jupiter",
         angularOrbit: 0.21 + 3.12,
         angularSelf: 0,
-        coeffrevolution: 0,
         coeffrotation: 0,
         annee: 7.15,
         satellites: 0,
@@ -232,7 +223,6 @@ const astres = [{
         parent: "Jupiter",
         angularOrbit: 0.192 + 3.12,
         angularSelf: 0,
-        coeffrevolution: 0,
         coeffrotation: 0,
         annee: 16.68,
         satellites: 0,
@@ -259,7 +249,6 @@ const astres = [{
             size: 20,
             alpha: 0.5
         },
-        coeffrevolution: 0.0323,
         coeffrotation: 2.338762215,
         annee: 29 * 365.25 + 167,
         satellites: 62,
@@ -279,7 +268,6 @@ const astres = [{
         parent: "Saturne",
         angularOrbit: 1.566 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 0.942,
         satellites: 0,
@@ -299,7 +287,6 @@ const astres = [{
         parent: "Saturne",
         angularOrbit: 0.019 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 1.37,
         satellites: 0,
@@ -319,7 +306,6 @@ const astres = [{
         parent: "Saturne",
         angularOrbit: 0.168 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 1.88,
         satellites: 0,
@@ -339,7 +325,6 @@ const astres = [{
         parent: "Saturne",
         angularOrbit: 0.002 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 2.737,
         satellites: 0,
@@ -359,7 +344,6 @@ const astres = [{
         parent: "Saturne",
         angularOrbit: 0.331 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 4.518,
         satellites: 0,
@@ -383,7 +367,6 @@ const astres = [{
         },
         angularOrbit: 0.280 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 15.95,
         satellites: 0,
@@ -403,7 +386,6 @@ const astres = [{
         parent: "Saturne",
         angularOrbit: 7.489 + 26.73,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 79.33,
         satellites: 0,
@@ -430,7 +412,6 @@ const astres = [{
             size: 8,
             alpha: 0.7
         },
-        coeffrevolution: 0.228,
         coeffrotation: 1.3914728682,
         annee: 84 * 365.25 + 7,
         satellites: 5,
@@ -450,7 +431,6 @@ const astres = [{
         parent: "Uranus",
         angularOrbit: 97.8 + 4.338,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 1.41,
         satellites: 0,
@@ -470,7 +450,6 @@ const astres = [{
         parent: "Uranus",
         angularOrbit: 97.8 + 0.260,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 2.52,
         satellites: 0,
@@ -490,7 +469,6 @@ const astres = [{
         parent: "Uranus",
         angularOrbit: 97.8 + 0.128,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 4.144,
         satellites: 0,
@@ -510,7 +488,6 @@ const astres = [{
         parent: "Uranus",
         angularOrbit: 97.8 + 0.340,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 8.7,
         satellites: 0,
@@ -530,7 +507,6 @@ const astres = [{
         parent: "Uranus",
         angularOrbit: 97.8 + 0.058,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 13.46,
         satellites: 0,
@@ -557,7 +533,6 @@ const astres = [{
         },
         angularOrbit: 1.7692,
         angularSelf: 29.58,
-        coeffrevolution: 182,
         coeffrotation: 1.4865424431,
         annee: 164 * 365.25 + 280,
         satellites: 15,
@@ -577,7 +552,6 @@ const astres = [{
         parent: "Neptune",
         angularOrbit: 0.026 + 29.58,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 1.122,
         satellites: 0,
@@ -597,7 +571,6 @@ const astres = [{
         parent: "Neptune",
         angularOrbit: 156.865 + 29.58,
         angularSelf: 0,
-        coeffrevolution: 0.001,
         coeffrotation: 0,
         annee: 5.877,
         satellites: 0,

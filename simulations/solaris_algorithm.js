@@ -46,7 +46,6 @@ function createScene(quality = "high") {
 
     var camfree = new BABYLON.FreeCamera("camfree", new BABYLON.Vector3(70 * scale, 70 * scale, 0), scene);
     camfree.maxZ = SCENE_SIZE;
-    camfree.minZ = .01; // permet d'approcher un astre de plus prêt avant d'overlap
 
     var camfreed = new BABYLON.AnaglyphFreeCamera("camfreed", new BABYLON.Vector3(70 * scale, 70 * scale, 0), .033, scene);
     camfreed.maxZ = SCENE_SIZE;

@@ -38,8 +38,8 @@ function createHyperSpace() {
     var camfree = new BABYLON.FreeCamera("camfree", new BABYLON.Vector3(-5000, 0, 0), scene);
     camfree.rotation.y = Math.PI / 2;
     camfree.minZ = .0001;
-    camfree.noRotationConstraint = true;
-    camfree.upVector = new BABYLON.Vector3(1, 0.2, -1);
+    //camfree.noRotationConstraint = true;
+    //camfree.upVector = new BABYLON.Vector3(1, 0.2, -1);
     scene.activecamfree = camfree;
 
     var camfreed = new BABYLON.AnaglyphFreeCamera("camfreed", new BABYLON.Vector3(-5000, 0, 0), 0.033, scene);
@@ -53,6 +53,7 @@ function createHyperSpace() {
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../data/skybox5/skybox", scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skybox.material = skyboxMaterial;
+    skybox.infiniteDistance = true;
     skybox.rotation.y = .8;
 
     $("#loading .text").html(TEXT[lang].ln);
@@ -91,15 +92,16 @@ function createHyperSpace() {
     var star = BABYLON.MeshBuilder.CreateGround("star", { size: 1, subdivisions: 1 });
     star.rotation.x = Math.PI / 2;
 
+    var starField;
     setTimeout(() => {
-        var starField = new BABYLON.SolidParticleSystem('stars', scene);
+        starField = new BABYLON.SolidParticleSystem('stars', scene);
         starField.addShape(star, 300000, { positionFunction: myPositionFunction });
         var mesh = starField.buildMesh();
         var mat = new BABYLON.StandardMaterial("mat1", scene);
         mat.emissiveTexture = new BABYLON.Texture("../data/particles/star5.png", scene);
         mat.opacityTexture = new BABYLON.Texture("../data/particles/star5.png", scene);
         mat.opacityTexture.getAlphaFromRGB = true;
-        mat.emissiveColor = new BABYLON.Color3.White();
+        mat.emissiveColor = new BABYLON.Color3.Blue();
         mat.backFaceCulling = false;
         mesh.material = mat;
         starField.setParticles();
@@ -171,21 +173,16 @@ function createHyperSpace() {
         }
         $("#fps").fadeOut(1);
 
-        let g = Math.PI / 2;
         scene.registerBeforeRender(() => {
             if (camfree.position.x > -3500) camfree.position.x = -5000;
             if (camfreed.position.x > -3500) camfreed.position.x = -5000;
             if (hyperspace) {
-                g += .002;
-                camfree.rotation.x = Math.cos(g) / 4;
                 if (speed < 0.2) speed += 0.0005 * transcoeff;
                 if (camfree.fov < fovmax) camfree.fov += 0.008 * transcoeff;
                 if (camfreed.fov < fovmax) camfreed.fov += 0.008 * transcoeff;
                 if (camfree.fov > fovmax) camfree.fov -= 0.008 * transcoeff;
                 if (camfreed.fov > fovmax) camfreed.fov -= 0.008 * transcoeff;
             } else {
-                camfree.rotation.x -= (Math.PI / 2 - Math.acos(camfree.rotation.x)) / 10;
-                g += (Math.PI / 2 - g) / 5;
                 if (speed > 0.1 / 100) speed -= 0.003 * transcoeff;
                 if (speed <= 0) speed += 0.001;
                 if (camfree.fov > 0.4) camfree.fov -= 0.1 * transcoeff;
