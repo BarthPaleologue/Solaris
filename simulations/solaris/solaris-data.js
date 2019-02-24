@@ -45,8 +45,8 @@ const astres = [{
         annee: 88,
         satellites: 0,
         rotation: "58&nbsp;jours&nbsp;et&nbsp;16&nbsp;heures",
-        revolution: "88&nbsp;jours (résonante 3/2)",
-        description: "La planète la plus proche du soleil<span class='point'>.</span> De plus, Mercure tourne 3 fois sur elle même toutes les 2 révolutions autour du Soleil<span class='point'>.</span> On appelle cela la résonance orbitale<span class='point'>.</span>"
+        revolution: "88&nbsp;jours",
+        description: "La planète la plus proche du soleil<span class='point'>.</span> De plus, Mercure tourne 3 fois sur elle même toutes les 2 révolutions autour du Soleil<span class='point'>.</span> On appelle cela la résonance spin-orbite<span class='point'>.</span>"
     },
     {
         name: "Vénus",

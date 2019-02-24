@@ -104,7 +104,7 @@
 </html>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="babylon_galaxy.js"></script>
+<script src="babylon4.js"></script>
 <script src="../../jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 <script src="../../js/screenfull.js"></script>
@@ -121,8 +121,8 @@
 
 <script>
     $("#renderCanvas").fadeOut();
-    var nb = 32000;
-    var starSlider = createSlider($("#star"),$("#starhandle"),32000,1000,150000,(e,ui)=>{
+    var nb = 20000;
+    var starSlider = createSlider($("#star"),$("#starhandle"),20000,1000,150000,(e,ui)=>{
         $("#starhandle").text(intFormat(ui.value));
         nb=ui.value;
     });

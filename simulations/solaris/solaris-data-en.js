@@ -45,7 +45,7 @@ var astres = [{
         annee: 88,
         satellites: 0,
         rotation: "58&nbsp;days&nbsp;and&nbsp;16&nbsp;hours",
-        revolution: "88&nbsp;days (resonant 3/2)",
+        revolution: "88&nbsp;days",
         description: "The closest planet to the Sun<span class='point'>.</span> Mercury rotates three times on its axis every two revolution around the Sun<span class='point'>.</span> It is called spin-orbit resonance<span class='point'>.</span>"
     },
     {

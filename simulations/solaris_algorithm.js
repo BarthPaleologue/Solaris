@@ -7,7 +7,6 @@
 //////////////////////////// Some dependencies /////////////////////////////////////////////////////////////////
 
 $.getScript("../babylon.gui.js");
-$.getScript("../../js/screenfull.js");
 $.getScript("https://code.jquery.com/pep/0.4.3/pep.js");
 $.getScript("http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js");
 
@@ -38,6 +37,7 @@ function createScene(quality = "high") {
     camAstras.maxZ = SCENE_SIZE; // Horizon assez loin pour voir skybox
     camAstras.upperRadiusLimit = SCENE_SIZE / 15 * scale; // Dézoom Max pour rester dans la skybox
     camAstras.upperBetaLimit = 3.14; // Règle le problème de la rotation verticale aux pôles
+    camAstras.beta = Math.PI / 4;
 
     var camAstrasd = new BABYLON.AnaglyphArcRotateCamera("camAstrasd", .3, 1.5, 400 * scale, new BABYLON.Vector3.Zero(), .33, scene);
     camAstrasd.maxZ = SCENE_SIZE;
@@ -57,19 +57,21 @@ function createScene(quality = "high") {
     camAstras.attachControl(canvas); // on l'attache au canvas
 
     var pipeline = new BABYLON.DefaultRenderingPipeline("pipeline", false, scene, [camAstras, camAstrasd, camfree, camfreed, camfreeVR]); /// name, hdrEnabled, scene, cameras
-    pipeline.bloomEnabled = true;
-    pipeline.bloomWeight = 1;
-    pipeline.imageProcessing.toneMappingEnabled = false; // un effet graphique sur les couleurs
-    pipeline.fxaa = new BABYLON.FxaaPostProcess('fxaa', 1, null, BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, true);
+    if (quality != "low") {
+        pipeline.bloomEnabled = true;
+        pipeline.bloomWeight = 1;
+    }
+    pipeline.fxaa = new BABYLON.FxaaPostProcess('fxaa', 1, null, BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false);
     pipeline.fxaaEnabled = false; // fxaa désactivé par défaut
 
-    var skybox = new BABYLON.Mesh.CreateBox("skyBox", SCENE_SIZE, scene);
+    var skybox = new BABYLON.Mesh.CreateBox("skyBox", SCENE_SIZE / 3, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false; // Texture à l'intérieur de la skybox
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../data/skybox5/skybox", scene);
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../data/skybox7/skybox", scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-    skyboxMaterial.diffuseColor = new BABYLON.Color3.White();
+    skyboxMaterial.diffuseColor = new BABYLON.Color3.Black();
     skyboxMaterial.specularColor = new BABYLON.Color3.Black();
+    skyboxMaterial.reflectionTexture.level = 5;
     skybox.material = skyboxMaterial;
     skybox.material.freeze(); // économie de ressources
     skybox.infiniteDistance = true; // impossible d'atteindre en vol libre
@@ -79,18 +81,17 @@ function createScene(quality = "high") {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $("#all").on("click", e => { /// Fullscreen
-        $("#full-exit,#all,#not-all").fadeToggle(10);
-        screenfull.toggle($("body")[0]);
-    });
+    $("#all").on("click", e => $("canvas")[0].requestFullscreen()); /// Fullscreen sans interface
 
-    $("#not-all").on("click", e => screenfull.toggle(canvas)); /// Fullscreen avec interface
+    $("#not-all").on("click", e => { /// Fullscreen avec interface
+        $("body")[0].requestFullscreen();
+        $("#full-exit, #not-all").fadeToggle(10);
+    });
 
     $("#full-exit").on("click", e => { /// Exit Fullscreen
-        $("#full-exit,#all,#not-all").fadeToggle(10);
-        screenfull.exit();
+        $("#full-exit, #not-all").fadeToggle(10);
+        document.exitFullscreen();
     });
-
 
     if (mobile) {
         $("#views,#fullscreen,#settings").fadeOut(10);
@@ -338,7 +339,9 @@ function createScene(quality = "high") {
 
     // Générations des astres selon la tables des données
     for (let i in astres) setTimeout(() => {
-        let astre = new BABYLON.Mesh.CreateSphere(astres[i].name, 32, astres[i].diametre, scene); // création de l'objet astre
+        let seg = 32;
+        if (isDefined(astres[i].atm) || quality == "low") seg = 16;
+        let astre = new BABYLON.Mesh.CreateSphere(astres[i].name, seg, astres[i].diametre, scene); // création de l'objet astre
         astre.position.x = astres[i].distance; // positionnement de l'astre
         astre.rotation.z = astres[i].angularSelf * Math.PI / 180 + Math.PI; // inclinaison de l'astre
         if (isDefined(astres[i].initialRotation)) scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, astres[i].initialRotation, BABYLON.Space.LOCAL);
@@ -353,15 +356,17 @@ function createScene(quality = "high") {
         if (astres[i].godrays) { // si l'astre est une étoile
             let light = new BABYLON.PointLight("luxOf" + astres[i].name, new BABYLON.Vector3.Zero(), scene); // création d'une lumière
             light.parent = astre; // attachement de la lumière à l'astre
-            let godrays = new BABYLON.VolumetricLightScatteringPostProcess('godraysOf' + astres[i].name, 1, camAstras, astre, 75, BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false); // création du VLS
+            let godrays = new BABYLON.VolumetricLightScatteringPostProcess('godraysOf' + astres[i].name, 1.0, camAstras, astre, 75, BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false); // création du VLS
             godrays.exposure = .2; // réglage de l'intensité
             godrays.decay = .95; // réglage de la couronne stellaire
             godrays.isPickable = false; // ne peut être pris pour cible
+
             camAstrasd.attachPostProcess(godrays); // on attache
             camAstras.attachPostProcess(godrays); // le VLS
             camfree.attachPostProcess(godrays); // sur toutes
             camfreed.attachPostProcess(godrays); // les
             camfreeVR.attachPostProcess(godrays); // caméras
+
             godraysTab.push([astre, light, godrays]); // on push tout dans un array
             for (let j in godraysTab) { // on empèche les conflits entre godrays
                 godraysTab[j][1].excludedMeshes.push(astre);
@@ -456,7 +461,6 @@ function createScene(quality = "high") {
         $("#tgodrays").on("click", e => {
             if (areGodraysEnabled) {
                 for (let i in godraysTab) {
-                    quality = "low";
                     camAstras.detachPostProcess(godraysTab[i][2]);
                     camAstrasd.detachPostProcess(godraysTab[i][2]);
                     camfree.detachPostProcess(godraysTab[i][2]);
@@ -467,7 +471,6 @@ function createScene(quality = "high") {
                 $("#tgodrays").attr("src", "../../toolbar/nogodrays.png");
             } else {
                 for (let i in godraysTab) {
-                    quality = "high"
                     camAstras.attachPostProcess(godraysTab[i][2]);
                     camAstrasd.attachPostProcess(godraysTab[i][2]);
                     camfree.attachPostProcess(godraysTab[i][2]);
@@ -539,17 +542,14 @@ function createScene(quality = "high") {
         $("#pland").on("click", e => switchTo(camAstrasd)); // Switch sur la caméra planétaire anaglyphe
 
         /// Slider gérant la précision du zoom de la roulette de la caméra planétaire   
-        var modiCam = .5 * scale;
         var precihandle = $("#precihandle");
         var preciSlider = createSlider($("#precision"), precihandle, 5, 1, 50, (e, ui) => {
             precihandle.text(ui.value);
-            modiCam = ui.value / 10 * scale;
         });
 
         /// Slider gérant la vitesse de la caméra en mode libre        
         var freehandle = $("#freehandle");
         var speedSlider = createSlider($("#speed"), freehandle, SPEED / scale / freeSpeedCoeff, 1, 200, (e, ui) => {
-            SPEED = ui.value * scale * freeSpeedCoeff;
             SPEED = ui.value * scale * freeSpeedCoeff;
             freehandle.text(ui.value);
         });
@@ -585,7 +585,7 @@ function createScene(quality = "high") {
         });
 
         /// Slider gérant le contraste des Textures   
-        pipeline.imageProcessing.contrast = 1.5;
+        pipeline.imageProcessing.contrast = 1.2;
         var contrasthandle = $("#contrasthandle");
         var contrastSlider = createSlider($("#contrast"), contrasthandle, pipeline.imageProcessing.contrast * 10, 0, 30, (e, ui) => {
             pipeline.imageProcessing.contrast = ui.value / 10;
@@ -593,7 +593,7 @@ function createScene(quality = "high") {
         });
 
         document.onkeydown = e => { // gestion de la vitesse du temps avec les touches + et -
-            if (e.keyCode == 107 || e.keyCode == 109) e.preventDefault(); /// + || - (utile si max ou min atteint)
+            if (e.keyCode == 107 || e.keyCode == 109) e.preventDefault(); /// + || - 
             if (e.keyCode === 107 && modiTime < Math.pow(100, powerTime) / timeQuotient) { /// +
                 timeSlider.slider("value", parseInt(timehandle.text()) + 1);
                 timehandle.text(parseInt(timehandle.text()) + 1);
@@ -741,9 +741,11 @@ function createScene(quality = "high") {
         });
 
         scene.beforeRender = () => {
-            for (let i in godraysTab) { /// Activation/Désactivation dynamique des Godrays
-                if (scene.activeCamera.isInFrustum(godraysTab[i][0]) && areGodraysEnabled && quality != "low") scene.activeCamera.attachPostProcess(godraysTab[i][2]); // si dans champ de vision, on active
-                else scene.activeCamera.detachPostProcess(godraysTab[i][2]); // sinon on déactive
+            if (areGodraysEnabled && quality != "low") {
+                for (let i in godraysTab) { /// Activation/Désactivation dynamique des Godrays
+                    if (scene.activeCamera.isInFrustum(godraysTab[i][0])) scene.activeCamera.attachPostProcess(godraysTab[i][2]); // si dans champ de vision, on active
+                    else scene.activeCamera.detachPostProcess(godraysTab[i][2]); // sinon on déactive
+                }
             }
             if ($("#fps").is(":visible")) $("#fps").html(Math.round(engine.getFps()) + " FPS"); /// Affichage des FPS en temps réel, seulement lorsqu'ils sont visibles
 
