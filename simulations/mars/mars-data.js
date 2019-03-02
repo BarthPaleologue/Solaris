@@ -16,7 +16,7 @@ const beginNavIndex = 1;
 const astres = [{
         name: "Soleil",
         icon: "Soleil.png",
-        diametre: 700,
+        diametre: 466,
         distance: 0,
         texture: "sun2.jpg",
         textureType: "emissive",
@@ -36,7 +36,7 @@ const astres = [{
         name: "Mars",
         icon: "Mars-life.png",
         diametre: 256,
-        distance: 100000,
+        distance: 66666,
         texture: "mars2.jpg",
         textureType: "diffuse",
         specular: "mars2_specular.png",

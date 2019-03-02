@@ -19,22 +19,23 @@ function createGalaxy(nb) {
 
     if (!/iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent)) {
 
-        $("#all").on("click", e => {
-            $("#full-exit,#all,#not-all").fadeToggle();
-            screenfull.toggle($("body")[0]);
+        $("#all").on("click", e => $("canvas")[0].requestFullscreen()); /// Fullscreen sans interface
+
+        $("#not-all").on("click", e => { /// Fullscreen avec interface
+            $("body")[0].requestFullscreen();
+            $("#full-exit, #not-all").fadeToggle(10);
         });
 
-        $("#not-all").on("click", e => screenfull.toggle(canvas));
-
-        $("#full-exit").on("click", e => {
-            $("#full-exit,#all,#not-all").fadeToggle();
-            screenfull.exit();
+        $("#full-exit").on("click", e => { /// Exit Fullscreen
+            $("#full-exit, #not-all").fadeToggle(10);
+            document.exitFullscreen();
         });
-        $("#full-exit").fadeOut(1);
 
     } else {
         $("#views,#fullscreen").fadeOut(1);
     }
+
+    $("#full-exit").fadeOut(1);
 
     var origin = new BABYLON.Mesh.CreateSphere("origin", 1, 1e-100, scene);
     origin.visibility = 0;
@@ -45,7 +46,7 @@ function createGalaxy(nb) {
     camAstras.angularSensibilityX = 2000;
     camAstras.angularSensibilityY = 2000;
     camAstras.maxZ = 10000000;
-    camAstras.wheelPrecision = 0.1000;
+    camAstras.wheelPrecision = 2;
     camAstras.lowerRadiusLimit = 100 * (nbstars / 32000);
     camAstras.upperRadiusLimit = 30000;
     scene.activeCamera = camAstras;
@@ -55,7 +56,7 @@ function createGalaxy(nb) {
     camAstrasd.angularSensibilityX = 2000;
     camAstrasd.angularSensibilityY = 2000;
     camAstrasd.maxZ = 10000000;
-    camAstrasd.wheelPrecision = 0.1000;
+    camAstrasd.wheelPrecision = 2;
     camAstrasd.lowerRadiusLimit = 100 * (nbstars / 32000);
     camAstrasd.upperRadiusLimit = 30000;
     camAstrasd.maxZ = 10000000;
@@ -164,7 +165,9 @@ function createGalaxy(nb) {
 
     const starTexture = new BABYLON.Texture("../data/particles/star1.jpg", scene);
 
-    var blue_stars = new BABYLON.ParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
+    var blue_stars;
+    //if (BABYLON.GPUParticleSystem.IsSupported) blue_stars = new BABYLON.GPUParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
+    blue_stars = new BABYLON.ParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
     blue_stars.particleTexture = starTexture;
     blue_stars.emitter = origin;
     blue_stars.updateFunction = particles => {
@@ -182,7 +185,9 @@ function createGalaxy(nb) {
     blue_stars.updateSpeed = 1;
     blue_stars.start();
 
-    var yellow_stars = new BABYLON.ParticleSystem("yellow_stars", Math.round(nbstars / 2), scene);
+    var yellow_stars;
+    //if (BABYLON.GPUParticleSystem.IsSupported) yellow_stars = new BABYLON.GPUParticleSystem("yellow_stars", Math.round(nbstars / 2), scene);
+    yellow_stars = new BABYLON.ParticleSystem("yellow_stars", Math.round(nbstars / 2), scene);
     yellow_stars.particleTexture = starTexture;
     yellow_stars.emitter = origin;
     yellow_stars.updateFunction = particles => {
@@ -200,7 +205,9 @@ function createGalaxy(nb) {
     yellow_stars.updateSpeed = 1;
     yellow_stars.start();
 
-    var nuages = new BABYLON.ParticleSystem("clouds", Math.round((nbstars / 4)), scene);
+    var nuages;
+    //if (BABYLON.GPUParticleSystem.IsSupported) nuages = new BABYLON.GPUParticleSystem("clouds", Math.round(nbstars / 4), scene);
+    nuages = new BABYLON.ParticleSystem("clouds", Math.round(nbstars / 4), scene);
     nuages.particleTexture = new BABYLON.Texture("../data/particles/gazCloud.jpg", scene);
     nuages.emitter = origin;
     nuages.updateFunction = particles => {
@@ -314,8 +321,9 @@ function createGalaxy(nb) {
     };
 
     var precihandle = $("#precihandle");
-    var precislider = createSlider($("#precision"), precihandle, 7, 1, 50, (e, ui) => {
+    var precislider = createSlider($("#precision"), precihandle, 20, 1, 50, (e, ui) => {
         camAstras.wheelPrecision = ui.value / 10;
+        camAstrasd.wheelPrecision = ui.value / 10;
         precihandle.text(Math.ceil(ui.value));
     });
 

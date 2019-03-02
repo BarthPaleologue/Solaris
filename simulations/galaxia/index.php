@@ -31,8 +31,8 @@
         <li id="exit"><a href="../../index.php?v=true"><p>Quitter</p></a></li>
         <li id="fullscreen"><p>Plein écran</p>
             <ul id="screen-list">
-                <li id="all">Avec Interface</li>
-                <li id="not-all">Sans Interface</li>
+                <li id="not-all">Garder l'interface</li>
+                <li id="all">Cacher l'interface</li>
                 <li id="full-exit">Quitter Plein écran</li>
             </ul>
         </li>
@@ -107,7 +107,6 @@
 <script src="babylon4.js"></script>
 <script src="../../jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-<script src="../../js/screenfull.js"></script>
 <script src="../../js/global.js"></script>
 <script src="galaxy.js"></script>
 <script>
