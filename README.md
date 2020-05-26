@@ -6,6 +6,10 @@ without having anything to download. Moreover Solaris is not limited to our sola
 tweak the amount of stars, of spirals and more. You will also find a visual comparison of the different scales in our universe : from our moon and Earth to 
 the most gigantic of red giants.
 
+You can access Solaris in two versions :
+- English version : http://barth.paleologue.fr/solaris/en.php
+- Version Française : http://barth.paleologue.fr/solaris/
+
 ![The red planet : Mars](http://barth.paleologue.fr/solaris/bg/background78.png)
 
 ![Cool looking eclipse](http://barth.paleologue.fr/solaris/bg/background31.png)
