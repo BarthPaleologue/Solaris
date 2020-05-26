@@ -123,12 +123,11 @@ function createGalaxy(nb) {
         disphandle.text(dispersion);
 
         InitializeStars(blue);
-        InitializeStars(yellow);
         InitializeStars(cloud);
+        stars.setParticles();
     });
 
     var blue = []; /// étoiles bleues
-    var yellow = []; /// étoiles jaunes
     var cloud = []; /// nuages de gaz
 
     function InitializeStars(array) {
@@ -144,11 +143,10 @@ function createGalaxy(nb) {
 
             var starX = Math.cos(angle) * distance + getRandom(0, Math.sqrt(Math.abs(armOffset))); /// Trigonométrie de base
             var starZ = Math.sin(angle) * distance + getRandom(0, Math.sqrt(Math.abs(armOffset))); /// Idem
-            var starY = getRandom(-10, 10) / (distance); /// Hauteur pseudo aléatoire
+            var starY = getRandom(-10, 10) / (distance ** 2); /// Hauteur aléatoire
             if (Math.abs(starY) > 4) starY = 0; /// Si trop élevée, est envoyée au milieu de la galaxie
-            if (distance < 40 && probability(70)) starY = 1e100; /// On jette la moitié du bulbe à la poubelle
 
-            if (array == blue || array == yellow) {
+            if (array == blue) {
                 starX += getRandom(-dispersion, dispersion);
                 starY += getRandom(-dispersion, dispersion) / 2;
                 starZ += getRandom(-dispersion, dispersion);
@@ -160,53 +158,36 @@ function createGalaxy(nb) {
     }
 
     InitializeStars(blue);
-    InitializeStars(yellow);
     InitializeStars(cloud);
 
-    const starTexture = new BABYLON.Texture("../data/particles/star1.jpg", scene);
-
-    var blue_stars;
-    //if (BABYLON.GPUParticleSystem.IsSupported) blue_stars = new BABYLON.GPUParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
-    blue_stars = new BABYLON.ParticleSystem("blue_stars", Math.round(nbstars / 2), scene);
-    blue_stars.particleTexture = starTexture;
-    blue_stars.emitter = origin;
-    blue_stars.updateFunction = particles => {
-        for (let i in particles) {
-            var particle = particles[i];
-            particle.position.x = blue[i][0] * density;
-            particle.position.y = blue[i][1] * density;
-            particle.position.z = blue[i][2] * density;
+    function randomStarColor() {
+        if (randomBoolean(50)) { //50% de bleu
+            return new BABYLON.Color4(getRandom(.1, .2), getRandom(.5, .8), 1, 1);
+        } else {
+            return new BABYLON.Color4(getRandom(.7, 253 / 255), getRandom(.8, 184 / 255), 1, 1);
         }
     }
-    blue_stars.color1 = new BABYLON.Color4(0.1, 0.8, 1.0, 1);
-    blue_stars.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1);
-    blue_stars.minSize = 1;
-    blue_stars.maxSize = 2;
-    blue_stars.updateSpeed = 1;
-    blue_stars.start();
 
-    var yellow_stars;
-    //if (BABYLON.GPUParticleSystem.IsSupported) yellow_stars = new BABYLON.GPUParticleSystem("yellow_stars", Math.round(nbstars / 2), scene);
-    yellow_stars = new BABYLON.ParticleSystem("yellow_stars", Math.round(nbstars / 2), scene);
-    yellow_stars.particleTexture = starTexture;
-    yellow_stars.emitter = origin;
-    yellow_stars.updateFunction = particles => {
-        for (let i in particles) {
-            var particle = particles[i];
-            particle.position.x = yellow[i][0] * density;
-            particle.position.y = yellow[i][1] * density;
-            particle.position.z = yellow[i][2] * density;
-        }
+    var stars = new BABYLON.PointsCloudSystem("blue_stars", 1.5, scene);
+
+    var initStars = function(particle, i, s) {
+        particle.position = new BABYLON.Vector3(particle.groupId * 0.5 + 0.25 * Math.random(), i / 5000, 0.25 * Math.random());
+        particle.position.x = blue[i][0] * density;
+        particle.position.y = blue[i][1] * density;
+        particle.position.z = blue[i][2] * density;
+        particle.color = randomStarColor();
     }
-    yellow_stars.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1);
-    yellow_stars.color2 = new BABYLON.Color4(253 / 256, 184 / 256, 19 / 256, 1);
-    yellow_stars.minSize = 1;
-    yellow_stars.maxSize = 2;
-    yellow_stars.updateSpeed = 1;
-    yellow_stars.start();
+
+    stars.updateParticle = function(particle) {
+        particle.position.x = blue[particle.idx][0] * density;
+        particle.position.y = blue[particle.idx][1] * density;
+        particle.position.z = blue[particle.idx][2] * density;
+    }
+
+    stars.addPoints(nbstars, initStars);
+    stars.buildMeshAsync();
 
     var nuages;
-    //if (BABYLON.GPUParticleSystem.IsSupported) nuages = new BABYLON.GPUParticleSystem("clouds", Math.round(nbstars / 4), scene);
     nuages = new BABYLON.ParticleSystem("clouds", Math.round(nbstars / 4), scene);
     nuages.particleTexture = new BABYLON.Texture("../data/particles/gazCloud.jpg", scene);
     nuages.emitter = origin;
@@ -237,11 +218,7 @@ function createGalaxy(nb) {
     skybox.isPickable = false;
 
     setTimeout(() => {
-        blue_stars.stop();
-        yellow_stars.stop();
         nuages.stop();
-        blue_stars.updateSpeed = 0;
-        yellow_stars.updateSpeed = 0;
         nuages.updateSpeed = 0;
     }, 8000);
 
@@ -351,14 +328,15 @@ function createGalaxy(nb) {
         armSeparationDistance = 2 * Math.PI / numArms;
         armshandle.text(ui.value);
         InitializeStars(blue);
-        InitializeStars(yellow);
         InitializeStars(cloud);
+        stars.setParticles();
     });
 
     var denshandle = $("#denshandle");
     var densityslider = createSlider($("#denstar"), denshandle, Math.round(10 / density), 1, 30, (e, ui) => {
         density = 10 / ui.value;
         denshandle.text(ui.value);
+        stars.setParticles();
     });
 
     var enrouhandle = $("#enrouhandle");
@@ -366,7 +344,7 @@ function createGalaxy(nb) {
         rotationFactor = ui.value / 2000;
         enrouhandle.text(ui.value);
         InitializeStars(blue);
-        InitializeStars(yellow);
+        stars.setParticles();
         InitializeStars(cloud);
     });
 
@@ -375,7 +353,7 @@ function createGalaxy(nb) {
         largeCoeff = ui.value / 10;
         largehandle.text(ui.value);
         InitializeStars(blue);
-        InitializeStars(yellow);
+        stars.setParticles();
         InitializeStars(cloud);
     });
 
@@ -384,7 +362,7 @@ function createGalaxy(nb) {
         armlength = ui.value;
         longueurhandle.text(ui.value);
         InitializeStars(blue);
-        InitializeStars(yellow);
+        stars.setParticles();
         InitializeStars(cloud);
     });
 
@@ -393,7 +371,7 @@ function createGalaxy(nb) {
         dispersion = ui.value;
         disphandle.text(ui.value);
         InitializeStars(blue);
-        InitializeStars(yellow);
+        stars.setParticles();
         InitializeStars(cloud);
     });
 

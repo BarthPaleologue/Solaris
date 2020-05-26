@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>http://barth.paleologue.fr/solaris/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/contact.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/news.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/solaris/index.php?q=low</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/solaris/index.php?q=high</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/galaxia/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/scales/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/moon-earth/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/hyperspace/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/jupiter/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/saturne/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/mars/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/pulsar/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/uranus/</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/galerie.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/en.php?v=true</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/index.php?v=true</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/contact-en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/news-en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/galaxia/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/gallery.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/solaris/en.php?q=low</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/solaris/en.php?q=high</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/scales/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/moon-earth/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/hyperspace/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/jupiter/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/saturne/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/mars/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/pulsar/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/uranus/en.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://barth.paleologue.fr/solaris/simulations/galaxia/index.php</loc>
+  <lastmod>2019-03-13T18:01:23+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>

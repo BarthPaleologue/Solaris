@@ -30,7 +30,7 @@
 </head>
 
 <body id="corps">
-    <h1 id="titre">Solaris Project<br/><span class="soustitre">3D space simulations online</span></h1>
+    <h1 id="titre">Solaris Project <br/><span class="soustitre">3D space simulations online</span></h1>
 
     <p id="contact"><a href="contact-en.php">Feedback</a></p>
 
@@ -60,35 +60,35 @@
 
     <div id="qualcontrol">
         <a href="simulations/solaris/en.php?q=low" id="low">
-            <img src="data/menu/low.png" alt="Système Solaire (qualité basse)"/>
-            <h3>Solar System <br/>(low quality)&nbsp;</h3>
+            <img src="data/menu/low.png" alt="Solar System (lightened)"/>
+            <h3>Solar System <br/>(lightened)&nbsp;</h3>
         </a>
         <a href="simulations/solaris/en.php?q=high" id="high">
-            <img src="data/menu/high.png" alt="Système Solaire (qualité haute)"/>
-            <h3>Solar System <br/>(high quality)&nbsp;</h3>
+            <img src="data/menu/high.png" alt="Solar System"/>
+            <h3>Solar System&nbsp;</h3>
         </a>
         <a href="simulations/galaxia/en.php" id="galaxy">
-            <img src="data/menu/galaxy.png" alt="Galaxie"/>
+            <img src="data/menu/galaxy.png" alt="Galaxy"/>
             <h3>Galaxy&nbsp;</h3>
         </a>
         <a href="simulations/scales/en.php" id="scales">
-            <img src="data/menu/scales.png" alt="Echelles"/>
+            <img src="data/menu/scales.png" alt="Universe's scales"/>
             <h3>Universe's scales&nbsp;</h3>    
         </a>
         <a href="simulations/moon-earth/en.php" id="terre">
-            <img src="data/menu/moon-earth.png" alt="Terre et Lune"/>
+            <img src="data/menu/moon-earth.png" alt="Earth and Moon"/>
             <h3>Earth and Moon&nbsp;</h3>
         </a>
         <a href="simulations/hyperspace/en.php" id="hyperspace">
-            <img src="data/menu/hyperspace.png" alt="HyperEspace"/>
+            <img src="data/menu/hyperspace.png" alt="HyperSpace"/>
             <h3>HyperSpace Travel&nbsp;</h3>
         </a>
         <a href="simulations/jupiter/en.php" id="jupiter">
-            <img src="data/menu/jupiter.png" alt="Jupiter"/>
+            <img src="data/menu/jupiter.png" alt="Jupiter and its satellites"/>
             <h3>Jupiter and its&nbsp; satellites&nbsp;</h3>
         </a>
         <a href="simulations/saturne/en.php" id="saturne">
-            <img src="data/menu/saturne.png" alt="Saturne"/>
+            <img src="data/menu/saturne.png" alt="Saturne and its satellites"/>
             <h3>Saturn and its satellites&nbsp;</h3>
         </a>
         <a href="simulations/mars/en.php" id="mars">
@@ -100,7 +100,7 @@
             <h3>Pulsars&nbsp;</h3>
         </a>
         <a href="simulations/uranus/en.php" id="uranus">
-            <img src="data/menu/uranus.png" alt="Uranus"/>
+            <img src="data/menu/uranus.png" alt="Uranus and its saltellites"/>
             <h3>Uranus and its&nbsp; satellites&nbsp;</h3>
         </a>
         <a href="gallery.php" id="gallery">
@@ -111,7 +111,7 @@
 
     <a href="https://twitter.com/ProjetSolaris" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @ProjetSolaris</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     
-    <a href="index.php?v=true"><img class="flag" src="data/menu/french.png"/></a>
+    <a href="index.php?v=true"><img alt="french" class="flag" src="data/menu/french.png"/></a>
 
     <?php include("includes/en/footer.html"); ?>
     <link rel="stylesheet" href="css/style.min.css" /> 

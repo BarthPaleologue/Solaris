@@ -1,18 +1,18 @@
-/// <reference path="../ts/babylonjs-2.5.d.ts" />
-/// <reference path="../ts/jquery.d.ts" />
-/// <reference path="../ts/jquery-ui.d.ts" />
-/// <reference path="solaris/solaris-data.js" />
-/// <reference path="../js/global.js" />
+/// <reference path="../../ts/babylonjs-2.5.d.ts" />
+/// <reference path="../../ts/jquery.d.ts" />
+/// <reference path="../../ts/jquery-ui.d.ts" />
+/// <reference path="../solaris/solaris-data.js" />
+/// <reference path="../../js/global.js" />
 
 //////////////////////////// Some dependencies /////////////////////////////////////////////////////////////////
 
-$.getScript("../babylon.gui.js");
+$.getScript("../../babylon.gui.js");
 $.getScript("https://code.jquery.com/pep/0.4.3/pep.js");
 $.getScript("http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js");
 
 ////////////////////////////// SOLARIS_ALGORITHM v1.5.2 ////////////////////////////////////////////////////////
 
-const audio = new Audio("../ambient.mp3");
+const audio = new Audio("../../ambient.mp3");
 audio.load();
 audio.autoplay = true;
 audio.loop = true;
@@ -24,7 +24,7 @@ function createScene(quality = "high") {
     var scene = new BABYLON.Scene(engine); // Définit la scène
     scene.clearColor = new BABYLON.Color3(0, 0, 0); // Couleur par défaut du fond de la scène
 
-    const SCENE_SIZE = 500000; /// Définit la taille de la skybox et les limites des caméras
+    const SCENE_SIZE = 50000; /// Définit la taille de la skybox et les limites des caméras
     const MAIN_DELAY = 75; /// Délai en ms entre le chargement de chaque astre
 
     var assetsManager = new BABYLON.AssetsManager(scene); // Va contenir tous les matériaux
@@ -99,7 +99,7 @@ function createScene(quality = "high") {
         $("#menu li ul").css("width", "50%");
         $("#astras>p").click(e => $("#astra-list").slideToggle(100));
         $(document).click(function(e) {
-            if (!$(e.target).is('#astras, #astra-list, #astras p')) $('#astra-list').slideUp(100); // si on clic ailleurs que dans le menu
+            if (!$(e.target).is('#astras, #astra-list, #astras p')) $('#astra-list').slideUp(100);
         });
     }
 
@@ -276,20 +276,21 @@ function createScene(quality = "high") {
         clouds.parent = scene.getMeshByID(astre); // on attache l'atmosphère à son astre
     }
 
-    function createPulsar(astre, emitRate = 20000) { // créer un jet d'émission aux pôles d'un astre tel un pulsar
+    function createPulsar(astre, emitRate = 1000) { // créer un jet d'émission aux pôles d'un astre tel un pulsar
         let particleSystem = new BABYLON.ParticleSystem("particlesOf" + astre.id, 100000, scene);
         particleSystem.particleTexture = new BABYLON.Texture("../data/particles/flare.png", scene);
         particleSystem.emitter = astre; // objet émétteur
-        particleSystem.minEmitBox = new BABYLON.Vector3(-.2, 0, 0); // Définition de
-        particleSystem.maxEmitBox = new BABYLON.Vector3(.2, 0, 0); // la zone d'apparition
+        particleSystem.minEmitBox = new BABYLON.Vector3(0, 0, 0); // Définition de
+        particleSystem.maxEmitBox = new BABYLON.Vector3(0, 0, 0); // la zone d'apparition
         particleSystem.color1 = new BABYLON.Color4(.7, .8, 1, 1); // Définition
         particleSystem.color2 = new BABYLON.Color4(.2, .5, 1, 1); // des couleurs
-        particleSystem.minSize = .5; // taille des
-        particleSystem.maxSize = .5; // particules
+        particleSystem.minSize = .98; // taille des
+        particleSystem.maxSize = .98; // particules
+        particleSystem.minLifeTime = .7;
         particleSystem.emitRate = emitRate; // Nb de particules émises par secondes
-        particleSystem.direction1 = new BABYLON.Vector3(0, 100, 0); // Emission pôle nord
-        particleSystem.direction2 = new BABYLON.Vector3(0, -100, 0); // Emission pôle sud
-        particleSystem.updateSpeed = .008;
+        particleSystem.direction1 = new BABYLON.Vector3(0, 0, 0); // Emission pôle nord
+        particleSystem.direction2 = new BABYLON.Vector3(-100, 0, -100); // Emission pôle sud
+        particleSystem.updateSpeed = .004;
         particleSystem.start();
     }
 
@@ -357,9 +358,7 @@ function createScene(quality = "high") {
             let light = new BABYLON.PointLight("luxOf" + astres[i].name, new BABYLON.Vector3.Zero(), scene); // création d'une lumière
             light.parent = astre; // attachement de la lumière à l'astre
             let godrays = new BABYLON.VolumetricLightScatteringPostProcess('godraysOf' + astres[i].name, 1.0, camAstras, astre, 75, BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false); // création du VLS
-            // réglage de l'intensité
-            if (isDefined(astres[i].exposure)) godrays.exposure = astres[i].exposure;
-            else godrays.exposure = .2;
+            godrays.exposure = .2; // réglage de l'intensité
             godrays.decay = .95; // réglage de la couronne stellaire
             godrays.isPickable = false; // ne peut être pris pour cible
 
@@ -487,7 +486,7 @@ function createScene(quality = "high") {
         if (quality == "low") $("#tgodrays").trigger("click");
 
         /// Toggle Labels
-        var areLabelsEnabled = true;
+        var areLabelsEnabled = false;
         $("#tlabel").on("click", e => {
             if (areLabelsEnabled) {
                 for (let i in labelTab) UI.removeControl(labelTab[i][0]);
@@ -645,7 +644,7 @@ function createScene(quality = "high") {
         var r = astres[indexOfCible].diametre * 2;
 
         function goTo(target) {
-            modiTime = 0;
+            //modiTime = 0;
 
             scene.getMeshByID("orbitTorusOf" + astres[indexOfCible].name).color = BABYLON.Color3.White(); // l'orbite redevient blanche
             UI.addControl(labelTab[indexOfCible][0]); // on fait réapparaître l'étiquette
@@ -681,68 +680,32 @@ function createScene(quality = "high") {
             r = astres[indexOfCible].diametre * 2 + 1; // distance d'approche de l'astre cible
             if (!changement) changement = true; // ENGAGE !
         }
-
-        var ticksdays = 0;
-        var date = new Date();
-        var days = date.getDate();
-        var mois = date.getMonth() + 1;
-        var year = date.getFullYear();
-        var limite;
-        var day = Math.PI * 2;
-        $("#jour").html(days);
-        $("#mois").html(mois);
-        $("#year").html(year);
-
-
-        function backToTheFuture(distance) { /// Prise en compte du bond temporel
-            for (let i in astres) {
-                scene.getMeshByID(astres[i].name + "-centerorbit").rotate(BABYLON.Axis.Y, ((-distance) / (astres[i].annee)) * Math.PI * 2, BABYLON.Space.LOCAL);
-                scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, ((-distance) / (astres[i].annee)) * Math.PI * 2, BABYLON.Space.WORLD);
-                if (isDefined(astres[i].rings)) scene.getMeshByID("ringsOf" + astres[i].name).rotate(BABYLON.Axis.Y, -((distance) / (astres[i].annee)) * Math.PI * 2, BABYLON.Space.WORLD);
-                if (isDefined(astres[i].parent)) {
-                    scene.getMeshByID(astres[i].name + "-centerorbit").rotate(BABYLON.Axis.Y, -distance / astres[getIndexOf(astres[i].parent)].annee * Math.PI * 2, BABYLON.Space.WORLD);
-                    scene.getMeshByID("orbitTorusOf" + astres[i].name).rotate(BABYLON.Axis.Y, -distance / astres[getIndexOf(astres[i].parent)].annee * Math.PI * 2, BABYLON.Space.WORLD);
-                }
-            }
-        }
-        var newDate = null;
-        var oldDate = new Date();
-        $("#datepicker").datepicker({
-            dateFormat: "mm/dd/yy",
-            onSelect: date => newDate = new Date(date)
-        });
-        $("#datesetter").dialog({
-            autoOpen: false,
-            dialogClass: "no-close",
-            buttons: [{
-                    text: TEXT[lang].cncl,
-                    click: function() {
-                        newDate = new Date($("#datepicker").val());
-                        $(this).dialog("close");
-                    }
-                },
-                {
-                    text: TEXT[lang].dne,
-                    click: function() {
-                        newDate = new Date($("#datepicker").val());
-                        $(this).dialog("close");
-                        oldDate = new Date($("#mois").text() + "/" + $("#jour").text() + "/" + $("#year").text());
-                        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-                        var diff = Math.round((newDate.getTime() - oldDate.getTime()) / oneDay);
-                        $("#mois").html(newDate.getMonth() + 1);
-                        $("#jour").html(newDate.getDate());
-                        $("#year").html(newDate.getFullYear());
-                        backToTheFuture(diff);
-                    }
-                }
-            ]
-        });
-        $("#date").click(e => { // on click sur la date
-            $("#datesetter").dialog("open"); // l'interface de voyage temporel s'ouvre
-            $("#datepicker").val($("#mois").text() + "/" + $("#jour").text() + "/" + $("#year").text()); // on règle le champ sur la date courante
-        });
+        $("#date").remove();
 
         scene.beforeRender = () => {
+
+            if (scene.getMeshByID("E1").position.x > 0) {
+                scene.getMeshByID("E1").position.x -= .09;
+                scene.getMeshByID("E2").position.x -= .09;
+                scene.getParticleSystemByID("particlesOfE1").emitRate += 70;
+                scene.getParticleSystemByID("particlesOfE2").emitRate += 70;
+                modiTime *= 1.01;
+                if (scene.getMeshByID("E1").position.x < 3) {
+                    scene.getParticleSystemByID("particlesOfE1").direction1 = new BABYLON.Vector3(0, -100, 0);
+                    scene.getParticleSystemByID("particlesOfE1").direction2 = new BABYLON.Vector3(-100, 100, -100);
+                    scene.getParticleSystemByID("particlesOfE2").direction1 = new BABYLON.Vector3(0, -100, 0);
+                    scene.getParticleSystemByID("particlesOfE2").direction2 = new BABYLON.Vector3(-100, 100, 100);
+                    scene.getParticleSystemByID("particlesOfE1").emitRate += 200;
+                    scene.getParticleSystemByID("particlesOfE2").emitRate += 200;
+                }
+            } else {
+                scene.getParticleSystemByID("particlesOfE1").stop();
+                scene.getParticleSystemByID("particlesOfE2").stop();
+                scene.getMeshByID("E2").visibility = 0;
+                scene.getMeshByID("E1").scalingDeterminant = 1.5;
+                modiTime = .01;
+            }
+
             if (areGodraysEnabled && quality != "low") {
                 for (let i in godraysTab) { /// Activation/Désactivation dynamique des Godrays
                     if (scene.activeCamera.isInFrustum(godraysTab[i][0])) scene.activeCamera.attachPostProcess(godraysTab[i][2]); // si dans champ de vision, on active
@@ -757,63 +720,11 @@ function createScene(quality = "high") {
             camAstrasd.wheelPrecision = 1 / camAstrasd.radius * 200 * parseInt(precihandle.html()) / 2;
             camAstrasd.pinchPrecision = 1 / camAstras.radius * 200 * parseInt(precihandle.html()) / 2;
 
-            if (changement) { /// Mise à jour de la position des caméras lors des changements de cibles
-                centerView.position.x += (cible.absolutePosition.x - centerView.position.x) * transispeed / 10;
-                centerView.position.y += (cible.absolutePosition.y - centerView.position.y) * transispeed / 10;
-                centerView.position.z += (cible.absolutePosition.z - centerView.position.z) * transispeed / 10;
-
-                camAstras.setTarget(centerView.position);
-                camAstrasd.setTarget(centerView.position);
-
-                let minus = astres[indexOfCible].diametre * 2;
-                if (Math.abs(cible.absolutePosition.x - camfree.position.x - minus) > 1) {
-                    camfree.position.x += (cible.absolutePosition.x - camfree.position.x - minus) / 10 * transispeed;
-                    camfree.position.y += (cible.absolutePosition.y - camfree.position.y + minus / 10) / 10 * transispeed;
-                    camfree.position.z += (cible.absolutePosition.z - camfree.position.z - minus) / 10 * transispeed;
-                    camfree.setTarget(cible.absolutePosition);
-                } else if (scene.activeCamera == camfree) endLock = false;
-
-                if (Math.abs(cible.absolutePosition.x - camfreed.position.x - minus) > 1) {
-                    camfreed.position.x += (cible.absolutePosition.x - camfreed.position.x - minus) / 10 * transispeed;
-                    camfreed.position.y += (cible.absolutePosition.y - camfreed.position.y + minus / 10) / 10 * transispeed;
-                    camfreed.position.z += (cible.absolutePosition.z - camfreed.position.z - minus) / 10 * transispeed;
-                    camfreed.setTarget(cible.absolutePosition);
-                } else if (scene.activeCamera == camfreed) endLock = false;
-
-                if (Math.abs(cible.absolutePosition.x - camfreeVR.position.x - minus) > 1) {
-                    camfreeVR.position.x += (cible.absolutePosition.x - camfreeVR.position.x - minus) / 10 * transispeed;
-                    camfreeVR.position.y += (cible.absolutePosition.y - camfreeVR.position.y + minus / 10) / 10 * transispeed;
-                    camfreeVR.position.z += (cible.absolutePosition.z - camfreeVR.position.z - minus) / 10 * transispeed;
-                    camfreeVR.setTarget(cible.absolutePosition);
-                } else if (scene.activeCamera == camfreeVR) endLock = false;
-
-                if (Math.abs(cible.absolutePosition.x - centerView.position.x) < .005) {
-                    if (Math.abs(camAstras.radius - r) < 10 && canZoom) endLock = false;
-                    else if (!canZoom) endLock = false;
-                } else if (canZoom) {
-                    camAstras.radius -= (camAstras.radius - r) / 10 * transispeed / 2;
-                    camAstrasd.radius -= (camAstrasd.radius - r) / 10 * transispeed / 2;
-                }
-
-                if (!endLock) {
-                    camAstras.setTarget(cible.absolutePosition);
-                    camAstrasd.setTarget(cible.absolutePosition);
-                    camAstras.lowerRadiusLimit = astres[indexOfCible].diametre + 1;
-                    camAstrasd.lowerRadiusLimit = astres[indexOfCible].diametre + 1;
-                    changement = false;
-                    endLock = true;
-                    canZoom = true;
-                    modiTime = (parseInt(timehandle.html()) ** powerTime) / timeQuotient;
-                }
-            } else {
-                camAstras.setTarget(cible.absolutePosition);
-                camAstrasd.setTarget(cible.absolutePosition);
-            }
-
             $(window).on('wheel gestureend', e => { /// Si l'utilisateur scroll ou pince
                 if (endLock && changement) canZoom = false;
                 if (zoomOn) zoomOn = false;
             });
+
 
             if (zoomOn) { /// Zoom sur l'astre courant
                 let leftR = camAstras.radius - r;
@@ -824,48 +735,20 @@ function createScene(quality = "high") {
             }
 
             for (let i in astres) {
-                if (!isDefined(astres[i].pulsar)) { /// Si n'est pas un pulsar
-                    if (Math.abs(astres[i].coeffrotation) > 0) { /// Si n'est pas un satellite synchrnone
-                        scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, modiTime * astres[i].coeffrotation, BABYLON.Space.LOCAL); /// Rotation des planètes sur elles-mêmes
-                        scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, -modiTime / astres[i].annee, BABYLON.Space.WORLD); /// Saisons (décalage de l'axe de rotation sur 1 année)
-                    }
-                    if (isDefined(astres[i].rings)) scene.getMeshByID("ringsOf" + astres[i].name).rotate(BABYLON.Axis.Y, -modiTime / astres[i].annee, BABYLON.Space.WORLD);
-                    if (isDefined(astres[i].parent)) {
-                        scene.getMeshByID(astres[i].name + "-centerorbit").rotate(BABYLON.Axis.Y, -modiTime / astres[getIndexOf(astres[i].parent)].annee, BABYLON.Space.WORLD);
-                        scene.getMeshByID("orbitTorusOf" + astres[i].name).rotate(BABYLON.Axis.Y, -modiTime / astres[getIndexOf(astres[i].parent)].annee, BABYLON.Space.WORLD);
-                    }
-                    scene.getMeshByID(astres[i].name + "-centerorbit").rotate(BABYLON.Axis.Y, -modiTime / astres[i].annee, BABYLON.Space.LOCAL); /// Rotation autour du parent
-                } else scene.getMeshByID(astres[i].name).rotation.y -= astres[i].coeffrotation / timeQuotient;
+                //if (!isDefined(astres[i].pulsar)) { /// Si n'est pas un pulsar
+                if (Math.abs(astres[i].coeffrotation) > 0) { /// Si n'est pas un satellite synchrnone
+                    scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, modiTime * astres[i].coeffrotation, BABYLON.Space.LOCAL); /// Rotation des planètes sur elles-mêmes
+                    scene.getMeshByID(astres[i].name).rotate(BABYLON.Axis.Y, -modiTime / astres[i].annee, BABYLON.Space.WORLD); /// Saisons (décalage de l'axe de rotation sur 1 année)
+                }
+                if (isDefined(astres[i].rings)) scene.getMeshByID("ringsOf" + astres[i].name).rotate(BABYLON.Axis.Y, -modiTime / astres[i].annee, BABYLON.Space.WORLD);
+                if (isDefined(astres[i].parent)) {
+                    scene.getMeshByID(astres[i].name + "-centerorbit").rotate(BABYLON.Axis.Y, -modiTime / astres[getIndexOf(astres[i].parent)].annee, BABYLON.Space.WORLD);
+                    scene.getMeshByID("orbitTorusOf" + astres[i].name).rotate(BABYLON.Axis.Y, -modiTime / astres[getIndexOf(astres[i].parent)].annee, BABYLON.Space.WORLD);
+                }
+                scene.getMeshByID(astres[i].name + "-centerorbit").rotate(BABYLON.Axis.Y, -modiTime / astres[i].annee, BABYLON.Space.LOCAL); /// Rotation autour du parent
+                //} else scene.getMeshByID(astres[i].name).rotation.y -= astres[i].coeffrotation / timeQuotient;
                 scene.getMeshByID(astres[i].name + "-center").position = scene.getMeshByID(astres[i].name).position;
                 if (isDefined(astres[i].atm)) scene.getMeshByID("atmosphereOf" + astres[i].name).rotation.y += .2 * modiTime;
-            }
-
-            ticksdays += modiTime;
-            days = parseInt($("#jour").html());
-            mois = parseInt($("#mois").html());
-            year = parseInt($("#year").html());
-
-            if (ticksdays >= day) {
-                days += Math.round(ticksdays / day);
-                ticksdays = 0;
-                if (mois == 1 || mois == 3 || mois == 5 || mois == 7 || mois == 8 || mois == 10 || mois == 12) limite = 31;
-                else if (mois == 2 && year % 4 == 0) limite = 29;
-                else if (mois == 2 && year % 4 != 0) limite = 28;
-                else limite = 30;
-
-                if (days - 1 >= limite) {
-                    mois += Math.round((days) / limite);
-                    days = 1;
-                }
-
-                if (mois >= 13) {
-                    year += Math.round(mois / 12);
-                    mois = 1;
-                }
-
-                $("#jour").html(days);
-                $("#mois").html(mois);
-                $("#year").html(year);
             }
         }
 

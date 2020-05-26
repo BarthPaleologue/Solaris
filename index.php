@@ -34,7 +34,7 @@
 
 <body id="corps">
 
-    <h1 id="titre">Projet Solaris<br/><span class="soustitre">Simulations Spatiales en 3D</span></h1>
+    <h1 id="titre">Projet Solaris <br/><span class="soustitre">Simulations Spatiales en 3D</span></h1>
 
     <p id="contact"><a href="contact.php">Feedback</a></p>
 
@@ -64,19 +64,19 @@
 
     <div id="qualcontrol">
         <a href="simulations/solaris/index.php?q=low" id="low">
-            <img src="data/menu/low.png" alt="Système Solaire (qualité basse)"/>
-            <h3>Système Solaire&nbsp; (qualité basse)&nbsp;</h3>
+            <img src="data/menu/low.png" alt="Système Solaire (allégé)"/>
+            <h3>Système Solaire&nbsp; (allégé)&nbsp;</h3>
         </a>
         <a href="simulations/solaris/index.php?q=high" id="high">
-            <img src="data/menu/high.png" alt="Système Solaire (qualité haute)"/>
-            <h3>Système Solaire&nbsp; (qualité haute)&nbsp;</h3>
+            <img src="data/menu/high.png" alt="Système Solaire"/>
+            <h3>Système Solaire&nbsp;</h3>
         </a>
         <a href="simulations/galaxia" id="galaxy">
             <img src="data/menu/galaxy.png" alt="Galaxie"/>
             <h3>Galaxie&nbsp;</h3>
         </a>
         <a href="simulations/scales" id="scales">
-            <img src="data/menu/scales.png" alt="Echelles"/>
+            <img src="data/menu/scales.png" alt="Echelles Cosmiques"/>
             <h3>Echelles&nbsp; cosmiques&nbsp;</h3>    
         </a>
         <a href="simulations/moon-earth" id="terre">
@@ -107,6 +107,10 @@
             <img src="data/menu/uranus.png" alt="Uranus"/>
             <h3>Uranus et ses&nbsp; satellites&nbsp;</h3>
         </a>
+        <a href="simulations/proxima" id="uranus">
+            <img src="data/menu/proximab.png" alt="Proxima B"/>
+            <h3>Proxima Centauri B&nbsp;</h3>
+        </a>
         <a href="galerie.php" id="gallery">
             <img src="data/menu/gallery.png" alt="Galerie"/>
             <h3>Galerie&nbsp;</h3>
@@ -114,7 +118,7 @@
     </div>
     <a href="https://twitter.com/ProjetSolaris" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @ProjetSolaris</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-    <a href="en.php?v=true"><img class="flag" src="data/menu/english.jpg"/></a>
+    <a href="en.php?v=true"><img alt="Anglais" class="flag" src="data/menu/english.jpg"/></a>
 
     <?php include("includes/fr/footer.html"); ?>
     <link rel="stylesheet" href="css/style.min.css" />
