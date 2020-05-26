@@ -6,6 +6,10 @@ without having anything to download. Moreover Solaris is not limited to our sola
 tweak the amount of stars, of spirals and more. You will also find a visual comparison of the different scales in our universe : from our moon and Earth to 
 the most gigantic of red giants.
 
+![The red planet : Mars](http://barth.paleologue.fr/solaris/bg/background78.png)
+
+![Cool looking eclipse](http://barth.paleologue.fr/solaris/bg/background31.png)
+
 ![Titan orbiting Saturn](http://barth.paleologue.fr/solaris/bg/background6.png)
 
 ![Randomly generated galaxy](http://barth.paleologue.fr/solaris/bg/background15.png)
