@@ -168,7 +168,7 @@ function createGalaxy(nb) {
         }
     }
 
-    var stars = new BABYLON.PointsCloudSystem("blue_stars", 1.5, scene);
+    var stars = new BABYLON.PointsCloudSystem("blue_stars", 1, scene);
 
     var initStars = function(particle, i, s) {
         particle.position = new BABYLON.Vector3(particle.groupId * 0.5 + 0.25 * Math.random(), i / 5000, 0.25 * Math.random());
