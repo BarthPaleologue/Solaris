@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="robots" content="index, follow" />
     <title>Quoi de neuf ?</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.min.css" />
     <link rel="icon" type="image/x-icon" href="icon.ico" />   
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <?php

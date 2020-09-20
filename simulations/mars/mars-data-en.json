@@ -1,0 +1,61 @@
+{
+    "diameterScalingFactor": 5,
+    "distanceScalingFactor": 5,
+
+    "timeSpeedFactor": 0.0001,
+
+    "firstTarget": "Mars",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 12756,
+    "distanceConversionFactor": 12756,
+
+    "astres": [{
+            "id": "Soleil",
+            "icon": "soleil.png",
+            "diametre": 109.17999,
+            "distance": 0,
+            "textureFileName": "sun.jpg",
+            "textureType": "emissive",
+            "godrays": true,
+            "isPickable": false,
+            "initialOrbitalPosition": 0,
+            "angularOrbit": 0,
+            "angularSelf": 7.25,
+            "dayDuration": 27,
+            "yearDuration": 1000,
+            "satellites": "Every planet of the system",
+            "rotation": "27 days",
+            "revolution": "Negligible around the barycenter",
+            "description": "The Sun is our solar system star, it is located in the center and all the planets orbit around it."
+        },
+        {
+            "id": "Mars",
+            "icon": "mars-life.png",
+            "diametre": 0.53144,
+            "distance": 17826.2278,
+            "textureFileName": "mars2.jpg",
+            "textureType": "diffuse",
+            "specular": "mars2_specular.png",
+            "initialOrbitalPosition": 148,
+            "atm": {
+                "opacity": 0.4,
+                "textureFileName": "clouds4.jpg"
+            },
+            "angularOrbit": 1.8506,
+            "angularSelf": 25.19,
+            "dayDuration": 1.025,
+            "yearDuration": 686,
+            "satellites": 2,
+            "rotation": "24 hours 36 minutes",
+            "revolution": "686 days",
+            "description": "Also called \"The red planet\", Mars is the last telluric planet of our solar system. Mars has almost completely lost its atmosphere because of the lack of magnetic field, but scientists think there was water and perhaps even life on it."
+        }
+    ],
+    "belts": []
+}

@@ -1,0 +1,156 @@
+{
+    "diameterScalingFactor": 30,
+    "distanceScalingFactor": 30,
+
+    "timeSpeedFactor": 0.0001,
+
+    "firstTarget": "Jupiter",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 12756,
+    "distanceConversionFactor": 12756,
+
+    "astres": [{
+            "id": "Soleil",
+            "icon": "soleil.png",
+            "diametre": 10.917999,
+            "realdiameter": 1392700000,
+            "distance": 0,
+            "textureFileName": "sun.jpg",
+            "textureType": "emissive",
+            "godrays": true,
+            "exposure": 1,
+            "decay": 0.95,
+            "isPickable": false,
+            "initialOrbitalPosition": 0,
+            "angularOrbit": 0,
+            "angularSelf": 7.25,
+            "dayDuration": 27,
+            "yearDuration": 1000,
+            "satellites": "Toutes les planètes du système solaire",
+            "rotation": "27 jours",
+            "revolution": "Négligable autour du barycentre",
+            "description": "Le Soleil est l'étoile de notre système solaire, il se situe en son centre et toutes les planètes orbitent autour de lui."
+        },
+        {
+            "id": "Jupiter",
+            "icon": "jupiter.png",
+            "diametre": 10.96112,
+            "distance": 6098.46347,
+            "realdistance": 777920000,
+            "textureFileName": "jupiter.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 83,
+            "atm": {
+                "opacity": 0.4,
+                "textureFileName": "black.png"
+            },
+            "rings": {
+                "textureFileName": "jupiter_rings.png",
+                "size": 20,
+                "alpha": 0.3
+            },
+            "angularOrbit": 1.304,
+            "angularSelf": 3.12,
+            "dayDuration": 0.41,
+            "yearDuration": 4331.75,
+            "satellites": 69,
+            "rotation": "9 heures 30 minutes",
+            "revolution": "11 ans 314 jours",
+            "description": "Jupiter est la plus grande de toutes les planètes de notre système solaire (11X plus grande que la Terre). Il s'agit de la première des planètes gazeuses<br/>Son apparence est dûe à la présence de différents gaz colorés et de vents supersoniques dans son atmosphère."
+        },
+        {
+            "id": "Io",
+            "icon": "io.png",
+            "diametre": 0.28561,
+            "distance": 33.0668,
+            "realdistance": 421800,
+            "textureFileName": "io.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 100,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.036,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 1.769,
+            "satellites": 0,
+            "rotation": "1,769 jours (synchrone)",
+            "revolution": "1,769 jours (synchrone)",
+            "description": "Io est un des quatre satellites Galiléens (satellites les plus gros de Jupiter). Io est également l'astre le plus actif du système solaire avec 400 volcans en activité. Cette forte activitée est due aux puissantes forces de marées de Jupiter sur Io."
+        },
+        {
+            "id": "Europe",
+            "icon": "europe.png",
+            "diametre": 0.24471,
+            "distance": 52.61053,
+            "realdistance": 671100,
+            "textureFileName": "europe.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 250,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.469,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 3.551181,
+            "satellites": 0,
+            "rotation": "3,55 jours (synchrone)",
+            "revolution": "3,55 jours (synchrone)",
+            "description": "Europe est le deuxième satellite Galiléen. Son enveloppe de glace abrite un océan souterrain et donc peut-être de la vie."
+        },
+        {
+            "id": "Ganymède",
+            "icon": "ganymede.png",
+            "diametre": 0.41299,
+            "distance": 83.9135,
+            "realdistance": 1070400,
+            "textureFileName": "ganymede.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 50,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.21,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 7.15,
+            "satellites": 0,
+            "rotation": "7,15 jours (synchrone)",
+            "revolution": "7,15 jours (synchrone)",
+            "description": "Ganymède est le troisième satellite Galiléen, il est le plus gros de tous les satellites du système solaire et est le seul a posséder une magnétosphère."
+        },
+        {
+            "id": "Callisto",
+            "icon": "callisto.png",
+            "diametre": 0.37791,
+            "distance": 147.59,
+            "realdistance": 1882700,
+            "textureFileName": "callisto.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 0,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.192,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 16.68,
+            "satellites": 0,
+            "rotation": "16,68 jours (synchrone)",
+            "revolution": "16,68 jours (synchrone)",
+            "description": "Callisto est le quatrième et dernier satellite Galiléen. Comme Europe, Callisto possède un océan, environ 100km sous sa surface, et donc potentiellement de la vie"
+        }
+    ],
+    "belts": [{
+        "id": "ceintureAsteroides",
+        "yDivergence": 0.001,
+        "nb": 5000,
+        "size": 0.001,
+        "position": {
+            "nearest": 9.7,
+            "farthest": 9.9
+        },
+        "parentId": "Jupiter",
+        "textureType": "diffuse"
+    }]
+}

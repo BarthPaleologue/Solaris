@@ -3,14 +3,18 @@
 <html lang="en">
 
 <head>
-    <?php echo("<style>body{background:url('../../bg/background".rand(1,count(glob('../../bg/*.*'))).".png');}</style>");?>
+    <style>
+        body {
+            background:url('../../bg/background<?php echo(rand(1,count(glob("../../bg/*.*"))))?>.png');
+        }
+    </style>
     <title>Projet Solaris - La Terre et la Lune</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
     <meta name="robots" content="index" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/style.min.css" />
     <?php
         $compteur = fopen("../../compteur.txt","r+");
         $visites = fgets($compteur);
@@ -35,26 +39,28 @@
 
     <?php include("../../includes/fr/footer.html"); ?>
 
+    <script type="text/javascript" src="../babylon4.js"></script>
+    <script type="text/javascript" src="../babylon.gui.js"></script>
+    <script type='module'>
+        import { initSolaris } from '../main.js';
+        initSolaris("./earth-moon-data.json", "high");
+    </script>
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-91827071-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
 </html>
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-91827071-1', 'auto');
-    ga('send', 'pageview');
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="../babylon.js"></script>
-<script src="../../jquery-ui/jquery-ui.min.js"></script>
-<script src="../../js/screenfull.js"></script>
-<script src="../../js/global.js"></script>
-<script src="earth-moon-data.js"></script>
-<script src="../solaris_algorithm.js"></script>
-<link rel="stylesheet" href="../common-style.css" />
-<link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
-<script>setTimeout(()=>createScene(),100);</script> 
 
 

@@ -1,0 +1,85 @@
+{
+    "diameterScalingFactor": 2,
+    "distanceScalingFactor": 2,
+
+    "timeSpeedFactor": 0.0001,
+
+    "firstTarget": "The Earth",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 12756,
+    "distanceConversionFactor": 12756,
+
+    "freeCameraSpeedFactor": 0.001,
+
+    "beginNavIndex": 0,
+
+    "astres": [{
+            "id": "The Sun",
+            "icon": "soleil.png",
+            "diametre": 109.17999,
+            "distance": 0,
+            "textureFileName": "sun.jpg",
+            "textureType": "emissive",
+            "godrays": true,
+            "initialOrbitalPosition": 0,
+            "angularOrbit": 0,
+            "angularSelf": 7.25,
+            "dayDuration": 27,
+            "yearDuration": 1000,
+            "satellites": "All planets",
+            "rotation": "27 days",
+            "revolution": "Negligible around the barycenter.",
+            "description": "The Sun is our solar system star, it is located in the center and all the planets orbit around it."
+        },
+        {
+            "id": "The Earth",
+            "icon": "terre.png",
+            "diametre": 1,
+            "distance": 11727.8144,
+            "textureFileName": "earth.jpg",
+            "textureType": "diffuse",
+            "specular": "specular.jpg",
+            "emissive": "night2.jpg",
+            "initialOrbitalPosition": -101,
+            "atm": {
+                "opacity": 0.4,
+                "textureFileName": "clouds4.jpg"
+            },
+            "angularOrbit": 0,
+            "angularSelf": -23.43,
+            "dayDuration": 1,
+            "yearDuration": 365.25,
+            "satellites": 1,
+            "rotation": "23 hours 56 minutes",
+            "revolution": "365.25 days",
+            "description": "The Earth is the only planet of the solar system with liquid water on its surface. It is also the only planet of the solar system which has ever hosted life and an intelligent civilization - as far as we know."
+        },
+        {
+            "id": "The Moon",
+            "icon": "lune.png",
+            "diametre": 0.2724,
+            "distance": 30.103,
+            "realdistance": 384000,
+            "textureFileName": "moon.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 51.4,
+            "parentId": "The Earth",
+            "angularOrbit": 5.145,
+            "angularSelf": 6.687,
+            "dayDuration": 0,
+            "initialRotation": 3.14,
+            "yearDuration": 29.5,
+            "satellites": 0,
+            "rotation": "29.5 days (synchronous)",
+            "revolution": "29.5 days (synchronous)",
+            "description": "The Moon is the only companion of the Earth. It was formed after the Earth collided with a protoplanet during the solar system's genesis : a part of the debris is said to have formed the Moon. The Moon is also responsible for the tides on Earth. Moreover, the Moon's attraction power is slowing down the Earth's rotation speed on itself. The Moon is the only celestial body Humanity has ever set foot on, except the Earth, of course."
+        }
+    ],
+    "belts": []
+}

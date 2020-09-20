@@ -33,7 +33,7 @@
         <p><a href="index.php?v=true">Accueil</a></p>
     </div>
 
-    <div id="qualcontrol">
+    <div id="qualcontrol" class="showMenu">
         <?php for($i=1;$i<=count(glob('bg/*.*'));$i++) echo("<img class='galerie-pic' alt='Background n°".$i."' src='bg/background".$i.".png' />");?>
     </div>
 
@@ -49,11 +49,11 @@
     <a href="gallery.php"><img class="flag" src="data/menu/english.jpg"/></a>
 
     <?php include("includes/fr/footer.html"); ?>
-    <link rel="stylesheet" href="css/style.min.css" />
+    <link rel="stylesheet" href="css/home.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
         $("#download").animate({"bottom":"-10%"},0);
-        $("#download").css("left",(window.innerWidth-270)/2+"px");
+        //$("#download").css("left",(window.innerWidth-270)/2+"px");
         $("body").fadeIn(500);
         $("#qualcontrol").fadeIn()
         <?php echo("const nbimage = ".count(glob('bg/*.*')).";\n");?>

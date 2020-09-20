@@ -1,0 +1,40 @@
+{
+    "diameterScalingFactor": 1,
+    "distanceScalingFactor": 1,
+
+    "timeSpeedFactor": 0.05,
+
+    "firstTarget": "Pulsar",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 1,
+    "distanceConversionFactor": 1,
+
+    "freeCameraSpeedFactor": 0.01,
+
+    "astres": [{
+        "id": "Pulsar",
+        "icon": "pulsar.png",
+        "diametre": 5,
+        "distance": 0,
+        "textureFileName": "pulsar2.jpg",
+        "textureType": "emissive",
+        "godrays": true,
+        "pulsar": true,
+        "initialOrbitalPosition": 0,
+        "angularOrbit": 0,
+        "angularSelf": 10,
+        "dayDuration": 1,
+        "yearDuration": 100,
+        "satellites": 0,
+        "rotation": "A few milliseconds",
+        "revolution": "Negligible around the barycenter.",
+        "description": "Pulsars are reamnants of very massive stars. They are among the most dense object of the Universe while spinning at tremendous speed. Their powerful magnetic field can lead to the ejection of matter, hence the astrophysical jets."
+    }],
+    "belts": []
+}

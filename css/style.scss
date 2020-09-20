@@ -1,0 +1,764 @@
+@font-face {
+    src: url("../font/a-space.otf");
+    font-family: space;
+}
+
+::selection {
+    color: inherit;
+    background: limegreen;
+}
+
+* {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}
+
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track-piece {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    height: 30px;
+    background: rgba(255, 255, 255, .7);
+}
+
+
+/***/
+
+html,
+body {
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+
+/* Titre principal */
+
+#titre {
+    font-family: space;
+    font-size: 400%;
+    text-align: center;
+    color: white;
+    text-shadow: 3px 3px 3px black;
+    line-height: 0.7em;
+    .soustitre {
+        font-size: 50%;
+    }
+}
+
+
+/* Bandeau de Chargement */
+
+#loading {
+    font-family: Space;
+    text-align: center;
+    color: white;
+    margin-top: 30vh;
+    font-size: 250%;
+    letter-spacing: 0.4em;
+    background: rgba(0, 0, 0, 0.9);
+    padding-top: 10px;
+    width: 100%;
+}
+
+#bar {
+    height: 2px;
+    width: 0%;
+    margin-top: 12px;
+    background: green;
+}
+
+@media screen and (max-width:560px) {
+    #loading {
+        letter-spacing: 0.3em;
+    }
+}
+
+@media screen and (max-width:520px) {
+    #loading {
+        letter-spacing: 0.2em;
+    }
+}
+
+@media screen and (max-width:470px) {
+    #loading {
+        letter-spacing: 0.1em;
+    }
+}
+
+@media screen and (max-width:420px) {
+    #loading {
+        font-size: 200%;
+    }
+}
+
+@media screen and (max-width:350px) {
+    #loading {
+        font-size: 150%;
+    }
+}
+
+
+/***/
+
+#renderCanvas {
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.point {
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+}
+
+
+/* Menu des simulations */
+
+#menu {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 35px;
+    z-index: 4;
+    transform: translateY(0);
+    transition: .5s;
+    div {
+        border: 1px solid white;
+        margin-right: 2px;
+        margin-left: 2px;
+        border-radius: 5px;
+        background: white;
+        font-family: Space;
+        text-align: center;
+        flex: 1;
+        font-size: 125%;
+        cursor: pointer;
+        transition: .2s;
+        &:hover {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            ul:not(#astra-list) {
+                min-width: calc(16.3%);
+                display: block;
+                position: absolute;
+                text-align: left;
+                padding: 0;
+                margin: 0;
+                list-style: none;
+                li {
+                    border: 1px solid black;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                    margin: 2px 0;
+                    color: black;
+                    background: white;
+                    transition: .2s;
+                    font-size: 80%;
+                    &:hover {
+                        border: 1px solid white;
+                        color: white;
+                        background: rgba(0, 0, 0, 0.9);
+                    }
+                }
+            }
+        }
+        &>p {
+            margin: 0;
+            height: 35px;
+            line-height: 35px;
+        }
+        ul:not(#astra-list) {
+            display: none;
+        }
+    }
+    &.hiddenMenu {
+        transform: translateY(-100%) !important;
+    }
+}
+
+
+/* Liste des astres */
+
+#astra-list {
+    display: none;
+}
+
+#astras:hover {
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    #astra-list {
+        display: block;
+        position: absolute;
+        max-height: 80vh !important;
+        width: calc(16.4%);
+        min-width: 250px !important;
+        overflow-y: auto;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-left: -1px;
+        li {
+            text-align: left;
+            border: 1px solid white;
+            &:last-child {
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+            &.planete {
+                padding: none !important;
+                transition: .5s;
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.9) !important;
+                height: 50px !important;
+                img {
+                    float: left;
+                    height: 100%;
+                    border-radius: 100%;
+                }
+                p {
+                    color: white;
+                    float: left;
+                    padding-left: 10px;
+                    width: calc(100% - 50px - 10px);
+                    border: none !important;
+                    margin: 0px !important;
+                    line-height: 50px;
+                    height: 100%;
+                    background: transparent !important;
+                }
+                &:hover {
+                    background: rgba(100, 100, 200, 0.9) !important;
+                }
+            }
+            &.satellite {
+                padding: none !important;
+                transition: .5s;
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.9) !important;
+                height: 30px !important;
+                img {
+                    float: left;
+                    height: 100%;
+                    border-radius: 100%;
+                }
+                p {
+                    float: left;
+                    padding-left: 10px;
+                    width: calc(100% - 30px - 10px);
+                    font-size: 80% !important;
+                    color: white;
+                    border: none !important;
+                    margin: 0px !important;
+                    line-height: 30px;
+                    height: 100%;
+                    background: transparent !important;
+                }
+                &:hover {
+                    background: rgba(100, 100, 200, 0.9) !important;
+                }
+            }
+        }
+    }
+}
+
+@media screen and(max-width:930px) {
+    #fullscreen>p {
+        font-size: 90%;
+    }
+}
+
+@media screen and(max-width:856px) {
+    #fullscreen>p {
+        line-height: 17.5px !important;
+    }
+}
+
+@media screen and (max-width:600px) {
+    #fullscreen>p {
+        line-height: 35px !important;
+    }
+    #views {
+        display: none;
+    }
+    #astra-list {
+        right: 0;
+    }
+    #toolbar img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    #settings {
+        display: none;
+    }
+}
+
+@media screen and (max-width:553px) {
+    #fullscreen>p {
+        line-height: 17.5px !important;
+    }
+}
+
+@media screen and (max-width:400px) {
+    #fullscreen {
+        display: none;
+    }
+}
+
+@media screen and (max-width:360px) {
+    #toolbar img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+}
+
+@media screen and (max-width:1100px) {
+    #menu>li:not(#exit):not(#astras):not(#binfos) {
+        display: none !important;
+    }
+}
+
+#exit a {
+    text-decoration: none;
+    color: red;
+}
+
+#fullscreen:hover #screen-list {
+    display: block;
+}
+
+#views:hover #cam-list {
+    display: block;
+}
+
+#full-exit {
+    display: none;
+}
+
+
+/* Date */
+
+#date-container {
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    z-index: 2;
+    #date {
+        color: white;
+        font-family: Space;
+        display: inline-block;
+        cursor: pointer;
+        opacity: 1;
+        transform: scale(1);
+        transition: .1s;
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+    #fps {
+        color: yellow;
+        font-family: Space;
+        display: inline-block;
+        opacity: 1;
+        transition: .1s;
+        &.hiddenFPS {
+            opacity: 0 !important;
+        }
+    }
+    &.hiddenDateContainer {
+        opacity: 0;
+    }
+}
+
+#dateSelectorContainer {
+    z-index: 4;
+    position: absolute;
+    width: 300px;
+    height: 150px;
+    left: calc(50% - 150px);
+    top: calc(50% - 75px);
+    background: rgba(0, 0, 0, .9);
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    font-family: Space;
+    transition: .5s;
+    #headText {
+        text-align: center;
+    }
+    input {
+        margin: 0 10px;
+        width: calc(100% - 22px);
+        height: 30px;
+        font-family: inherit;
+        font-size: 100%;
+        border: 1px solid white;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        outline: none;
+    }
+    #closeDateSelector,
+    #changeDateButton {
+        float: right;
+        border: 1px solid white;
+        border-radius: 5px;
+        padding: 10px 5px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: .2s;
+    }
+    #closeDateSelector:hover {
+        background: rgba(255, 0, 0, .5);
+    }
+    #changeDateButton:hover {
+        background: rgba(100, 100, 200, 0.5);
+    }
+    &.hiddenDateSelector {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+#visite {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    font-family: Space;
+    color: white;
+    font-size: 90%;
+}
+
+
+/* Bouton Github */
+
+#github {
+    position: absolute;
+    bottom: 1%;
+    right: 1%;
+    opacity: 0.2;
+    transition: 0.25s;
+    img {
+        border-radius: 100%;
+        width: 60px;
+    }
+    &:hover {
+        opacity: 1;
+    }
+}
+
+
+/* Bouton BabylonJS  */
+
+#babylonjs {
+    position: absolute;
+    left: 5px;
+    bottom: 10px;
+    opacity: 0.5;
+    cursor: pointer !important;
+    z-index: 2;
+    transition: 0.25s;
+    &:hover {
+        opacity: 1;
+    }
+}
+
+
+/* Pied de page sur mobile */
+
+@media screen and (max-width:630px) {
+    footer {
+        display: none;
+    }
+}
+
+
+/* Panneau d'informations des simulations */
+
+#infos {
+    width: 28.5%;
+    min-width: 350px;
+    left: 0;
+    font-weight: normal;
+    line-height: 1.5em;
+    transform: translateX(0%);
+    transition: .5s;
+    #previous {
+        text-align: left;
+    }
+    #name {
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        margin: 0;
+        width: 70%;
+        font-size: 200%;
+        letter-spacing: 0.15em;
+    }
+    #previous,
+    #next {
+        cursor: pointer;
+        text-align: left;
+        font-size: 256%;
+        vertical-align: middle;
+        margin: 0;
+        width: 13%;
+        display: inline-block;
+    }
+    #next {
+        text-align: right;
+    }
+}
+
+#infos {
+    position: absolute;
+    top: 15%;
+    min-height: 200px;
+    height: calc(65vh + 2px + 42px);
+    border-radius: 5px;
+    z-index: 2;
+    font-family: space;
+    color: white;
+    background: rgba(0, 0, 0, 0.9);
+    #infos-headers {
+        text-align: center;
+        margin: 0;
+        border: 1px solid white;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        padding: 5px;
+        height: 30px;
+    }
+    #infos-content {
+        overflow-y: auto;
+        height: 65vh;
+        border: 1px solid white;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        h3 {
+            margin-left: 3%;
+            margin-right: 3%;
+            span:not(#parent) {
+                font-size: 80%;
+                font-weight: normal;
+                line-height: 1.7em;
+            }
+        }
+    }
+    &.hiddenInfos {
+        transform: translateX(-100%) !important;
+    }
+}
+
+
+/* Panneau des paramètres */
+
+#setters {
+    position: absolute;
+    top: 15%;
+    height: calc(65vh + 2px + 42px);
+    min-height: 200px;
+    width: 270px;
+    right: 0;
+    border-radius: 5px;
+    z-index: 2;
+    transform: translateX(0%);
+    background: rgba(0, 0, 0, 0.9);
+    font-family: space;
+    color: white;
+    transition: .5s;
+    h2 {
+        text-align: center;
+        margin: 0;
+        border: 1px solid white;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        padding: 5px;
+        height: 30px;
+    }
+    #setters-content {
+        overflow-y: auto;
+        height: 65vh;
+        border: 1px solid white;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        h3 {
+            margin-left: 3%;
+            margin-right: 3%;
+            margin-block-end: 0;
+        }
+        .ui-slider {
+            margin: 5%;
+            margin-right: 8%;
+        }
+        .ui-slider-handle {
+            font-family: space;
+            min-width: 2em;
+            height: 1.6em;
+            top: 50%;
+            margin-top: -.8em;
+            text-align: center;
+            line-height: 1.6em;
+            cursor: pointer;
+        }
+    }
+    &.hiddenSetters {
+        transform: translateX(100%) !important;
+    }
+}
+
+
+/* Toolbar */
+
+#toolbar {
+    position: absolute;
+    bottom: 5px;
+    display: none;
+    z-index: 2;
+    img {
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+
+/* Mobile */
+
+@media screen and (max-width:580px) {
+    #titre {
+        line-height: 1em;
+        span {
+            display: none;
+        }
+    }
+}
+
+
+/* Popup vue libre */
+
+#zqsd {
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-family: Space;
+    position: absolute;
+    pointer-events: none;
+    top: 200px;
+    opacity: 0;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    transition: .25s;
+}
+
+.visibleZQSD {
+    opacity: 1 !important;
+}
+
+.key {
+    border: 1px solid gray;
+    border-radius: 5px;
+    background: rgba(100, 100, 200, 0.8);
+    padding: 2px 4px;
+}
+
+
+/****SLIDER EXPERIMENT***/
+
+.range-slider {
+    width: 90%;
+    margin: 0 5%;
+}
+
+.rs-range {
+    width: 100%;
+    -webkit-appearance: none;
+    &:focus {
+        outline: none;
+    }
+    &::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 15px;
+        cursor: pointer;
+        box-shadow: none;
+        background: rgb(200, 200, 200);
+        border-radius: 0px;
+        border: 0px solid #010101;
+    }
+    &::-moz-range-track {
+        width: 100%;
+        height: 15px;
+        cursor: pointer;
+        box-shadow: none;
+        background: rgb(200, 200, 200);
+        border-radius: 0px;
+        border: 0px solid #010101;
+    }
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        background: rgb(220, 220, 220);
+        box-shadow: 0px 0px 0px black;
+        border: 1px solid grey !important;
+        border-radius: 5px;
+        height: 30px;
+        width: 50px;
+        cursor: pointer;
+        margin-top: -8px;
+        transition: .5s;
+        &:hover {
+            box-shadow: 0px 0px 10px white;
+        }
+    }
+    &::-moz-range-thumb {
+        -webkit-appearance: none;
+        background: rgb(255, 255, 255);
+        box-shadow: 0px 10px 10px black;
+        border: 1px solid grey !important;
+        border-radius: 5px;
+        height: 42px;
+        width: 22px;
+        cursor: pointer;
+        margin-top: -8px;
+        transition: .5s;
+        &:hover {
+            box-shadow: 0px 0px 10px white;
+        }
+    }
+    &::-moz-focus-outer {
+        border: 0;
+    }
+}
+
+.rs-label {
+    position: relative;
+    top: 24px;
+    left: 25px;
+    pointer-events: none;
+    line-height: 30px;
+    color: black;
+}

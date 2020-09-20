@@ -44,7 +44,7 @@
             <input type="reset" value="Reset" />
             <input type="submit" value="Envoyer" />
         </form>
-        <link rel="stylesheet" href="css/style.min.css" />
+        <link rel="stylesheet" href="css/home.min.css" />
         <link rel="stylesheet" href="css/form.min.css" />
         <script>setTimeout(()=>$(".alert,.success").fadeOut(1500),3000);</script>
 

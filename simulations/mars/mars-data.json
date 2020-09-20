@@ -1,0 +1,61 @@
+{
+    "diameterScalingFactor": 5,
+    "distanceScalingFactor": 5,
+
+    "timeSpeedFactor": 0.0001,
+
+    "firstTarget": "Mars",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 12756,
+    "distanceConversionFactor": 12756,
+
+    "astres": [{
+            "id": "Soleil",
+            "icon": "soleil.png",
+            "diametre": 109.17999,
+            "distance": 0,
+            "textureFileName": "sun.jpg",
+            "textureType": "emissive",
+            "godrays": true,
+            "isPickable": false,
+            "initialOrbitalPosition": 0,
+            "angularOrbit": 0,
+            "angularSelf": 7.25,
+            "dayDuration": 27,
+            "yearDuration": 1000,
+            "satellites": "Toutes les planètes du système solaire",
+            "rotation": "27 jours",
+            "revolution": "Négligable autour du barycentre",
+            "description": "Le Soleil est l'étoile de notre système solaire, il se situe en son centre et toutes les planètes orbitent autour de lui."
+        },
+        {
+            "id": "Mars",
+            "icon": "mars-life.png",
+            "diametre": 0.53144,
+            "distance": 17826.2278,
+            "textureFileName": "mars2.jpg",
+            "textureType": "diffuse",
+            "specular": "mars2_specular.png",
+            "initialOrbitalPosition": 148,
+            "atm": {
+                "opacity": 0.4,
+                "textureFileName": "clouds4.jpg"
+            },
+            "angularOrbit": 1.8506,
+            "angularSelf": 25.19,
+            "dayDuration": 1.025,
+            "yearDuration": 686,
+            "satellites": 2,
+            "rotation": "24 heures 36 minutes",
+            "revolution": "686 jours",
+            "description": "Surnommée \"La Planète Rouge\", Mars est la dernière planète tellurique de notre système solaire. Mars a presque entièrement perdu son atmosphère du fait de l'absence de champ magnétique, mais les scientifiques pensent que Mars a pu abriter de l'eau liquide et donc potentiellement de la vie à une époque lointaine."
+        }
+    ],
+    "belts": []
+}

@@ -1,0 +1,156 @@
+{
+    "diameterScalingFactor": 10,
+    "distanceScalingFactor": 10,
+
+    "timeSpeedFactor": 0.0001,
+
+    "firstTarget": "Jupiter",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 12756,
+    "distanceConversionFactor": 12756,
+
+    "astres": [{
+            "id": "The Sun",
+            "icon": "soleil.png",
+            "diametre": 10.917999,
+            "realdiameter": 1392700000,
+            "distance": 0,
+            "textureFileName": "sun.jpg",
+            "textureType": "emissive",
+            "godrays": true,
+            "exposure": 1,
+            "decay": 0.95,
+            "isPickable": false,
+            "initialOrbitalPosition": 0,
+            "angularOrbit": 0,
+            "angularSelf": 7.25,
+            "dayDuration": 27,
+            "yearDuration": 1000,
+            "satellites": "All planets",
+            "rotation": "27 days",
+            "revolution": "Negligible around the barycenter.",
+            "description": "The Sun is our solar system star, it is located in the center and all the planets orbit around it."
+        },
+        {
+            "id": "Jupiter",
+            "icon": "jupiter.png",
+            "diametre": 10.96112,
+            "distance": 6098.46347,
+            "realdistance": 777920000,
+            "textureFileName": "jupiter.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 83,
+            "atm": {
+                "opacity": 0.4,
+                "textureFileName": "black.png"
+            },
+            "rings": {
+                "textureFileName": "jupiter_rings.png",
+                "size": 20,
+                "alpha": 0.3
+            },
+            "angularOrbit": 1.304,
+            "angularSelf": 3.12,
+            "dayDuration": 0.41,
+            "yearDuration": 4331.75,
+            "satellites": 69,
+            "rotation": "9 hours 30 minutes",
+            "revolution": "11 years 314 days",
+            "description": "Jupiter is the biggest planet of our solar system (11 times bigger than the Earth). Moreover, Jupiter has an astonishing number of satellites : 69 !"
+        },
+        {
+            "id": "Io",
+            "icon": "io.png",
+            "diametre": 0.28561,
+            "distance": 33.0668,
+            "realdistance": 421800,
+            "textureFileName": "io.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 100,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.036,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 1.769,
+            "satellites": 0,
+            "rotation": "1.769 days (synchronous)",
+            "revolution": "1.769 days (synchronous)",
+            "description": "Io is one of the four Galilean satellites (Jupiter's biggest satellites). It is also the most active solar system's celestial body with more than 400 active volcanoes<br/>Their trails of smoke are visible from space !<br/>This huge activity is due to Jupiter's high tidal power."
+        },
+        {
+            "id": "Europa",
+            "icon": "europe.png",
+            "diametre": 0.24471,
+            "distance": 52.61053,
+            "realdistance": 671100,
+            "textureFileName": "europe.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 250,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.469,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 3.551181,
+            "satellites": 0,
+            "rotation": "3.55 days (synchronous)",
+            "revolution": "3.55 days (synchronous)",
+            "description": "Europa is the second Galilean satellite. Under its ice envelope lies a subsurface ocean with perhaps life in it, but one should get there to make sure of it."
+        },
+        {
+            "id": "Ganymede",
+            "icon": "ganymede.png",
+            "diametre": 0.41299,
+            "distance": 83.9135,
+            "realdistance": 1070400,
+            "textureFileName": "ganymede.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 50,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.21,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 7.15,
+            "satellites": 0,
+            "rotation": "7.15 days (synchronous)",
+            "revolution": "7.15 days (synchronous)",
+            "description": "Ganymede is the third Galilean satellite, and the biggest one. It is also the only one which has a magnetosphere."
+        },
+        {
+            "id": "Callisto",
+            "icon": "callisto.png",
+            "diametre": 0.37791,
+            "distance": 147.59,
+            "realdistance": 1882700,
+            "textureFileName": "callisto.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 0,
+            "parentId": "Jupiter",
+            "angularOrbit": 0.192,
+            "angularSelf": 0,
+            "dayDuration": 0,
+            "yearDuration": 16.68,
+            "satellites": 0,
+            "rotation": "16.68 days (synchronous)",
+            "revolution": "16.68 days (synchronous)",
+            "description": "Callisto is the fourth and the last Galilean satellite.  It seems that Callisto, like Europa, has a subsurface ocean around 100km deep under its surface and perhaps life as well."
+        }
+    ],
+    "belts": [{
+        "id": "ceintureAsteroides",
+        "yDivergence": 0.001,
+        "nb": 5000,
+        "size": 0.001,
+        "position": {
+            "nearest": 9.7,
+            "farthest": 9.9
+        },
+        "parentId": "Jupiter",
+        "textureType": "diffuse"
+    }]
+}

@@ -25,7 +25,7 @@
             <input type="reset" value="Reset" />
             <input type="submit" value="Submit" />
         </form>
-        <link rel="stylesheet" href="css/style.min.css" />
+        <link rel="stylesheet" href="css/home.min.css" />
         <link rel="stylesheet" href="css/form.min.css" />
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -3,7 +3,11 @@
 <html lang="en">
 
 <head>
-    <?php echo("<style>body{background:url('../../bg/background".rand(1,count(glob('bg/*.*'))).".png');}</style>");?>
+    <style>
+        body {
+            background:url('../../bg/background<?php echo(rand(1,count(glob("../../bg/*.*"))))?>.png');
+        }
+    </style>
     <title>Solaris Project - Pulsars</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
@@ -25,24 +29,7 @@
 
     <?php include("../../includes/fr/settings.html"); ?>
 
-    <div id="infos">
-
-        <div id="infos-headers">
-            <p id="previous">&lt;</p>
-            <p id="name">Infos</p>
-            <p id="next">&gt;</p>
-        </div>
-
-        <div id="infos-content">
-            <h3>Diameter : <span id="diameter"></span></h3>
-
-            <h3>Rotation duration : <br/><span id="rotation"></span></h3>
-
-            <h3>Description : <br/><span id="bio"></span></h3>
-
-            <br/>
-        </div>
-    </div>
+    <?php include("../../includes/en/infos.html"); ?>
 
     <?php include("../../includes/en/toolbar.html"); ?>
 
@@ -52,26 +39,30 @@
 
     <?php include("../../includes/en/footer.html"); ?>
 
+    <script type="text/javascript" src="../babylon4.js"></script>
+    <script type="text/javascript" src="../babylon.gui.js"></script>
+    <script type='module'>
+        import { initSolaris } from '../main.js';
+        initSolaris("./pulsar-data-en.json","high");
+        for(let i = 0; i < 3; i++) {
+            document.querySelectorAll("#infos-content h3")[i].style.display = "none";
+        }
+    </script>
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-91827071-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
 </html>
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-91827071-1', 'auto');
-    ga('send', 'pageview');
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="../babylon.js"></script>
-<script src="../../jquery-ui/jquery-ui.min.js"></script>
-<script src="../../js/screenfull.js"></script>
-<script src="../../js/global.js"></script>
-<script src="pulsar-data-en.js"></script>
-<script src="../solaris_algorithm.js"></script>
-<link rel="stylesheet" href="../common-style.css" />
-<link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
-<script>setTimeout(()=>createScene(),100);</script> 
-
 

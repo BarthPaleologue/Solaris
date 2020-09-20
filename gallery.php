@@ -10,8 +10,6 @@
     <meta http-equiv="Cache-control" content="public">
     <meta name="description" content="All Solaris backgrounds, downloadfree and reusefree." />
     <meta name="viewport" content="width=device-width, user-scalable=no">
-    <link rel="dns-prefetch" href="http://www.copyright01.com/">
-    <link rel="dns-prefetch" href="http://www.twitter.com/">
     <link rel="icon" type="image/x-icon" href="icon.ico" />
     <style>
         body{display:none;}
@@ -30,10 +28,10 @@
     <p id="contact"><a href="contact.php">Feedback</a></p>
 
     <div id="home">
-        <p><a href="index.php?v=true">Home</a></p>
+        <p><a href="en.php?v=true">Home</a></p>
     </div>
 
-    <div id="qualcontrol">
+    <div id="qualcontrol" class="showMenu">
         <?php for($i=1;$i<=count(glob('bg/*.*'));$i++) echo("<img class='galerie-pic' alt='Background n°".$i."' src='bg/background".$i.".png' />");?>
     </div>
 
@@ -49,11 +47,10 @@
     <a href="galerie.php"><img class="flag" src="data/menu/french.png"/></a>
 
     <?php include("includes/fr/footer.html"); ?>
-    <link rel="stylesheet" href="css/style.min.css" />
+    <link rel="stylesheet" href="css/home.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
         $("#download").animate({"bottom":"-10%"},0);
-        $("#download").css("left",(window.innerWidth-270)/2+"px");
         $("body").fadeIn(500);
         $("#qualcontrol").fadeIn()
         <?php echo("const nbimage = ".count(glob('bg/*.*')).";\n");?>

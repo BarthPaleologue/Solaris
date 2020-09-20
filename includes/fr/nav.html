@@ -1,21 +1,22 @@
-<nav id="menu">
-    <li id="exit">
-        <a href="../../index.php?v=true">
-            <p>Quitter</p>
-        </a>
-    </li>
-    <li id="fullscreen">
+<!--Menu horizontal des simulations-->
+<nav id="menu" class="hiddenMenu">
+    <div id="exit">
+        <p>
+            <a href="../../index.php?v=true">Quitter</a>
+        </p>
+    </div>
+    <div id="fullscreen">
         <p>Plein écran</p>
         <ul id="screen-list">
             <li id="all">Cacher l'interface</li>
             <li id="not-all">Garder l'interface</li>
             <li id="full-exit">Quitter Plein écran</li>
         </ul>
-    </li>
-    <li id="binfos">
+    </div>
+    <div id="binfos">
         <p>Infos</p>
-    </li>
-    <li id="views">
+    </div>
+    <div id="views">
         <p>Vues</p>
         <ul id="cam-list">
             <li id="free">Vue libre</li>
@@ -24,14 +25,28 @@
             <li id="plan">Vue planétaire</li>
             <li id="pland">Vue planétaire 3D</li>
         </ul>
-    </li>
-    <li id="astras">
+    </div>
+    <div id="astras">
         <p>Astres</p>
         <ul id="astra-list"></ul>
-    </li>
-    <li id="settings">
+    </div>
+    <div id="settings">
         <p>Paramètres</p>
-    </li>
-    <p id="date"><span id="jour"></span>/<span id="mois"></span>/<span id="year"></span></p>
-    <p id="fps"></p>
+    </div>
 </nav>
+
+<!--Affichage de la date actuelle + fps-->
+<div id="date-container" class="hiddenDateContainer">
+    <p id="date">
+        <span id="jour"></span>/<span id="mois"></span>/<span id="year"></span>
+    </p>
+    <p id="fps" class="hiddenFPS"></p>
+</div>
+
+<!--Date picker-->
+<div id="dateSelectorContainer" class="hiddenDateSelector">
+    <p id="headText">Choisissez une date :</p>
+    <input id="dateSelector" type="date" value="2020-01-01" />
+    <p id="changeDateButton">Confirmer</p>
+    <p id="closeDateSelector">Fermer</p>
+</div>

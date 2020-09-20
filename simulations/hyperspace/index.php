@@ -26,8 +26,8 @@
         <li id="exit"><a href="../../index.php?v=true"><p>Quitter</p></a></li>
         <li id="fullscreen"><p>Plein écran</p>
             <ul id="screen-list">
-                <li id="all">Avec Interface</li>
-                <li id="not-all">Sans Interface</li>
+                <li id="all">Sans Interface</li>
+                <li id="not-all">Avec Interface</li>
                 <li id="full-exit">Quitter Plein écran</li>
             </ul>
         </li>
@@ -68,9 +68,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../babylon.js"></script>
     <script src="../../jquery-ui/jquery-ui.min.js"></script>
-    <script src="../../js/screenfull.js"></script>
-    <script src="../../js/global.js"></script>
-    <script src="hyperspace.js"></script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -80,7 +77,10 @@
         ga('send', 'pageview');
     </script>
 
-    <script>setTimeout(()=>createHyperSpace(),100)</script>
+    <script type="module">
+        import {createHyperSpace} from "./hyperspace";
+        setTimeout(createHyperSpace,100)
+    </script>
 
 </body>
 </html>

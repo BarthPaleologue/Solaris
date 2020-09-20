@@ -1,36 +1,43 @@
-<nav id="menu">
-    <li id="exit">
-        <a href="../../en.php?v=true">
-            <p>Quit</p>
-        </a>
-    </li>
-    <li id="fullscreen">
+<nav id="menu" class="hiddenMenu">
+    <div id="exit">
+        <p><a href="../../index.php?v=true">Quitter</a></p>
+    </div>
+    <div id="fullscreen">
         <p>Fullscreen</p>
         <ul id="screen-list">
             <li id="all">Hide interface</li>
             <li id="not-all">Keep interface</li>
             <li id="full-exit">Exit Fullscreen</li>
         </ul>
-    </li>
-    <li id="binfos">
+    </div>
+    <div id="binfos">
         <p>Info</p>
-    </li>
-    <li id="views">
+    </div>
+    <div id="views">
         <p>Views</p>
         <ul id="cam-list">
             <li id="free">Free View</li>
             <li id="freed">3D Free View</li>
+            <li id="freevr">VR Free View (Test)</li>
             <li id="plan">Planetary View</li>
             <li id="pland">3D Planetary View</li>
         </ul>
-    </li>
-    <li id="astras">
+    </div>
+    <div id="astras">
         <p>Celestial bodies</p>
         <ul id="astra-list"></ul>
-    </li>
-    <li id="settings">
+    </div>
+    <div id="settings">
         <p>Settings</p>
-    </li>
-    <p id="date"><span id="jour"></span>/<span id="mois"></span>/<span id="year"></span></p>
-    <p id="fps"></p>
+    </div>
 </nav>
+<div id="date-container" class="hiddenDateContainer">
+    <p id="date"><span id="jour"></span>/<span id="mois"></span>/<span id="year"></span></p>
+    <p id="fps" class="hiddenFPS"></p>
+</div>
+<div id="dateSelectorContainer" class="hiddenDateSelector">
+    <p id="headText">Choisissez une date :</p>
+    <input id="dateSelector" type="date" value="2020-01-01" />
+    <p id="changeDateButton">Confirmer</p>
+    <p id="closeDateSelector">Fermer</p>
+</div>

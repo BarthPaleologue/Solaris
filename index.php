@@ -3,21 +3,21 @@
 <html lang="fr">
 
 <head>
-    <?php echo("<style>body{background:url('bg/background".rand(1,count(glob('bg/*.*'))).".png');}</style>");?>
-    <title>Projet Solaris - Simulations Spatiales en 3D WebGL</title>
+    <style>
+        body {
+            background:url('./bg/background<?php echo(rand(1,count(glob("./bg/*.*"))))?>.png');
+        }
+    </style>
+    <title>Projet Solaris - Simulations Spatiales 3D</title>
     <meta charset="utf-8" />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="Cache-control" content="public">
     <meta name="description" content="Le Projet Solaris est une collection de simulations spatiales 3D online qui vous permettent d'explorer l'espace comme si vous y étiez !" />
     <meta name="viewport" content="width=device-width, user-scalable=no">
-    <link rel="dns-prefetch" href="http://www.copyright01.com/">
-    <link rel="dns-prefetch" href="http://www.twitter.com/">
+    <link rel="stylesheet" href="css/home.min.css" />
     <link rel="icon" type="image/x-icon" href="icon.ico" />
-    <style>
-        body{display:none;}
-    </style>
     <?php
-        if(isset($_GET["v"]) && $_GET["v"] == true) {
+        if(isset($_GET["v"]) && $_GET["v"]) {
             $compteur = fopen("compteur.txt","r+");
             $visites = fgets($compteur);
             fclose($compteur);
@@ -57,10 +57,7 @@
         </div>
     </div>
 
-
-
     <div id="start">Start</div>
-
 
     <div id="qualcontrol">
         <a href="simulations/solaris/index.php?q=low" id="low">
@@ -71,7 +68,7 @@
             <img src="data/menu/high.png" alt="Système Solaire"/>
             <h3>Système Solaire&nbsp;</h3>
         </a>
-        <a href="simulations/galaxia" id="galaxy">
+        <a href="simulations/galaxy" id="galaxy">
             <img src="data/menu/galaxy.png" alt="Galaxie"/>
             <h3>Galaxie&nbsp;</h3>
         </a>
@@ -107,35 +104,28 @@
             <img src="data/menu/uranus.png" alt="Uranus"/>
             <h3>Uranus et ses&nbsp; satellites&nbsp;</h3>
         </a>
-        <a href="simulations/proxima" id="uranus">
-            <img src="data/menu/proximab.png" alt="Proxima B"/>
-            <h3>Proxima Centauri B&nbsp;</h3>
-        </a>
         <a href="galerie.php" id="gallery">
             <img src="data/menu/gallery.png" alt="Galerie"/>
             <h3>Galerie&nbsp;</h3>
         </a>
     </div>
-    <a href="https://twitter.com/ProjetSolaris" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @ProjetSolaris</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/ProjetSolaris" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @ProjetSolaris</a> 
 
-    <a href="en.php?v=true"><img alt="Anglais" class="flag" src="data/menu/english.jpg"/></a>
+    <a href="en.php?v=true"><img alt="english" class="flag" src="data/menu/english.jpg"/></a>
 
     <?php include("includes/fr/footer.html"); ?>
-    <link rel="stylesheet" href="css/style.min.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
     <script>
-        $("body").fadeIn(500);
-        $("#start").on("click", function(e) {
-            $(this).fadeOut(() => {
-                $("#qualcontrol").fadeIn()
-                $("#qualcontrol a").addClass("toTop");
-                setTimeout(() => {
-                    $("#qualcontrol a").css({"transition-delay":"0s"});
-                }, 1000);
-            });
+        document.getElementById("start").addEventListener("click", () => {
+            document.getElementById("start").style.display = "none";
+            document.getElementById("qualcontrol").classList.toggle("showMenu");
+            for(let elm of document.querySelectorAll("#qualcontrol a")) {
+                elm.classList.toggle("toTop");
+                setTimeout(() => elm.style.transitionDelay = "0s", 1000);
+            }
         });
-        $("#news").hover(e => $("#news-content").fadeToggle(200));
     </script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

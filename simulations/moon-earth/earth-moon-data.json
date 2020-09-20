@@ -1,0 +1,86 @@
+{
+    "diameterScalingFactor": 2,
+    "distanceScalingFactor": 2,
+
+    "timeSpeedFactor": 0.0001,
+
+    "firstTarget": "La Terre",
+
+    "startDate": {
+        "day": 1,
+        "month": 1,
+        "year": 2020
+    },
+
+    "diametreConversionFactor": 12756,
+    "distanceConversionFactor": 12756,
+
+    "freeCameraSpeedFactor": 0.001,
+
+    "beginNavIndex": 0,
+
+    "astres": [{
+            "id": "Soleil",
+            "icon": "soleil.png",
+            "diametre": 109.17999,
+            "distance": 0,
+            "textureFileName": "sun.jpg",
+            "textureType": "emissive",
+            "godrays": true,
+            "isPickable": false,
+            "initialOrbitalPosition": 0,
+            "angularOrbit": 0,
+            "angularSelf": 7.25,
+            "dayDuration": 27,
+            "yearDuration": 1000,
+            "satellites": "Toutes les planètes du système solaire",
+            "rotation": "27 jours",
+            "revolution": "Négligable autour du barycentre",
+            "description": "Le Soleil est l'étoile de notre système solaire, il se situe en son centre et toutes les planètes orbitent autour de lui."
+        },
+        {
+            "id": "La Terre",
+            "icon": "terre.png",
+            "diametre": 1,
+            "distance": 11727.8144,
+            "textureFileName": "earth.jpg",
+            "textureType": "diffuse",
+            "specular": "specular.jpg",
+            "emissive": "night2.jpg",
+            "initialOrbitalPosition": -101,
+            "atm": {
+                "opacity": 0.4,
+                "textureFileName": "clouds4.jpg"
+            },
+            "angularOrbit": 0,
+            "angularSelf": -23.43,
+            "dayDuration": 1,
+            "yearDuration": 365.25,
+            "satellites": 1,
+            "rotation": "23 heures 56 minutes",
+            "revolution": "365,25 jours",
+            "description": "La Terre est le seul astre de notre système solaire possédant de l'eau liquide à sa surface. La Terre est égalment la seule planète du système solaire à avoir vu se développer la vie et une civilisation intelligente."
+        },
+        {
+            "id": "La Lune",
+            "icon": "lune.png",
+            "diametre": 0.2724,
+            "distance": 30.103,
+            "realdistance": 384000,
+            "textureFileName": "moon.jpg",
+            "textureType": "diffuse",
+            "initialOrbitalPosition": 51.4,
+            "parentId": "La Terre",
+            "angularOrbit": 5.145,
+            "angularSelf": 6.687,
+            "dayDuration": 0,
+            "initialRotation": 3.14,
+            "yearDuration": 29.5,
+            "satellites": 0,
+            "rotation": "29,5 jours (synchrone)",
+            "revolution": "29,5 jours (synchrone)",
+            "description": "La Lune est le compagnon inséparable de la Terre. La Lune s'est formée, dit-on, de l'impact d'une planète avec la Terre lors de la formation du système solaire, une partie des débris auraient alors formé la Lune. Le Satellite de la Terre est responsable des marées et du ralentissement de la vitesse de rotation de la Terre sur elle même. La Lune est seul astre à ce jour à avoir été foulé par l'Homme avec la Terre bien sûr."
+        }
+    ],
+    "belts": []
+}

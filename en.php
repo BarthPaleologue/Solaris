@@ -3,18 +3,20 @@
 <html lang="en">
 
 <head>
-    <?php echo("<style>body{background:url('bg/background".rand(1,count(glob('bg/*.*'))).".png');}</style>");?>
-    <title>Solaris Project - 3D WebGL Space Simulations Online</title>
+    <style>
+        body {
+            background:url('./bg/background<?php echo(rand(1,count(glob("../../bg/*.*"))))?>.png');
+        }
+    </style>
+    <title>Solaris Project - 3D Space Simulations Online</title>
     <meta charset="utf-8" />
     <meta name="robots" content="index, follow" />
     <meta name="description" content="The Solaris Project is a collection of 3D space simulations which permit you to discover the solar system and more." />
     <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="stylesheet" href="css/home.min.css" />
     <link rel="icon" type="image/x-icon" href="icon.ico" />
-    <style>
-        body{display:none;}
-    </style>
     <?php
-        if(isset($_GET["v"]) && $_GET["v"] == true) {
+        if(isset($_GET["v"]) && $_GET["v"]) {
             $compteur = fopen("compteur.txt","r+");
             $visites = fgets($compteur);
             fclose($compteur);
@@ -67,7 +69,7 @@
             <img src="data/menu/high.png" alt="Solar System"/>
             <h3>Solar System&nbsp;</h3>
         </a>
-        <a href="simulations/galaxia/en.php" id="galaxy">
+        <a href="simulations/galaxy/en.php" id="galaxy">
             <img src="data/menu/galaxy.png" alt="Galaxy"/>
             <h3>Galaxy&nbsp;</h3>
         </a>
@@ -114,20 +116,16 @@
     <a href="index.php?v=true"><img alt="french" class="flag" src="data/menu/french.png"/></a>
 
     <?php include("includes/en/footer.html"); ?>
-    <link rel="stylesheet" href="css/style.min.css" /> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
     <script>
-        $("body").fadeIn(500);
-        $("#start").on("click", function(e) {
-            $(this).fadeOut(() => {
-                $("#qualcontrol").fadeIn()
-                $("#qualcontrol a").addClass("toTop");
-                setTimeout(() => {
-                    $("#qualcontrol a").css({"transition-delay":"0s"});
-                }, 1000);
-            });
+        document.getElementById("start").addEventListener("click", () => {
+            document.getElementById("start").style.display = "none";
+            document.getElementById("qualcontrol").classList.toggle("showMenu");
+            for(let elm of document.querySelectorAll("#qualcontrol a")) {
+                elm.classList.toggle("toTop");
+                setTimeout(() => elm.style.transitionDelay = "0s", 1000);
+            }
         });
-        $("#news").hover(e => $("#news-content").fadeToggle(200));
     </script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

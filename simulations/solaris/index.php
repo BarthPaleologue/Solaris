@@ -3,19 +3,27 @@
 <html lang="fr">
 
 <head>
-    <?php echo("<style>body{background:url('../../bg/background".rand(1,count(glob('../../bg/*.*'))).".png');}</style>");?>
+    <style>
+        body {
+            background:url('../../bg/background<?php echo(rand(1,count(glob("../../bg/*.*"))))?>.png');
+        }
+    </style>
     <title>Projet Solaris - Le Système Solaire</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <meta name="robots" content="index" />
     <link rel="stylesheet" href="../../css/style.min.css" />
-    <meta name="description" content="Simulation de tout le système solaire en 3D (WebGL) online." />
+    <meta name="description" content="Simulation de tout le système solaire en 3D en ligne." />
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
 
     <?php
         $compteur = fopen("../../compteur.txt","r+");
         $visites = fgets($compteur);
         fclose($compteur);
+
+        $q = "low";
+        if($_GET["q"] != "low" && $_GET["q"] != "high") $q = "low";
+        else $q = $_GET["q"];
     ?>
 </head>
 
@@ -35,15 +43,13 @@
     <canvas id="renderCanvas"></canvas>
 
     <?php include("../../includes/fr/footer.html"); ?>
-
-    <link rel="stylesheet" href="../common-style.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="../babylon.js"></script>
-    <script src="../../js/global.js"></script>
-    <script src="../../jquery-ui/jquery-ui.min.js"></script>
-    <script src="solaris-data.js"></script>
-    <script src="../solaris_algorithm.js"></script>
-    <link rel="stylesheet" href="../../jquery-ui/jquery-ui.min.css" />
+    
+    <script type="text/javascript" src="../babylon4.js"></script>
+    <script type="text/javascript" src="../babylon.gui.js"></script>
+    <script type='module'>
+        import { initSolaris } from '../main.js';
+        initSolaris("./solaris-data.json","<?php echo($q)?>");
+    </script>
     <script>
         (function(i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -59,11 +65,6 @@
         ga('create', 'UA-91827071-1', 'auto');
         ga('send', 'pageview');
     </script>
-    <?php 
-        if(!isset($_GET["q"])) $_GET["q"] = "low";
-        if($_GET["q"] != "low" && $_GET["q"] != "high") $_GET["q"] = "low";
-        echo("<script>setTimeout(()=>createScene('".$_GET["q"]."'),100);</script>"); 
-    ?>
 
 </body>
 
