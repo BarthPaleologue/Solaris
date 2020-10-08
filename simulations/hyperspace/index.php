@@ -3,16 +3,18 @@
 <html lang="fr">
 
 <head>
-    <?php echo("<style>body{background:url('../../bg/background".rand(1,count(glob('../../bg/*.*'))).".png');}</style>");?>
+    <style>
+        body {
+            background:url('../../bg/background<?php echo(rand(1,count(glob("../../bg/*.*"))))?>.png');
+        }
+    </style>
     <title>Projet Solaris - Voyage Hyperspatial</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <meta name="robots" content="index" />
     <meta name="description" content="" />
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="../../css/style.min.css" />
     <?php
         $compteur = fopen("../../compteur.txt","r+");
         $visites = fgets($compteur);
@@ -22,38 +24,42 @@
 
 <body id="corps">
     <h1 id="titre">Projet Solaris<br/><span class="soustitre">Voyage Hyperspatial</span></h1>
-    <nav id="menu">
-        <li id="exit"><a href="../../index.php?v=true"><p>Quitter</p></a></li>
-        <li id="fullscreen"><p>Plein écran</p>
+    <nav id="menu" class="hiddenMenu">
+        <div id="exit"><p><a href="../../index.php?v=true">Quitter</a></p></div>
+        <div id="fullscreen">
+            <p>Plein écran</p>
             <ul id="screen-list">
-                <li id="all">Sans Interface</li>
-                <li id="not-all">Avec Interface</li>
+                <li id="all">Cacher l'interface</li>
+                <li id="not-all">Garder l'interface</li>
                 <li id="full-exit">Quitter Plein écran</li>
             </ul>
-        </li>
-        <li id="engage"><p>HyperEspace</p></li>
-        <li id="views"><p>Vues</p>
+        </div>
+        <div id="engage"><p>HyperEspace</p></div>
+        <div id="views"><p>Vues</p>
             <ul id="cam-list">
                 <li id="free">Vue libre</li>
                 <li id="freed">Vue libre 3D</li>
             </ul>
-        </li>
-        <li id="settings"><p>Paramètres</p></li>
-        <p id="fps"></p>
+        </div>
+        <div id="settings"><p>Paramètres</p></div>
     </nav>
-    <div id="setters">
+    <div id="date-container">
+        <p id="fps" class="hiddenFPS"></p>
+    </div>
+
+    <div id="setters" class="hiddenSetters">
         <h2>Paramètres</h2>
         <div id="setters-content">
             <h3>Vitesse HyperSpatiale</h3>
-            <div id="speed"><div id="freehandle" class="ui-slider-handle"></div></div>
+            <div id="speed"></div>
             <h3>Vitesse de Transition</h3>
-            <div id="trans"><div id="transhandle" class="ui-slider-handle"></div></div>
+            <div id="trans"></div>
             <h3>FOV Max</h3>
-            <div id="fov"><div id="fovhandle" class="ui-slider-handle"></div></div>
+            <div id="fov"></div>
 			<br/>
-			<h4 id="disable">Désactiver SkyBox</h4>
         </div>
     </div>
+
 
     <div id="toolbar">
         <img id="tscreen" src="../../toolbar/screenshot.png" width=50 height=50 title="Screenshot [S]" />
@@ -65,9 +71,13 @@
 
     <?php include("../../includes/fr/footer.html"); ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="../babylon.js"></script>
-    <script src="../../jquery-ui/jquery-ui.min.js"></script>
+    <script src="../babylon4.js"></script>
+
+    <script type="module">
+        import { initHyperspace } from "./main.js";
+        initHyperspace();
+    </script>
+
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -75,11 +85,6 @@
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-91827071-1', 'auto');
         ga('send', 'pageview');
-    </script>
-
-    <script type="module">
-        import {createHyperSpace} from "./hyperspace";
-        setTimeout(createHyperSpace,100)
     </script>
 
 </body>
