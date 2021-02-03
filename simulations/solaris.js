@@ -62,6 +62,7 @@ export class Solaris {
         this.astresData = data.astres;
         this.beltsData = data.belts;
         this.freeCameraSpeed = Math.pow((50 * 0.001), 2) * this.distanceScalingFactor;
+        return data;
     }
     initScene() {
         let scene = new BABYLON.Scene(this.engine);
@@ -119,7 +120,7 @@ export class Solaris {
     }
     initSkybox() {
         let skybox = BABYLON.Mesh.CreateBox("skyBox", 1, this.scene);
-        skybox.scaling = skybox.scaling.scale(this.SCENE_SIZE);
+        skybox.scaling.scaleInPlace(this.SCENE_SIZE);
         skybox.infiniteDistance = true; // impossible d'atteindre en vol libre
         skybox.isPickable = false; // n'est pas clickable
         let skyboxMaterial = new BABYLON.StandardMaterial("skyBoxMat", this.scene);
@@ -201,6 +202,7 @@ export class Solaris {
     initAstres() {
         for (let astreData of this.astresData)
             this.createAstre(astreData); // Générations des astres selon la tables des données
+        return this.astres;
     }
     initBelts() {
         for (let beltData of this.beltsData)
@@ -288,6 +290,7 @@ export class Solaris {
             document.getElementById("astra-list").appendChild(listElm);
             listElm.addEventListener("click", () => this.goTo(astre)); // gère le click sur le sélecteur d'astre
         }
+        return astre;
     }
     createBelt(beltData) {
         let asteroid = BABYLON.Mesh.CreateSphere("asteroid", 1, 1, this.scene);
@@ -298,11 +301,11 @@ export class Solaris {
                 particle.position.y = rand(-1, 1) * beltData.yDivergence;
                 particle.position.z = rand(beltData.position.nearest, beltData.position.farthest) * Math.cos(Math.PI * 2 / beltData.nb * i);
                 if (!isDefined(beltData.parentId))
-                    particle.position = particle.position.scale(this.distanceScalingFactor);
+                    particle.position.scaleInPlace(this.distanceScalingFactor);
                 particle.scale.x = (Math.random() * 2 + 0.8);
                 particle.scale.y = (Math.random() + 0.8);
                 particle.scale.z = (Math.random() * 2 + 0.8);
-                particle.scale = particle.scale.scale(beltData.size * (isDefined(beltData.parentId) ? 1 : this.diameterScalingFactor));
+                particle.scale.scaleInPlace(beltData.size * (isDefined(beltData.parentId) ? 1 : this.diameterScalingFactor));
                 particle.rotation.x = rand(0, 6.28);
                 particle.rotation.y = rand(0, 6.28);
                 particle.rotation.z = rand(0, 6.28);
@@ -331,6 +334,7 @@ export class Solaris {
             mesh.parent = this.scene.getMeshByID(beltData.parentId);
         mesh.freezeNormals();
         asteroid.dispose();
+        return ceintureAsteroids;
     }
     //#endregion
     takeScreenshot(precision = 2) {
@@ -439,7 +443,7 @@ export class Solaris {
             }
             else {
                 for (let camera of this.targetCameras) {
-                    camera.targetNode.position = camera.targetNode.position.add(this.currentTarget.mesh.absolutePosition.subtract(camera.targetNode.position).scale(.1 * this.transitionSpeedFactor));
+                    camera.targetNode.position.addInPlace(this.currentTarget.mesh.absolutePosition.subtract(camera.targetNode.position).scale(.1 * this.transitionSpeedFactor));
                     if (this.targeting)
                         camera.setTarget(camera.targetNode);
                 }
@@ -451,7 +455,7 @@ export class Solaris {
             }
             else {
                 for (let camera of this.freeCameras) {
-                    camera.position = camera.position.add(this.currentTarget.mesh.absolutePosition.subtract(camera.position).scale(.1 * this.transitionSpeedFactor));
+                    camera.position.addInPlace(this.currentTarget.mesh.absolutePosition.subtract(camera.position).scale(.1 * this.transitionSpeedFactor));
                 }
             }
         }

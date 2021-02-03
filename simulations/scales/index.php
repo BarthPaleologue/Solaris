@@ -15,8 +15,6 @@
     <meta name="description" content="" />
     <link rel="icon" type="image/x-icon" href="../../icon.ico" />
     <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../common-style.css" />
-    <link rel="stylesheet" href="../../jquery-ui/jquery-ui.css" />
     <style>
         #name {font-size:150% !important}
     </style>
@@ -44,11 +42,11 @@
 
     <?php include("../../includes/fr/footer.html"); ?>
 
-    <script type="text/javascript" src="../babylon.3.3.js"></script>
+    <script type="text/javascript" src="../babylon4.js"></script>
     <script type="text/javascript" src="../babylon.gui.js"></script>
     <script type='module'>
-        import { initSolaris } from '../main.js';
-        initSolaris("./scales-data.json","low");
+        import { initScales } from './main.js';
+        initScales("./scales-data.json","low");
     </script>
     <script>
         (function(i, s, o, g, r, a, m) {

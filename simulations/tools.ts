@@ -2,7 +2,7 @@
 
 export let mobile = /iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent);
 
-export function setupAudio(path: string, autoplay: boolean = true, loop: boolean = true): HTMLAudioElement {
+export function setupAudio(path: string, autoplay = true, loop = true): HTMLAudioElement {
     let audio = new Audio(path);
     audio.autoplay = autoplay;
     audio.loop = loop;

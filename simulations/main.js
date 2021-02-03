@@ -41,7 +41,6 @@ export function initSolaris(pathToData, quality = "high") {
         document.getElementById("titre").remove(); // BabylonJS logo
         document.getElementById("loading").remove(); // BabylonJS logo
         document.getElementById("visite").remove(); // BabylonJS logo
-        document.getElementById("babylonjs").remove(); // BabylonJS logo
         document.getElementById("menu").classList.toggle("hiddenMenu"); // On affiche le menu
         document.getElementById("date-container").classList.toggle("hiddenDateContainer");
         if (window.innerWidth > 600) {

@@ -168,17 +168,19 @@ export class Astre {
         this.orbitMesh.scaling = this.orbitMesh.scaling.scale(distanceScalingFactor);
     }
     updateRotation(timeUnit) {
-        if (Math.abs(this.data.dayDuration) > 0) { /// Si n'est pas un satellite synchrnone
+        if (this.data.dayDuration != 0) { /// Si n'est pas un satellite synchrnone
             if (this.data.pulsar)
                 this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.WORLD); // rotation des pulsars
             else
                 this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.LOCAL); // rotation des planètes sur elles-mêmes
-            this.centerNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.WORLD); // Saisons aussi
+            if (this.data.yearDuration != 0)
+                this.centerNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.WORLD); // Saisons aussi
         }
         if (isDefined(this.data.atm))
             this.atmosphereMesh.rotation.y += .2 * timeUnit;
     }
     updateOrbitalPosition(timeUnit) {
-        this.orbitalNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.LOCAL);
+        if (this.data.yearDuration != 0)
+            this.orbitalNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.LOCAL);
     }
 }
