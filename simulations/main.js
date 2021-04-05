@@ -1,5 +1,5 @@
 import { Solaris } from "./solaris.js";
-import { Slider, mod, intFormat, isDefined, loadJSON } from "./tools.js";
+import { Slider, mod, intFormat, isDefined, loadJSON } from "./components/tools.js";
 export function initSolaris(pathToData, quality = "high") {
     let canvas = document.getElementById("renderCanvas");
     let engine = new BABYLON.Engine(canvas, true);
@@ -194,6 +194,12 @@ export function initSolaris(pathToData, quality = "high") {
     /// Slider gérant le contraste des Textures   
     new Slider("contrast", document.getElementById("contrast"), 0, 30, system.pipeline.imageProcessing.contrast * 10, (val) => {
         system.pipeline.imageProcessing.contrast = val / 10;
+    });
+    /// Slider gérant le contraste des Textures   
+    new Slider("fov", document.getElementById("fov"), 1, 179, system.scene.activeCamera.fov * 180 / Math.PI, (val) => {
+        for (let camera of system.scene.cameras) {
+            camera.fov = (val / 180) * Math.PI;
+        }
     });
     document.onkeydown = e => {
         if (e.keyCode == 107 || e.keyCode == 109)

@@ -1,5 +1,5 @@
 /// <reference path="../babylon.d.ts" />
-import { rand, randInt } from "../tools";
+import { rand, randInt } from "../components/tools";
 function setStarPosition(particle, i) {
     particle.position.z = randInt(0, 300);
     let theta = rand(0, 6.28);

@@ -1,5 +1,5 @@
 /// <reference path="../../babylon.d.ts" />
-import { setupAudio, Slider, rand, randInt, randBool, loadJSON } from "../../tools";
+import { setupAudio, Slider, rand, randInt, randBool, loadJSON } from "../../components/tools";
 const lang = document.documentElement.lang;
 const TEXT = loadJSON("../data/lang/language.support.json");
 function randomStarColor() {

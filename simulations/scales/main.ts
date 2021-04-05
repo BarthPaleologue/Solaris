@@ -1,6 +1,6 @@
 import { Solaris } from "../solaris.js";
-import { Slider, mod, intFormat, isDefined, loadJSON } from "../tools.js";
-import { AstreData } from "../astre.js";
+import { Slider, mod, intFormat, isDefined, loadJSON } from "../components/tools.js";
+import { AstreData } from "../components/astreData.js";
 
 export function initScales(pathToData: string, quality = "high") {
     let canvas = document.getElementById("renderCanvas");
@@ -46,7 +46,7 @@ export function initScales(pathToData: string, quality = "high") {
     for (let camera of scene.cameras) {
         for (let godrays of camera.godraysList) {
             godrays.light.includedOnlyMeshes = [godrays.mesh];
-            godrays.dispose(camera)
+            godrays.dispose(camera);
         }
     }
     for (let camera of system.targetCameras) {
@@ -66,7 +66,7 @@ export function initScales(pathToData: string, quality = "high") {
     document.getElementById("speed").remove();
 
     const lang = document.documentElement.lang;
-    const TEXT: { [lang: string]: { [key: string]: string } } = loadJSON("../data/lang/language.support.json");
+    const TEXT: { [lang: string]: { [key: string]: string; }; } = loadJSON("../data/lang/language.support.json");
     document.querySelector("#setters h2").innerHTML = TEXT[lang].st;
     document.querySelector("#setters h3:nth-child(1)").innerHTML = TEXT[lang].wp;
     document.querySelector("#setters h3:nth-child(3)").innerHTML = TEXT[lang].fs;
@@ -218,17 +218,17 @@ export function initScales(pathToData: string, quality = "high") {
 
     /// Slider gérant la vitesse du temps 
     new Slider("timeSpeed", document.getElementById("time"), 0, 100, 1, (val: number) => {
-        system.timeUnit = val ** system.powerTime * system.timeSpeedFactor
+        system.timeUnit = val ** system.powerTime * system.timeSpeedFactor;
     });
 
     /// Slider gérant les vitesses de voyage astre à astre  
     new Slider("transitionSpeed", document.getElementById("transispeed"), 1, 20, system.transitionSpeedFactor * 10, (val: number) => {
-        system.transitionSpeedFactor = val / 10
+        system.transitionSpeedFactor = val / 10;
     });
 
     /// Slider gérant le contraste des Textures   
     new Slider("contrast", document.getElementById("contrast"), 0, 30, system.pipeline.imageProcessing.contrast * 10, (val: number) => {
-        system.pipeline.imageProcessing.contrast = val / 10
+        system.pipeline.imageProcessing.contrast = val / 10;
     });
 
     //#endregion

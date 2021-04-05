@@ -1,5 +1,5 @@
-import { createHyperspace } from "./hyperspace"
-import { Slider } from "../tools"
+import { createHyperspace } from "./hyperspace";
+import { Slider } from "../components/tools";
 
 export function initHyperspace() {
     let canvas = document.getElementById("renderCanvas");
@@ -14,7 +14,7 @@ export function initHyperspace() {
 
     document.addEventListener("loadingComplete", () => {
         document.getElementById("renderCanvas").style.opacity = "1";
-        document.getElementById("menu").classList.remove("hiddenMenu")
+        document.getElementById("menu").classList.remove("hiddenMenu");
         document.getElementById("setters").classList.remove("hiddenSetters");
     });
 
@@ -81,6 +81,6 @@ export function initHyperspace() {
             fovSlider.decrement();
             hyperspace.fovMax = fovSlider.getValue() / 100;
         }
-    }
+    };
 
 }

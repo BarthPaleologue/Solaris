@@ -1,5 +1,5 @@
 import { createHyperspace } from "./hyperspace";
-import { Slider } from "../tools";
+import { Slider } from "../components/tools";
 export function initHyperspace() {
     let canvas = document.getElementById("renderCanvas");
     let hyperspace = createHyperspace(canvas);

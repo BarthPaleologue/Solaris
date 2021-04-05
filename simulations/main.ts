@@ -1,6 +1,6 @@
 import { Solaris } from "./solaris.js";
-import { Slider, mod, intFormat, isDefined, loadJSON } from "./tools.js";
-import { AstreData } from "./astre.js";
+import { Slider, mod, intFormat, isDefined, loadJSON } from "./components/tools.js";
+import { AstreData } from "./components/astreData";
 
 export function initSolaris(pathToData: string, quality: string = "high") {
     let canvas = document.getElementById("renderCanvas");
@@ -43,7 +43,7 @@ export function initSolaris(pathToData: string, quality: string = "high") {
     //#region Interactive DOM
 
     const lang = document.documentElement.lang;
-    const TEXT: { [lang: string]: { [key: string]: string } } = loadJSON("../data/lang/language.support.json");
+    const TEXT: { [lang: string]: { [key: string]: string; }; } = loadJSON("../data/lang/language.support.json");
     document.querySelector("#setters h2").innerHTML = TEXT[lang].st;
     document.querySelector("#setters h3:nth-child(1)").innerHTML = TEXT[lang].wp;
     document.querySelector("#setters h3:nth-child(3)").innerHTML = TEXT[lang].fs;
@@ -73,7 +73,7 @@ export function initSolaris(pathToData: string, quality: string = "high") {
     });
 
     document.addEventListener("targetChange", e => {
-        let data:AstreData = (<CustomEvent>e).detail;
+        let data: AstreData = (<CustomEvent>e).detail;
         document.getElementById("name").innerHTML = data.id; // le nom
         document.getElementById("diameter").innerHTML = intFormat(isDefined(data.realdiameter) ? data.realdiameter : data.diametre * system.diametreConversionFactor) + "km"; // le diamètre
         document.getElementById("distance").innerHTML = intFormat(isDefined(data.realdistance) ? data.realdistance : data.distance * system.distanceConversionFactor) + "km"; // la distance
@@ -225,17 +225,24 @@ export function initSolaris(pathToData: string, quality: string = "high") {
 
     /// Slider gérant la vitesse du temps 
     let timeSlider = new Slider("timeSpeed", document.getElementById("time"), 0, 100, 1, (val: number) => {
-        system.timeUnit = val ** system.powerTime * system.timeSpeedFactor
+        system.timeUnit = val ** system.powerTime * system.timeSpeedFactor;
     });
 
     /// Slider gérant les vitesses de voyage astre à astre  
     new Slider("transitionSpeed", document.getElementById("transispeed"), 1, 20, system.transitionSpeedFactor * 10, (val: number) => {
-        system.transitionSpeedFactor = val / 10
+        system.transitionSpeedFactor = val / 10;
     });
 
     /// Slider gérant le contraste des Textures   
     new Slider("contrast", document.getElementById("contrast"), 0, 30, system.pipeline.imageProcessing.contrast * 10, (val: number) => {
-        system.pipeline.imageProcessing.contrast = val / 10
+        system.pipeline.imageProcessing.contrast = val / 10;
+    });
+
+    /// Slider gérant le contraste des Textures   
+    new Slider("fov", document.getElementById("fov"), 1, 179, system.scene.activeCamera.fov * 180 / Math.PI, (val: number) => {
+        for (let camera of system.scene.cameras) {
+            camera.fov = (val / 180) * Math.PI;
+        }
     });
 
     document.onkeydown = e => { // gestion de la vitesse du temps avec les touches + et -
@@ -248,7 +255,7 @@ export function initSolaris(pathToData: string, quality: string = "high") {
             timeSlider.decrement();
             system.timeUnit = timeSlider.getValue() ** system.powerTime * system.timeSpeedFactor;
         }
-    }
+    };
 
     //#endregion
 

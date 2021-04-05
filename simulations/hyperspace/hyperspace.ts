@@ -1,10 +1,10 @@
 /// <reference path="../babylon.d.ts" />
 
-import { rand, randInt } from "../tools";
+import { rand, randInt } from "../components/tools";
 
 function setStarPosition(particle: BABYLON.SolidParticle, i: number) {
     particle.position.z = randInt(0, 300);
-    let theta = rand(0, 6.28)
+    let theta = rand(0, 6.28);
     particle.position.y = Math.cos(theta) * rand(10, 100);
     particle.position.x = Math.sin(theta) * rand(10, 100);
 
@@ -58,10 +58,10 @@ class Hyperspace {
             let fulfilled = Math.round(((total - remaining) / total) * 100);
             let progressEvent = new CustomEvent("loadingProgress", { detail: fulfilled });
             document.dispatchEvent(progressEvent);
-        }
+        };
 
         this.camera1 = new BABYLON.FreeCamera("camera1", BABYLON.Vector3.Zero(), this.scene);
-        this.camera1.fov = 0.4
+        this.camera1.fov = 0.4;
         this.camera1.minZ = .001;
         this.scene.activeCamera = this.camera1;
 
@@ -78,7 +78,7 @@ class Hyperspace {
             mat.emissiveTexture = task.texture;
             mat.opacityTexture = task.texture;
             mat.opacityTexture.getAlphaFromRGB = true;
-        }
+        };
         mat.emissiveColor = BABYLON.Color3.Blue();
         mat.backFaceCulling = false;
 
@@ -101,7 +101,7 @@ class Hyperspace {
         this.isFTL = !this.isFTL;
     }
     takeScreenShot() {
-        BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.scene.activeCamera, { precision: 1.1 })
+        BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.scene.activeCamera, { precision: 1.1 });
     }
     update() {
         if (this.isFTL) {

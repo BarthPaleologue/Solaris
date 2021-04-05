@@ -1,5 +1,3 @@
-/// <reference path="../ts/babylon3.d.ts" />
-
 export let mobile = /iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent);
 
 export function setupAudio(path: string, autoplay = true, loop = true): HTMLAudioElement {
@@ -19,7 +17,7 @@ export function rand(min: number, max: number): number {
 }
 
 export function intFormat(number: number): string {
-    return new Intl.NumberFormat().format(Math.round(number))
+    return new Intl.NumberFormat().format(Math.round(number));
 }
 
 export function randBool(x: number = 2): boolean {
@@ -67,13 +65,13 @@ export class Slider {
     max: number;
     baseValue: number;
     slide: Function;
-    constructor(_id: string, _parent: HTMLElement, _min: number, _max: number, _baseValue: number, _slide = (val:number) => {}) {
+    constructor(_id: string, _parent: HTMLElement, _min: number, _max: number, _baseValue: number, _slide = (val: number) => { }) {
         this.id = _id;
         this.parent = _parent;
         this.min = _min;
         this.max = _max;
         this.baseValue = _baseValue;
-        this.slide = _slide;     
+        this.slide = _slide;
 
         let container = document.createElement("div");
         container.setAttribute("id", `${this.id}SliderContainer`);
@@ -114,7 +112,7 @@ export class Slider {
     getValue(): number {
         return parseInt(this.slider.value);
     }
-    setValue(value:number) {
+    setValue(value: number) {
         this.slider.value = String(value);
         this.update();
     }

@@ -1,5 +1,5 @@
-/// <reference path="babylon.d.ts" />
-/// <reference path="../ts/babylon.gui.d.ts" />
+/// <reference path="../babylon.d.ts" />
+/// <reference path="../../ts/babylon.gui.d.ts" />
 import { toRadians, isDefined } from "./tools.js";
 export class Astre {
     constructor(astreData, parent, index, quality, assetsManager, scene) {

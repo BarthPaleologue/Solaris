@@ -1,50 +1,8 @@
-/// <reference path="babylon.d.ts" />
-/// <reference path="../ts/babylon.gui.d.ts" />
+/// <reference path="../babylon.d.ts" />
+/// <reference path="../../ts/babylon.gui.d.ts" />
 
 import { toRadians, isDefined } from "./tools.js";
-
-export interface AstreData {
-    "id": string,
-    "icon": string,
-    "diametre": number,
-    "realdiameter": number,
-    "distance": number,
-    "realdistance": number,
-    "parentId": string,
-    "textureFileName": string,
-    "textureType": string,
-    "specular": string,
-    "emissive": string,
-    "godrays": boolean,
-    "exposure": number,
-    "decay": number,
-    "pulsar": boolean,
-    "isPickable": boolean,
-    "initialOrbitalPosition": number,
-    "initialRotation": number,
-    "atm": Atmosphere,
-    "angularOrbit": number,
-    "angularSelf": number,
-    "rings": Rings,
-    "dayDuration": number,
-    "yearDuration": number,
-    "satellites": string,
-    "rotation": string,
-    "revolution": string,
-    "description": string
-}
-
-interface Atmosphere {
-    "opacity": number,
-    "textureFileName": string,
-    "color": Array<number>
-}
-
-interface Rings {
-    "textureFileName": string,
-    "size": number,
-    "alpha": number
-}
+import { AstreData } from "./astreData";
 
 export class Astre {
     id: string;
@@ -107,24 +65,24 @@ export class Astre {
                     material.diffuseTexture = task.texture;
                     material.diffuseTexture.hasAlpha = alpha;
                     if (alpha) material.opacityTexture = task.texture;
-                }
+                };
                 break;
             case "emissive":
                 textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                     material.emissiveTexture = task.texture;
-                }
+                };
                 break;
             case "ambient":
                 textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                     material.ambientTexture = task.texture;
                     material.ambientTexture.hasAlpha = alpha;
-                }
+                };
                 break;
             case "opacity":
                 textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                     material.opacityTexture = task.texture;
                     material.opacityTexture.getAlphaFromRGB = alpha;
-                }
+                };
                 break;
         }
         material.specularColor = BABYLON.Color3.Black();
@@ -160,7 +118,7 @@ export class Astre {
             cloudMat.opacityFresnelParameters.rightColor = BABYLON.Color3.Black();
 
             cloudMat.freeze(); // on gèle le matériel pour économiser des ressources
-        }
+        };
 
         clouds.material = cloudMat; // on applique la matériel
         clouds.parent = this.mesh; // on attache l'atmosphère à son astre
@@ -239,14 +197,14 @@ export class Astre {
 
     updateRotation(timeUnit: number) {
         if (this.data.dayDuration != 0) { /// Si n'est pas un satellite synchrnone
-            if(this.data.pulsar) this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.WORLD); // rotation des pulsars
+            if (this.data.pulsar) this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.WORLD); // rotation des pulsars
             else this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.LOCAL); // rotation des planètes sur elles-mêmes
-            if(this.data.yearDuration != 0) this.centerNode.rotate(BABYLON.Axis.Y, - timeUnit / this.data.yearDuration, BABYLON.Space.WORLD); // Saisons aussi
+            if (this.data.yearDuration != 0) this.centerNode.rotate(BABYLON.Axis.Y, - timeUnit / this.data.yearDuration, BABYLON.Space.WORLD); // Saisons aussi
         }
         if (isDefined(this.data.atm)) this.atmosphereMesh.rotation.y += .2 * timeUnit;
     }
 
     updateOrbitalPosition(timeUnit: number) { // Rotation autour du parent
-        if(this.data.yearDuration != 0) this.orbitalNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.LOCAL);
+        if (this.data.yearDuration != 0) this.orbitalNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.LOCAL);
     }
 }

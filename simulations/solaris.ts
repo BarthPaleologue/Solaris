@@ -1,37 +1,13 @@
 /// <reference path="babylon.d.ts" />
 /// <reference path="../ts/babylon.gui.d.ts" />
 
-import { Astre, AstreData } from "./astre.js";
-import { isDefined, rand } from "./tools.js";
 
-interface dataFile {
-    "diameterScalingFactor": number,
-    "distanceScalingFactor": number,
-    "timeSpeedFactor": number,
-    "firstTarget": string,
-    "startDate": {
-        "day": number,
-        "month": number,
-        "year": number
-    },
-    "diametreConversionFactor": number,
-    "distanceConversionFactor": number,
-    "astres": AstreData[],
-    "belts": BeltData[]
-}
-
-interface BeltData {
-    "id": string,
-    "yDivergence": number,
-    "nb": number,
-    "size": number,
-    "position": {
-        "nearest": number,
-        "farthest": number
-    },
-    "parentId": string,
-    "textureType": string
-}
+import { isDefined, rand } from "./components/tools.js";
+import { Astre } from "./components/astre";
+import { dataFile } from "./components/dataFile";
+import { BeltData } from "./components/beltData";
+import { AstreData } from "./components/astreData";
+import { Belt } from "./components/belt";
 
 export class Solaris {
     quality: string; // définit le nombre de polygones et la qualité des effets
@@ -43,6 +19,8 @@ export class Solaris {
     canvas: HTMLCanvasElement; // le canvas de rendu
     scene: BABYLON.Scene; // la scène contenant le système
 
+    keyboard: { [key: string]: boolean; } = {}; // dictionnaire de l'état du clavier
+
     assetsManager: BABYLON.AssetsManager; // l'outil pour charger les textures et affichier la progress bar
     UI: BABYLON.GUI.AdvancedDynamicTexture; // gestionnaire des labels des astres
     pipeline: BABYLON.DefaultRenderingPipeline; // gestionnaire des fx (pas les godrays)
@@ -51,6 +29,7 @@ export class Solaris {
     astresData: AstreData[]; // données des astres
     beltsData: any[]; // données des ceintures d'astéroides
     astres: Astre[] = []; // liste des astres
+    belts: Belt[] = []; // liste des ceintures d'astéroides
 
     //#region Paramètres de temps
 
@@ -181,10 +160,10 @@ export class Solaris {
         let assetsManager = new BABYLON.AssetsManager(this.scene); // Va contenir tous les matériaux
         assetsManager.useDefaultLoadingScreen = false;
         assetsManager.onProgress = (remaining: number, total: number) => {
-            let fulfilled = Math.round(((total - remaining) / total) * 100)
+            let fulfilled = Math.round(((total - remaining) / total) * 100);
             let progressEvent = new CustomEvent("loadingProgress", { detail: fulfilled });
             document.dispatchEvent(progressEvent);
-        }
+        };
         this.assetsManager = assetsManager;
         return this.assetsManager;
     }
@@ -233,68 +212,73 @@ export class Solaris {
     }
 
     initKeyboard(): {} {
-        let map: { [key: number]: boolean } = {};
+        this.keyboard = {};
         document.addEventListener("keydown", e => {
-            map[e.keyCode] = true;
-            let camera = this.scene.activeCamera;
-            if (camera instanceof BABYLON.FreeCamera) {
-                if (map[32]) camera.cameraDirection.y += this.freeCameraSpeed; // SPAAAAAACE !!!!!!!!!!
-                if (map[16]) camera.cameraDirection.y -= this.freeCameraSpeed; // SHIFT
-                if (map[90] || map[87]) { // Z // W
-                    let dx = Math.sin(camera.rotation.y);
-                    let dy = -Math.sin(camera.rotation.x);
-                    let dz = Math.cos(camera.rotation.y);
-                    camera.cameraDirection.x += dx * this.freeCameraSpeed;
-                    camera.cameraDirection.y += dy * this.freeCameraSpeed;
-                    camera.cameraDirection.z += dz * this.freeCameraSpeed;
-                }
-                if (map[83]) { // S
-                    let dx = Math.sin(camera.rotation.y);
-                    let dy = Math.sin(camera.rotation.x);
-                    let dz = Math.cos(camera.rotation.y);
-                    camera.cameraDirection.x -= dx * this.freeCameraSpeed;
-                    camera.cameraDirection.y += dy * this.freeCameraSpeed;
-                    camera.cameraDirection.z -= dz * this.freeCameraSpeed;
-                }
-                if (map[68]) { // D
-                    let dx = Math.cos(camera.rotation.y);
-                    let dz = Math.sin(camera.rotation.y);
-                    camera.cameraDirection.x += dx * this.freeCameraSpeed;
-                    camera.cameraDirection.z -= dz * this.freeCameraSpeed;
-                }
-                if (map[81] || map[65]) { // Q // A
-                    let dx = Math.cos(camera.rotation.y);
-                    let dz = Math.sin(camera.rotation.y);
-                    camera.cameraDirection.x -= dx * this.freeCameraSpeed;
-                    camera.cameraDirection.z += dz * this.freeCameraSpeed;
-                }
-            }
+            this.keyboard[e.key] = true;
+            // appuis ponctuels
+            if (this.keyboard["f"]) this.toggleFXAA(); // [F]
+            if (this.keyboard["g"]) this.toggleGodrays(); // [G]
+            if (this.keyboard["h"]) this.toggleAsteroidBelts(); // [H]
+            if (this.keyboard["i"]) document.getElementById("infos").classList.toggle("hiddenInfos"); // Toggle Information pannel [I]
+            if (this.keyboard["k"]) document.getElementById("fps").classList.toggle("hiddenFPS"); // Toggle FPS [K]
+            if (this.keyboard["m"]) this.toggleSound(); // [M]
+            if (this.keyboard["n"]) this.toggleLabels(); // [N]
+            if (this.keyboard["o"]) this.toggleOrbits(); // [O]
+            if (this.keyboard["p"]) this.takeScreenshot(); // [P]
+            if (this.keyboard["t"]) document.getElementById("dateSelectorContainer").classList.toggle("hiddenDateSelector"); // Toggle time travel pannel [T]
 
-            if (map[70]) this.toggleFXAA(); // [F]
-            if (map[71]) this.toggleGodrays(); // [G]
-            if (map[72]) this.toggleAsteroidBelts(); // [H]
-            if (map[73]) document.getElementById("infos").classList.toggle("hiddenInfos"); // Toggle Information pannel [I]
-            if (map[75]) document.getElementById("fps").classList.toggle("hiddenFPS"); // Toggle FPS [K]
-            if (map[77]) this.toggleSound(); // [M]
-            if (map[78]) this.toggleLabels(); // [N]
-            if (map[79]) this.toggleOrbits(); // [O]
-            if (map[80]) this.takeScreenshot(); // [P]
-            if (map[84]) document.getElementById("dateSelectorContainer").classList.toggle("hiddenDateSelector"); // Toggle time travel pannel [T]
-
-            if (map[67]) this.zooming = true; /// Zoom sur l'astre courant [C]
+            if (this.keyboard["c"]) this.zooming = true; /// Zoom sur l'astre courant [C]
         });
-        document.addEventListener("keyup", e => map[e.keyCode] = false); // Lorsque l'on relache une touche
+        document.addEventListener("keyup", e => this.keyboard[e.key] = false); // Lorsque l'on relache une touche
 
-        return map;
+        return this.keyboard;
+    }
+
+    listenToKeyboard() {
+        // appuis longs
+        let camera = this.scene.activeCamera;
+        if (camera instanceof BABYLON.FreeCamera) {
+            if (this.keyboard["space"]) camera.cameraDirection.y += this.freeCameraSpeed; // SPAAAAAACE !!!!!!!!!!
+            if (this.keyboard["shift"]) camera.cameraDirection.y -= this.freeCameraSpeed; // SHIFT
+            if (this.keyboard["z"] || this.keyboard["w"]) {
+                let dx = Math.sin(camera.rotation.y);
+                let dy = -Math.sin(camera.rotation.x);
+                let dz = Math.cos(camera.rotation.y);
+                camera.cameraDirection.x += dx * this.freeCameraSpeed;
+                camera.cameraDirection.y += dy * this.freeCameraSpeed;
+                camera.cameraDirection.z += dz * this.freeCameraSpeed;
+            }
+            if (this.keyboard["s"]) {
+                let dx = Math.sin(camera.rotation.y);
+                let dy = Math.sin(camera.rotation.x);
+                let dz = Math.cos(camera.rotation.y);
+                camera.cameraDirection.x -= dx * this.freeCameraSpeed;
+                camera.cameraDirection.y += dy * this.freeCameraSpeed;
+                camera.cameraDirection.z -= dz * this.freeCameraSpeed;
+            }
+            if (this.keyboard["d"]) {
+                let dx = Math.cos(camera.rotation.y);
+                let dz = Math.sin(camera.rotation.y);
+                camera.cameraDirection.x += dx * this.freeCameraSpeed;
+                camera.cameraDirection.z -= dz * this.freeCameraSpeed;
+            }
+            if (this.keyboard["q"] || this.keyboard["a"]) {
+                let dx = Math.cos(camera.rotation.y);
+                let dz = Math.sin(camera.rotation.y);
+                camera.cameraDirection.x -= dx * this.freeCameraSpeed;
+                camera.cameraDirection.z += dz * this.freeCameraSpeed;
+            }
+        }
     }
 
     initAstres(): Astre[] {
-        for (let astreData of this.astresData) this.createAstre(astreData); // Générations des astres selon la tables des données
+        for (let astreData of this.astresData) this.astres.push(this.createAstre(astreData)); // Générations des astres selon la tables des données
         return this.astres;
     }
 
-    initBelts(): void {
-        for (let beltData of this.beltsData) this.createBelt(beltData); // on crée une ceinture d'astéroides
+    initBelts(): Belt[] {
+        for (let beltData of this.beltsData) this.belts.push(this.createBelt(beltData)); // on crée une ceinture d'astéroides
+        return this.belts;
     }
 
     //#region Caméras
@@ -357,7 +341,6 @@ export class Solaris {
         let astre = new Astre(astreData, isDefined(astreData.parentId) ? this.getAstreById(astreData.parentId) : undefined, this.astres.length, this.quality, this.assetsManager, this.scene);
         astre.setDiameterScale(this.diameterScalingFactor);
         astre.setDistanceScale(this.distanceScalingFactor);
-        this.astres.push(astre);
 
         if (astreData.godrays) { // si l'astre est une étoile
             let light = new BABYLON.PointLight(`lightOf${astre.id}`, BABYLON.Vector3.Zero(), this.scene); // création d'une lumière
@@ -387,7 +370,7 @@ export class Solaris {
             let listElm = document.createElement("li");
             listElm.setAttribute("id", astreData.id);
             listElm.setAttribute("class", isDefined(astreData.parentId) ? "satellite" : "planete");
-            listElm.innerHTML = `<img src="../data/icons/${astreData.icon}"/><p>${astreData.id}</p>`
+            listElm.innerHTML = `<img src="../data/icons/${astreData.icon}"/><p>${astreData.id}</p>`;
             document.getElementById("astra-list").appendChild(listElm);
             listElm.addEventListener("click", () => this.goTo(astre)); // gère le click sur le sélecteur d'astre
         }
@@ -395,7 +378,7 @@ export class Solaris {
         return astre;
     }
 
-    createBelt(beltData: BeltData): BABYLON.SolidParticleSystem {
+    createBelt(beltData: BeltData): Belt {
         let asteroid = BABYLON.Mesh.CreateSphere("asteroid", 1, 1, this.scene);
 
         let ceintureAsteroids = new BABYLON.SolidParticleSystem(beltData.id, this.scene, { updatable: false });
@@ -440,7 +423,9 @@ export class Solaris {
         mesh.freezeNormals();
         asteroid.dispose();
 
-        return ceintureAsteroids;
+        let belt = new Belt(ceintureAsteroids);
+
+        return belt;
     }
 
     //#endregion
@@ -608,6 +593,8 @@ export class Solaris {
 
     update() {
         document.dispatchEvent(this.tickEvent);
+
+        this.listenToKeyboard();
 
         if (this.changement) { /// Mise à jour de la position des caméras lors du changement de cible
             this.updateCameraPositions();

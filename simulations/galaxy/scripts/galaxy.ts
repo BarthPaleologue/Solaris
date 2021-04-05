@@ -1,9 +1,9 @@
 /// <reference path="../../babylon.d.ts" />
 
-import { setupAudio, Slider, rand, randInt, randBool, loadJSON } from "../../tools";
+import { setupAudio, Slider, rand, randInt, randBool, loadJSON } from "../../components/tools";
 
 const lang = document.documentElement.lang;
-const TEXT: { [lang: string]: { [key: string]: string } } = loadJSON("../data/lang/language.support.json");
+const TEXT: { [lang: string]: { [key: string]: string; }; } = loadJSON("../data/lang/language.support.json");
 
 function randomStarColor() {
     if (randBool(50)) return new BABYLON.Color4(rand(.1, .2), rand(.5, .8), 1, 1);
@@ -53,7 +53,7 @@ class Galaxy {
         this.gazClouds.particleTexture = new BABYLON.Texture("../data/textures/particles/gazCloud.jpg", this.scene);
         this.gazClouds.updateFunction = (particles: BABYLON.Particle[]) => {
             for (let i in particles) particles[i].position = this.gazCloudsPositions[i];
-        }
+        };
         this.gazClouds.color1 = new BABYLON.Color4(70 / 256, 66 / 256, 122 / 256, .1);
         this.gazClouds.color2 = new BABYLON.Color4(rand(55, 120) / 256, 34 / 256, rand(4, 100) / 256, .1);
         this.gazClouds.minSize = 8 * (this.nbStars / 32000);
@@ -90,7 +90,7 @@ class Galaxy {
             }
             positions[i] = new BABYLON.Vector3(starX, starY, starZ).scale(5);
         }
-        console.log(this.density)
+        console.log(this.density);
         return positions;
     }
     update() {
@@ -267,17 +267,17 @@ export function createGalaxy(nb: number) {
     function generateRandomGalaxy() {
         armslider.setValue(randInt(4, 7));
         largeslider.setValue(rand(9, 14));
-        longueurslider.setValue(rand(7,9));
+        longueurslider.setValue(rand(7, 9));
         enrouslider.setValue(randInt(80, 180));
         densityslider.setValue(randInt(2, 7) / (nbstars / 32000));
         dispslider.setValue(randInt(2, 6));
     }
 
     assetsManager.onProgress = (remaining: number, total: number) => {
-        let progression = (total - remaining) / total
+        let progression = (total - remaining) / total;
         document.getElementById("bar").style.width = String(progression) + "%";
         document.querySelector(".text").innerHTML = String(progression);
-    }
+    };
 
     assetsManager.onFinish = () => {
         document.getElementById("menu").classList.toggle("hiddenMenu"); // On affiche le menu
@@ -290,7 +290,7 @@ export function createGalaxy(nb: number) {
             document.getElementById("fps").innerHTML = Math.round(engine.getFps()) + " FPS";
             scene.render();
         });
-    }
+    };
 
     assetsManager.load();
 

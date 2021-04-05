@@ -1,4 +1,3 @@
-/// <reference path="../ts/babylon3.d.ts" />
 export let mobile = /iPhone|iPod|Android|opera mini|blackberry|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iris|3g_t|windows ce|opera mobi|windows ce; smartphone;|windows ce;iemobile/i.test(navigator.userAgent);
 export function setupAudio(path, autoplay = true, loop = true) {
     let audio = new Audio(path);

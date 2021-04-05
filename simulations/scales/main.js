@@ -1,5 +1,5 @@
 import { Solaris } from "../solaris.js";
-import { Slider, mod, intFormat, isDefined, loadJSON } from "../tools.js";
+import { Slider, mod, intFormat, isDefined, loadJSON } from "../components/tools.js";
 export function initScales(pathToData, quality = "high") {
     let canvas = document.getElementById("renderCanvas");
     let engine = new BABYLON.Engine(canvas, true);
