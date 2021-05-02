@@ -1,12 +1,15 @@
 /// <reference path="../babylon.d.ts" />
 /// <reference path="../../ts/babylon.gui.d.ts" />
 import { toRadians, isDefined } from "./tools.js";
+import { AtmosphericScatteringPostProcess } from "../shaders/atmosphericScattering.js";
 export class Astre {
     constructor(astreData, parent, index, quality, assetsManager, scene) {
+        this.atmPostPross = null;
         this.data = astreData;
         this.id = astreData.id;
         this.index = index;
         this.parent = parent;
+        this.scene = scene;
         let nbSegments = quality == "low" ? 16 : 32;
         this.mesh = BABYLON.Mesh.CreateSphere(astreData.id, nbSegments, astreData.diametre, scene); // création de l'objet astre
         this.mesh.rotation.z = Math.PI; // sinon les astres ont la tête à l'envers mdr
@@ -84,25 +87,30 @@ export class Astre {
         this.ringMesh = rings;
     }
     addAtmosphere(assetsManager) {
-        let diametre = this.data.diametre * 1.015; // diamètre légèrement supérieur
-        let clouds = BABYLON.Mesh.CreateSphere(`atmosphereOf${this.id}`, 32, diametre, this.mesh.getScene());
-        let cloudMat = new BABYLON.StandardMaterial(`cloudMatOf${this.id}`, this.mesh.getScene());
-        let textureTask = assetsManager.addTextureTask(this.id, `../data/textures/atmospheres/${this.data.atm.textureFileName}`);
-        textureTask.onSuccess = (task) => {
-            cloudMat.opacityTexture = task.texture;
-            if (isDefined(this.data.atm.color))
-                cloudMat.diffuseColor = BABYLON.Color3.FromArray(this.data.atm.color).scale(1 / 255);
-            cloudMat.opacityTexture.getAlphaFromRGB = true;
-            // Fresnel (effet d'opacité sur les bords de l'astre)
-            cloudMat.opacityFresnelParameters = new BABYLON.FresnelParameters();
-            cloudMat.opacityFresnelParameters.power = this.data.atm.opacity;
-            cloudMat.opacityFresnelParameters.leftColor = BABYLON.Color3.White();
-            cloudMat.opacityFresnelParameters.rightColor = BABYLON.Color3.Black();
-            cloudMat.freeze(); // on gèle le matériel pour économiser des ressources
-        };
-        clouds.material = cloudMat; // on applique la matériel
-        clouds.parent = this.mesh; // on attache l'atmosphère à son astre
-        this.atmosphereMesh = clouds;
+        if (this.data.atm.textureFileName == "clouds4.jpg") {
+            let epsilon = 1e-3;
+            let diametre = this.data.diametre + epsilon; // diamètre légèrement supérieur
+            let planetRadius = (diametre / 2) + 10 * epsilon;
+            let atmRadius = (diametre / 2) + 100 * epsilon;
+            //@ts-ignore
+            this.atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}`, this.mesh, planetRadius, atmRadius, this.scene.getMeshByID("Soleil"), this.scene.activeCamera, this.scene);
+            let clouds = BABYLON.Mesh.CreateSphere(`atmosphereOf${this.id}`, 32, diametre, this.mesh.getScene());
+            let cloudMat = new BABYLON.StandardMaterial(`cloudMatOf${this.id}`, this.mesh.getScene());
+            let textureTask = assetsManager.addTextureTask(this.id, `../data/textures/atmospheres/${this.data.atm.textureFileName}`);
+            textureTask.onSuccess = (task) => {
+                cloudMat.opacityTexture = task.texture;
+                if (isDefined(this.data.atm.color))
+                    cloudMat.diffuseColor = BABYLON.Color3.FromArray(this.data.atm.color).scale(1 / 255);
+                cloudMat.opacityTexture.getAlphaFromRGB = true;
+            };
+            clouds.material = cloudMat; // on applique la matériel
+            clouds.parent = this.mesh; // on attache l'atmosphère à son astre
+            this.atmosphereMesh = clouds;
+        }
+        else {
+            //@ts-ignore
+            this.atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}`, this.mesh, this.data.diametre / 2, (this.data.diametre / 2) * 1.3, this.scene.getMeshByID("Soleil"), this.scene.activeCamera, this.scene);
+        }
     }
     addPulsarEffect(emitRate = 20000) {
         let particleSystem = new BABYLON.ParticleSystem(`particlesOf${this.id}`, 100000, this.mesh.getScene());
@@ -162,6 +170,10 @@ export class Astre {
         this.mesh.scaling = this.mesh.scaling.scale(diameterScalingFactor);
         if (isDefined(this.data.rings))
             this.ringMesh.scaling = this.ringMesh.scaling.scale(diameterScalingFactor);
+        if (this.atmPostPross != null) {
+            this.atmPostPross.settings.atmosphereRadius *= diameterScalingFactor;
+            this.atmPostPross.settings.planetRadius *= diameterScalingFactor;
+        }
     }
     setDistanceScale(distanceScalingFactor) {
         this.centerNode.position.x *= distanceScalingFactor;
@@ -176,8 +188,7 @@ export class Astre {
             if (this.data.yearDuration != 0)
                 this.centerNode.rotate(BABYLON.Axis.Y, -timeUnit / this.data.yearDuration, BABYLON.Space.WORLD); // Saisons aussi
         }
-        if (isDefined(this.data.atm))
-            this.atmosphereMesh.rotation.y += .2 * timeUnit;
+        //if (isDefined(this.data.atm)) this.atmosphereMesh.rotation.y += .2 * timeUnit;
     }
     updateOrbitalPosition(timeUnit) {
         if (this.data.yearDuration != 0)

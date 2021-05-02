@@ -3,9 +3,14 @@ import { Slider, mod, intFormat, isDefined, loadJSON } from "./components/tools.
 import { AstreData } from "./components/astreData";
 
 export function initSolaris(pathToData: string, quality: string = "high") {
+
     let canvas = document.getElementById("renderCanvas");
 
-    let engine = new BABYLON.Engine(<HTMLCanvasElement>canvas, true);
+    let engine = new BABYLON.Engine(<HTMLCanvasElement>canvas, true, {
+        //@ts-ignore
+        useHighPrecisionFloats: true,
+        useHighPrecisionMatrix: true
+    });
     window.addEventListener("resize", () => engine.resize());
 
     let system = new Solaris(engine, quality);
@@ -105,7 +110,7 @@ export function initSolaris(pathToData: string, quality: string = "high") {
     document.getElementById("tfxaa").addEventListener("click", () => system.toggleFXAA()); // Toggle FXAA
     document.getElementById("tgodrays").addEventListener("click", () => system.toggleGodrays()); // Toggle Godrays
     document.getElementById("tlabel").addEventListener("click", () => system.toggleLabels()); // Toggle Labels
-    document.getElementById("tzoom").addEventListener("click", () => system.zooming = true);
+    //document.getElementById("tzoom").addEventListener("click", () => system.zooming = true);
     document.getElementById("tsound").addEventListener("click", () => system.toggleSound()); // Toggle sound
 
     //#endregion

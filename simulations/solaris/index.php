@@ -26,7 +26,7 @@
         else $q = $_GET["q"];
     ?>
 
-    <script defer type="text/javascript" src="../babylon4.js"></script>
+    <script defer type="text/javascript" src="../babylon.js"></script>
     <script defer type="text/javascript" src="../babylon.gui.js"></script>
     <script defer type='module'>
     import {

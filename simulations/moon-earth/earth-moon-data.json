@@ -1,28 +1,22 @@
 {
     "diameterScalingFactor": 2,
     "distanceScalingFactor": 2,
-
     "timeSpeedFactor": 0.0001,
-
     "firstTarget": "La Terre",
-
     "startDate": {
         "day": 1,
         "month": 1,
         "year": 2020
     },
-
     "diametreConversionFactor": 12756,
     "distanceConversionFactor": 12756,
-
     "freeCameraSpeedFactor": 0.001,
-
     "beginNavIndex": 0,
-
-    "astres": [{
+    "astres": [
+        {
             "id": "Soleil",
             "icon": "soleil.png",
-            "diametre": 109.17999,
+            "diametre": 10.917999,
             "distance": 0,
             "textureFileName": "sun.jpg",
             "textureType": "emissive",
@@ -42,7 +36,7 @@
             "id": "La Terre",
             "icon": "terre.png",
             "diametre": 1,
-            "distance": 11727.8144,
+            "distance": 1172.78144,
             "textureFileName": "earth.jpg",
             "textureType": "diffuse",
             "specular": "specular.jpg",

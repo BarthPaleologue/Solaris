@@ -2,7 +2,11 @@ import { Solaris } from "./solaris.js";
 import { Slider, mod, intFormat, isDefined, loadJSON } from "./components/tools.js";
 export function initSolaris(pathToData, quality = "high") {
     let canvas = document.getElementById("renderCanvas");
-    let engine = new BABYLON.Engine(canvas, true);
+    let engine = new BABYLON.Engine(canvas, true, {
+        //@ts-ignore
+        useHighPrecisionFloats: true,
+        useHighPrecisionMatrix: true
+    });
     window.addEventListener("resize", () => engine.resize());
     let system = new Solaris(engine, quality);
     system.loadConfiguration(pathToData);
@@ -77,7 +81,7 @@ export function initSolaris(pathToData, quality = "high") {
     document.getElementById("tfxaa").addEventListener("click", () => system.toggleFXAA()); // Toggle FXAA
     document.getElementById("tgodrays").addEventListener("click", () => system.toggleGodrays()); // Toggle Godrays
     document.getElementById("tlabel").addEventListener("click", () => system.toggleLabels()); // Toggle Labels
-    document.getElementById("tzoom").addEventListener("click", () => system.zooming = true);
+    //document.getElementById("tzoom").addEventListener("click", () => system.zooming = true);
     document.getElementById("tsound").addEventListener("click", () => system.toggleSound()); // Toggle sound
     //#endregion
     //#region Toggle events

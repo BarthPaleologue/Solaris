@@ -62,12 +62,12 @@ export class Solaris {
 
     destinationRadius: number; // distance de la targetcamera à l'astre currentTarget lors de la fin de transition
     precisionFactor = 5; // facteur de précision du zoom roulette
-    zooming = false; // Flag pour zoomer sur les astres
-    changement = false; // Flag pour se déplacer vers un autre astre
-    targeting = false; // Flag pour lock la caméra pendant les déplacements
 
     //#endregion
 
+    step: number = 0;
+    maxStep: number = 200;
+    previousTarget: Astre;
     currentTarget: Astre;
     firstTarget: string; // premier astre ciblé par la caméra au lancement
 
@@ -98,11 +98,6 @@ export class Solaris {
         this.engine = engine;
         this.canvas = engine.getRenderingCanvas();
 
-        window.addEventListener("wheel", () => this.zooming = false);
-        window.addEventListener("mousemove", () => this.targeting = false); // si l'utilisateur drag (souris)
-        window.addEventListener("touchmove", () => this.targeting = false); // si l'utilisateur drag (doigt)
-
-        BABYLON.ArcRotateCamera.prototype.targetNode = undefined; // point d'attache des caméras de cible lors des déplacements
         BABYLON.VolumetricLightScatteringPostProcess.prototype.light = undefined; // un godrays est associé à une lumière
         BABYLON.Camera.prototype.godraysList = []; // une caméra a accès aux godrays qui lui sont attachés
     }
@@ -177,7 +172,7 @@ export class Solaris {
         this.pipeline = new BABYLON.DefaultRenderingPipeline("pipeline", false, this.scene, this.scene.cameras); /// name, hdrEnabled, scene, cameras
         this.pipeline.fxaa = new BABYLON.FxaaPostProcess('fxaa', 1, null, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
         this.pipeline.fxaaEnabled = false; // fxaa désactivé par défaut
-        this.pipeline.imageProcessing.contrast = 1.2;
+        //this.pipeline.imageProcessing.contrast = 1.2;
 
         return this.pipeline;
     }
@@ -227,7 +222,7 @@ export class Solaris {
             if (this.keyboard["p"]) this.takeScreenshot(); // [P]
             if (this.keyboard["t"]) document.getElementById("dateSelectorContainer").classList.toggle("hiddenDateSelector"); // Toggle time travel pannel [T]
 
-            if (this.keyboard["c"]) this.zooming = true; /// Zoom sur l'astre courant [C]
+            //if (this.keyboard["c"]) this.zooming = true; /// Zoom sur l'astre courant [C]
         });
         document.addEventListener("keyup", e => this.keyboard[e.key] = false); // Lorsque l'on relache une touche
 
@@ -295,7 +290,6 @@ export class Solaris {
             case "targetAnaglyph":
                 newCamera = new BABYLON.AnaglyphArcRotateCamera(name, .3, Math.PI / 4, 400 * this.diameterScalingFactor, BABYLON.Vector3.Zero(), .33, this.scene);
                 newCamera.upperRadiusLimit = (this.SCENE_SIZE / 15) * this.diameterScalingFactor;
-                newCamera.targetNode = BABYLON.Mesh.CreatePlane(`${name}TargetNode`, 1e-100, this.scene);
                 this.targetCameras.push(newCamera);
                 break;
             case "free":
@@ -311,7 +305,7 @@ export class Solaris {
                 this.freeCameras.push(newCamera);
                 break;
         }
-        newCamera.maxZ = this.SCENE_SIZE; // Horizon assez loin pour voir skybox
+        //newCamera.maxZ = this.SCENE_SIZE; // Horizon assez loin pour voir skybox
 
         return newCamera;
     }
@@ -496,20 +490,7 @@ export class Solaris {
         }
     }
 
-    endTravel() {
-        this.changement = false;
-        for (let camera of this.targetCameras) {
-            camera.setTarget(this.currentTarget.mesh);
-            camera.lowerRadiusLimit = this.currentTarget.data.diametre * this.diameterScalingFactor + 1;
-        }
-    }
-
     goTo(newTarget: Astre) {
-        for (let camera of this.targetCameras) {
-            camera.targetNode.position = this.currentTarget.mesh.getAbsolutePosition();
-            camera.lowerRadiusLimit = 0;
-            camera.setTarget(camera.targetNode);
-        }
 
         this.currentTarget.orbitMesh.color = BABYLON.Color3.White(); // l'orbite redevient blanche
         newTarget.orbitMesh.color = BABYLON.Color3.Yellow(); // l'orbite devient jaune
@@ -521,35 +502,37 @@ export class Solaris {
             }
         }
 
-        let event = new CustomEvent("targetChange", { detail: newTarget.data });
-        document.dispatchEvent(event);
+        let targetChangeEvent = new CustomEvent("targetChange", { detail: newTarget.data });
+        document.dispatchEvent(targetChangeEvent);
 
         this.destinationRadius = (newTarget.data.diametre * 2 + 1) * this.diameterScalingFactor; // distance d'approche de l'astre currentTarget
-        this.zooming = true;
-        this.targeting = true;
-        this.changement = true; // ENGAGE !
 
+        this.previousTarget = this.currentTarget;
         this.currentTarget = newTarget; // on change la cible
+
+        this.step = 1;
     }
 
     updateCameraPositions() {
         if (this.scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
-            if (BABYLON.Vector3.DistanceSquared(this.scene.activeCamera.target, this.currentTarget.mesh.absolutePosition) < .1 && (Math.abs(this.scene.activeCamera.radius - this.destinationRadius) < .1 || !this.zooming)) {
-                this.endTravel();
-            } else {
-                for (let camera of this.targetCameras) {
-                    camera.targetNode.position.addInPlace(this.currentTarget.mesh.absolutePosition.subtract(camera.targetNode.position).scale(.1 * this.transitionSpeedFactor));
-                    if (this.targeting) camera.setTarget(camera.targetNode);
-                }
+            for (let camera of this.targetCameras) {
+                let direction = this.currentTarget.mesh.absolutePosition.subtract(this.previousTarget.mesh.absolutePosition);
+                direction.scaleInPlace(this.step / this.maxStep);
+                camera.setTarget(this.previousTarget.mesh.absolutePosition.add(direction));
             }
         } else if (this.scene.activeCamera instanceof BABYLON.FreeCamera) {
-            if (BABYLON.Vector3.DistanceSquared(this.scene.activeCamera.position, this.currentTarget.mesh.absolutePosition) < this.destinationRadius ** 2) {
-                this.endTravel();
-            } else {
-                for (let camera of this.freeCameras) {
-                    camera.position.addInPlace(this.currentTarget.mesh.absolutePosition.subtract(camera.position).scale(.1 * this.transitionSpeedFactor));
-                }
+            for (let camera of this.freeCameras) {
+                let direction = this.currentTarget.mesh.absolutePosition.subtract(this.previousTarget.mesh.absolutePosition);
+                direction.scaleInPlace(this.step / this.maxStep);
+                camera.position = this.previousTarget.mesh.absolutePosition.add(direction);
             }
+        }
+    }
+
+    zoom() {
+        for (let camera of this.targetCameras) {
+            let height = camera.radius - this.destinationRadius;
+            camera.radius = this.destinationRadius + (1 - (this.step / this.maxStep)) * height;
         }
     }
 
@@ -596,8 +579,17 @@ export class Solaris {
 
         this.listenToKeyboard();
 
-        if (this.changement) { /// Mise à jour de la position des caméras lors du changement de cible
+        if (this.step > 0) { /// Mise à jour de la position des caméras lors du changement de cible
+            this.step += 1;
             this.updateCameraPositions();
+            this.zoom();
+            if (this.step == this.maxStep) {
+                for (let camera of this.targetCameras) {
+                    camera.setTarget(this.currentTarget.mesh);
+                    camera.lowerRadiusLimit = this.currentTarget.data.diametre * this.diameterScalingFactor + 1;
+                }
+                this.step = 0;
+            }
         } else {
             this.updateAstres();
             this.updateClock();
@@ -607,12 +599,6 @@ export class Solaris {
         for (let camera of this.targetCameras) {
             camera.wheelPrecision = this.precisionFactor * 100 / camera.radius;
             camera.pinchPrecision = camera.wheelPrecision;
-        }
-
-        if (this.zooming) {
-            for (let camera of this.targetCameras) {
-                camera.radius -= (camera.radius - this.destinationRadius) * this.transitionSpeedFactor / 10;
-            }
         }
     }
 
