@@ -23,6 +23,7 @@ export class Solaris {
         //#endregion
         this.step = 0;
         this.maxStep = 200;
+        this.movementVector = BABYLON.Vector3.Zero();
         //#region Flag pour togglers
         this.areOrbitsEnabled = false;
         this.areAsteroidsEnabled = true;
@@ -43,6 +44,7 @@ export class Solaris {
         this.canvas = engine.getRenderingCanvas();
         BABYLON.VolumetricLightScatteringPostProcess.prototype.light = undefined; // un godrays est associé à une lumière
         BABYLON.Camera.prototype.godraysList = []; // une caméra a accès aux godrays qui lui sont attachés
+        BABYLON.Camera.prototype.movementVector = BABYLON.Vector3.Zero();
     }
     loadConfiguration(path) {
         let xmlhttp = new XMLHttpRequest();
@@ -86,6 +88,13 @@ export class Solaris {
         });
         scene.beforeRender = () => this.update();
         this.scene = scene;
+        let systemNode = new BABYLON.Mesh("systemNode", scene);
+        let center = BABYLON.Mesh.CreateBox("centre", 1000, scene);
+        let mat = new BABYLON.StandardMaterial("matmat", scene);
+        mat.wireframe = true;
+        mat.emissiveColor = BABYLON.Color3.White();
+        center.material = mat;
+        center.isPickable = false;
         return this.scene;
     }
     initAssetsManager() {
@@ -167,37 +176,36 @@ export class Solaris {
         // appuis longs
         let camera = this.scene.activeCamera;
         if (camera instanceof BABYLON.FreeCamera) {
-            if (this.keyboard["space"])
-                camera.cameraDirection.y += this.freeCameraSpeed; // SPAAAAAACE !!!!!!!!!!
-            if (this.keyboard["shift"])
-                camera.cameraDirection.y -= this.freeCameraSpeed; // SHIFT
+            let systemNode = this.scene.getMeshByID("systemNode");
             if (this.keyboard["z"] || this.keyboard["w"]) {
-                let dx = Math.sin(camera.rotation.y);
-                let dy = -Math.sin(camera.rotation.x);
-                let dz = Math.cos(camera.rotation.y);
-                camera.cameraDirection.x += dx * this.freeCameraSpeed;
-                camera.cameraDirection.y += dy * this.freeCameraSpeed;
-                camera.cameraDirection.z += dz * this.freeCameraSpeed;
+                let dt = this.engine.getDeltaTime();
+                let movement = camera.getDirection(BABYLON.Axis.Z).scale(dt);
+                systemNode.position.subtractInPlace(movement);
             }
             if (this.keyboard["s"]) {
-                let dx = Math.sin(camera.rotation.y);
-                let dy = Math.sin(camera.rotation.x);
-                let dz = Math.cos(camera.rotation.y);
-                camera.cameraDirection.x -= dx * this.freeCameraSpeed;
-                camera.cameraDirection.y += dy * this.freeCameraSpeed;
-                camera.cameraDirection.z -= dz * this.freeCameraSpeed;
+                let dt = this.engine.getDeltaTime();
+                let movement = camera.getDirection(BABYLON.Axis.Z).scale(dt);
+                systemNode.position.addInPlace(movement);
             }
             if (this.keyboard["d"]) {
-                let dx = Math.cos(camera.rotation.y);
-                let dz = Math.sin(camera.rotation.y);
-                camera.cameraDirection.x += dx * this.freeCameraSpeed;
-                camera.cameraDirection.z -= dz * this.freeCameraSpeed;
+                let dt = this.engine.getDeltaTime();
+                let movement = camera.getDirection(BABYLON.Axis.X).scale(dt);
+                systemNode.position.subtractInPlace(movement);
             }
             if (this.keyboard["q"] || this.keyboard["a"]) {
-                let dx = Math.cos(camera.rotation.y);
-                let dz = Math.sin(camera.rotation.y);
-                camera.cameraDirection.x -= dx * this.freeCameraSpeed;
-                camera.cameraDirection.z += dz * this.freeCameraSpeed;
+                let dt = this.engine.getDeltaTime();
+                let movement = camera.getDirection(BABYLON.Axis.X).scale(dt);
+                systemNode.position.addInPlace(movement);
+            }
+            if (this.keyboard[" "]) {
+                let dt = this.engine.getDeltaTime();
+                let movement = camera.getDirection(BABYLON.Axis.Y).scale(dt);
+                systemNode.position.subtractInPlace(movement);
+            }
+            if (this.keyboard["Shift"]) {
+                let dt = this.engine.getDeltaTime();
+                let movement = camera.getDirection(BABYLON.Axis.Y).scale(dt);
+                systemNode.position.addInPlace(movement);
             }
         }
     }
@@ -218,7 +226,6 @@ export class Solaris {
             case "target":
                 newCamera = new BABYLON.ArcRotateCamera(name, .3, Math.PI / 4, 400 * this.diameterScalingFactor, BABYLON.Vector3.Zero(), this.scene);
                 newCamera.upperRadiusLimit = (this.SCENE_SIZE / 15) * this.diameterScalingFactor; // Dézoom Max pour rester dans la skybox
-                newCamera.targetNode = BABYLON.Mesh.CreatePlane(`${name}TargetNode`, 1e-100, this.scene);
                 this.targetCameras.push(newCamera);
                 break;
             case "targetAnaglyph":
@@ -227,15 +234,15 @@ export class Solaris {
                 this.targetCameras.push(newCamera);
                 break;
             case "free":
-                newCamera = new BABYLON.FreeCamera(name, new BABYLON.Vector3(500, 0, 0).scale(this.diameterScalingFactor), this.scene);
+                newCamera = new BABYLON.FreeCamera(name, BABYLON.Vector3.Zero(), this.scene);
                 this.freeCameras.push(newCamera);
                 break;
             case "freeAnaglyph":
-                newCamera = new BABYLON.AnaglyphFreeCamera(name, new BABYLON.Vector3(500, 0, 0).scale(this.diameterScalingFactor), .033, this.scene);
+                newCamera = new BABYLON.AnaglyphFreeCamera(name, BABYLON.Vector3.Zero(), .033, this.scene);
                 this.freeCameras.push(newCamera);
                 break;
             case "freeVR":
-                newCamera = new BABYLON.VRDeviceOrientationFreeCamera(name, new BABYLON.Vector3(500, 0, 0).scale(this.diameterScalingFactor), this.scene);
+                newCamera = new BABYLON.VRDeviceOrientationFreeCamera(name, BABYLON.Vector3.Zero(), this.scene);
                 this.freeCameras.push(newCamera);
                 break;
         }
@@ -333,6 +340,8 @@ export class Solaris {
         mesh.material = mat;
         if (isDefined(beltData.parentId))
             mesh.parent = this.scene.getMeshByID(beltData.parentId);
+        else
+            mesh.parent = this.scene.getMeshByID("systemNode");
         mesh.freezeNormals();
         asteroid.dispose();
         let belt = new Belt(ceintureAsteroids);
@@ -423,23 +432,13 @@ export class Solaris {
         this.destinationRadius = (newTarget.data.diametre * 2 + 1) * this.diameterScalingFactor; // distance d'approche de l'astre currentTarget
         this.previousTarget = this.currentTarget;
         this.currentTarget = newTarget; // on change la cible
+        this.movementVector = this.currentTarget.mesh.absolutePosition;
         this.step = 1;
     }
     updateCameraPositions() {
-        if (this.scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
-            for (let camera of this.targetCameras) {
-                let direction = this.currentTarget.mesh.absolutePosition.subtract(this.previousTarget.mesh.absolutePosition);
-                direction.scaleInPlace(this.step / this.maxStep);
-                camera.setTarget(this.previousTarget.mesh.absolutePosition.add(direction));
-            }
-        }
-        else if (this.scene.activeCamera instanceof BABYLON.FreeCamera) {
-            for (let camera of this.freeCameras) {
-                let direction = this.currentTarget.mesh.absolutePosition.subtract(this.previousTarget.mesh.absolutePosition);
-                direction.scaleInPlace(this.step / this.maxStep);
-                camera.position = this.previousTarget.mesh.absolutePosition.add(direction);
-            }
-        }
+        let systemNode = this.scene.getMeshByID("systemNode");
+        let offset = this.movementVector.scale(1 / this.maxStep);
+        systemNode.position.subtractInPlace(offset);
     }
     zoom() {
         for (let camera of this.targetCameras) {
@@ -488,16 +487,22 @@ export class Solaris {
         }
     }
     update() {
+        //this.scene.getMeshByID("systemNode").position.x += 1;
         document.dispatchEvent(this.tickEvent);
         this.listenToKeyboard();
         if (this.step > 0) { /// Mise à jour de la position des caméras lors du changement de cible
             this.step += 1;
             this.updateCameraPositions();
             this.zoom();
+            if (this.scene.activeCamera instanceof BABYLON.FreeCamera) {
+                if (this.currentTarget.mesh.absolutePosition.length() < (this.currentTarget.data.diametre * this.diameterScalingFactor) * 4 + 1) {
+                    this.step = this.maxStep;
+                }
+            }
             if (this.step == this.maxStep) {
+                console.log("shit", this.currentTarget.mesh.absolutePosition);
                 for (let camera of this.targetCameras) {
-                    camera.setTarget(this.currentTarget.mesh);
-                    camera.lowerRadiusLimit = this.currentTarget.data.diametre * this.diameterScalingFactor + 1;
+                    camera.lowerRadiusLimit = (this.currentTarget.data.diametre * this.diameterScalingFactor) * 4 + 1;
                 }
                 this.step = 0;
             }
@@ -505,6 +510,11 @@ export class Solaris {
         else {
             this.updateAstres();
             this.updateClock();
+            if (this.scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
+                let previousPosition = this.currentTarget.mesh.absolutePosition;
+                let systemNode = this.scene.getMeshByID("systemNode");
+                systemNode.position.subtractInPlace(previousPosition);
+            }
         }
         /// Gestion dynamique de la précision du zoom roulette
         for (let camera of this.targetCameras) {

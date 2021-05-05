@@ -24,17 +24,19 @@ export class Astre {
             material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${astreData.emissive}`, scene); // si texture d'émission en plus
         else
             material.emissiveColor = BABYLON.Color3.White().scale(.04); /// Ambient light
-        this.centerNode = BABYLON.Mesh.CreateSphere(`${astreData.id}-center`, 1, 1e-100, scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
+        this.centerNode = new BABYLON.Mesh(`${astreData.id}-center`, scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
         this.centerNode.rotation.z = toRadians(astreData.angularSelf);
         this.centerNode.position.x = astreData.distance;
         this.centerNode.isPickable = false;
-        this.orbitalNode = BABYLON.Mesh.CreateSphere(`${astreData.id}-centerorbit`, 1, 1e-100, scene); // on crée un point d'attache orbital
+        this.orbitalNode = new BABYLON.Mesh(`${astreData.id}-centerorbit`, scene); // on crée un point d'attache orbital
         this.orbitalNode.rotation.z = toRadians(astreData.angularOrbit); // prend l'inclinaison de l'orbite
         this.orbitalNode.rotate(BABYLON.Axis.Y, toRadians(astreData.initialOrbitalPosition), BABYLON.Space.LOCAL); // on initialise la position orbitale des astres au 1er janvier 2020
         this.mesh.parent = this.centerNode; // mesh sur point d'attache propre
         this.centerNode.parent = this.orbitalNode; // point d'attache propre sur point d'attache orbital
         if (isDefined(astreData.parentId))
             this.orbitalNode.parent = this.parent.centerNode; // point d'attache orbital sur point d'attache propre du parent si il existe
+        else
+            this.orbitalNode.parent = scene.getMeshByID("systemNode");
         this.addOrbit(); // on génère un cercle orbital
         if (isDefined(astreData.rings))
             this.addRings(assetsManager); // on ajoute des anneaux si besoin
