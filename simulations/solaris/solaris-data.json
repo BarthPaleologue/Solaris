@@ -1,21 +1,17 @@
 {
     "diameterScalingFactor": 5,
     "distanceScalingFactor": 2000,
-
     "timeSpeedFactor": 0.0001,
-
     "firstTarget": "Soleil",
-
     "startDate": {
         "day": 1,
         "month": 1,
         "year": 2020
     },
-
     "diametreConversionFactor": 12756,
     "distanceConversionFactor": 149600000,
-
-    "astres": [{
+    "astres": [
+        {
             "id": "Soleil",
             "icon": "soleil.png",
             "diametre": 109.17999,
@@ -59,8 +55,12 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": -3,
             "atm": {
-                "opacity": 0.3,
-                "textureFileName": "black.png"
+                "colors": [
+                    450,
+                    400,
+                    400
+                ],
+                "size": 1.15
             },
             "angularOrbit": 3.39,
             "angularSelf": 177.36,
@@ -83,7 +83,8 @@
             "initialOrbitalPosition": -101,
             "atm": {
                 "opacity": 0.4,
-                "textureFileName": "clouds4.jpg"
+                "textureFileName": "clouds4.jpg",
+                "size": 1.15
             },
             "angularOrbit": 0,
             "angularSelf": -23.43,
@@ -123,9 +124,13 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": 148,
             "atm": {
-                "opacity": 0.2,
-                "textureFileName": "black.png",
-                "color": [179, 96, 62]
+                "opacity": 1.5,
+                "colors": [
+                    600,
+                    750,
+                    900
+                ],
+                "size": 1.3
             },
             "angularOrbit": 1.8506,
             "angularSelf": 25.19,
@@ -146,7 +151,12 @@
             "initialOrbitalPosition": 83,
             "atm": {
                 "opacity": 0.4,
-                "textureFileName": "black.png"
+                "colors": [
+                    488,
+                    530,
+                    530
+                ],
+                "size": 1.15
             },
             "angularOrbit": 1.304,
             "angularSelf": 3.12,
@@ -243,7 +253,12 @@
             "initialOrbitalPosition": 65,
             "atm": {
                 "opacity": 0.4,
-                "textureFileName": "black.png"
+                "colors": [
+                    520,
+                    520,
+                    520
+                ],
+                "size": 1.15
             },
             "angularOrbit": 2.4845,
             "angularSelf": 26.73,
@@ -365,8 +380,12 @@
             "initialOrbitalPosition": 200,
             "parentId": "Saturne",
             "atm": {
-                "opacity": 0.2,
-                "textureFileName": "black.png"
+                "colors": [
+                    380,
+                    380,
+                    380
+                ],
+                "size": 1.15
             },
             "angularOrbit": 0.280,
             "angularSelf": 0,
@@ -405,9 +424,7 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": -34,
             "atm": {
-                "opacity": 0.4,
-                "textureFileName": "black.png",
-                "color": [95, 179, 216]
+                "size": 1.25
             },
             "angularSelf": 97.8,
             "angularOrbit": 0.7725,
@@ -527,9 +544,7 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": 11,
             "atm": {
-                "opacity": 0.4,
-                "textureFileName": "black.png",
-                "color": [62, 109, 208]
+                "size": 1.2
             },
             "rings": {
                 "textureFileName": "neptune_rings.png",
@@ -584,15 +599,17 @@
             "description": "Le plus gros des satellites de Neptune. De plus, il possède une orbite rétrograde."
         }
     ],
-    "belts": [{
-        "id": "ceintureAsteroides",
-        "yDivergence": 0.1,
-        "nb": 5000,
-        "size": 0.5,
-        "position": {
-            "nearest": 2.2,
-            "farthest": 3.2
-        },
-        "textureType": "diffuse"
-    }]
+    "belts": [
+        {
+            "id": "ceintureAsteroides",
+            "yDivergence": 0.1,
+            "nb": 5000,
+            "size": 0.5,
+            "position": {
+                "nearest": 2.2,
+                "farthest": 3.2
+            },
+            "textureType": "diffuse"
+        }
+    ]
 }

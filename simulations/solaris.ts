@@ -70,7 +70,7 @@ export class Solaris {
     maxStep: number = 200;
     previousTarget: Astre;
     currentTarget: Astre;
-    movementVector: BABYLON.Vector3 = BABYLON.Vector3.Zero();
+    movementVector = BABYLON.Vector3.Zero();
     firstTarget: string; // premier astre ciblé par la caméra au lancement
 
     //#region Flag pour togglers
@@ -102,7 +102,6 @@ export class Solaris {
 
         BABYLON.VolumetricLightScatteringPostProcess.prototype.light = undefined; // un godrays est associé à une lumière
         BABYLON.Camera.prototype.godraysList = []; // une caméra a accès aux godrays qui lui sont attachés
-        BABYLON.Camera.prototype.movementVector = BABYLON.Vector3.Zero();
     }
 
     loadConfiguration(path: string): dataFile { // load json configuration file
@@ -158,6 +157,7 @@ export class Solaris {
         mat.emissiveColor = BABYLON.Color3.White();
         center.material = mat;
         center.isPickable = false;
+        center.visibility = 0;
 
         return this.scene;
     }
@@ -182,7 +182,8 @@ export class Solaris {
     initPipeline(): BABYLON.DefaultRenderingPipeline {
         this.pipeline = new BABYLON.DefaultRenderingPipeline("pipeline", false, this.scene, this.scene.cameras); /// name, hdrEnabled, scene, cameras
         this.pipeline.fxaa = new BABYLON.FxaaPostProcess('fxaa', 1, null, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
-        this.pipeline.fxaaEnabled = false; // fxaa désactivé par défaut
+        this.pipeline.fxaaEnabled = true;
+        //this.pipeline.
         //this.pipeline.imageProcessing.contrast = 1.2;
 
         return this.pipeline;
@@ -296,11 +297,13 @@ export class Solaris {
             case "target":
                 newCamera = new BABYLON.ArcRotateCamera(name, .3, Math.PI / 4, 400 * this.diameterScalingFactor, BABYLON.Vector3.Zero(), this.scene);
                 newCamera.upperRadiusLimit = (this.SCENE_SIZE / 15) * this.diameterScalingFactor; // Dézoom Max pour rester dans la skybox
+                newCamera.fov = (30 / 360) * Math.PI * 2;
                 this.targetCameras.push(newCamera);
                 break;
             case "targetAnaglyph":
                 newCamera = new BABYLON.AnaglyphArcRotateCamera(name, .3, Math.PI / 4, 400 * this.diameterScalingFactor, BABYLON.Vector3.Zero(), .33, this.scene);
                 newCamera.upperRadiusLimit = (this.SCENE_SIZE / 15) * this.diameterScalingFactor;
+                newCamera.fov = (30 / 360) * Math.PI * 2;
                 this.targetCameras.push(newCamera);
                 break;
             case "free":
@@ -316,7 +319,8 @@ export class Solaris {
                 this.freeCameras.push(newCamera);
                 break;
         }
-        //newCamera.maxZ = this.SCENE_SIZE; // Horizon assez loin pour voir skybox
+
+        newCamera.maxZ = this.SCENE_SIZE; // Horizon assez loin pour voir skybox
 
         return newCamera;
     }
@@ -352,14 +356,16 @@ export class Solaris {
             light.parent = astre.mesh; // attachement de la lumière à l'astre
 
             for (let camera of this.scene.cameras) {
-                let godrays = new BABYLON.VolumetricLightScatteringPostProcess(`godraysOf${astre.id}${camera.id}`, 1.0, camera, astre.mesh, this.quality == "high" ? 75 : 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false); // création du VLS
-                godrays.exposure = isDefined(astreData.exposure) ? astreData.exposure : .18; // réglage de l'intensité
-                godrays.decay = isDefined(astreData.decay) ? astreData.decay : .97; // réglage de la couronne stellaire
-                godrays.light = light;
-                camera.godraysList.push(godrays); // on push tout dans un array
+                let godrays = new BABYLON.VolumetricLightScatteringPostProcess(`godraysOf${astre.id}${camera.id}`, 1.0, camera, astre.mesh, this.quality == "high" ? 100 : 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false); // création du VLS
+                godrays.exposure = isDefined(astreData.exposure) ? astreData.exposure : 0.5; // réglage de l'intensité
+                godrays.decay = isDefined(astreData.decay) ? astreData.decay : .93; // réglage de la couronne stellaire
+                //godrays.light = light;
+                let renderEffect = new BABYLON.PostProcessRenderEffect(this.engine, godrays.name, () => { return godrays; });
+                this.pipeline.addEffect(renderEffect);
+                //camera.godraysList.push(godrays); // on push tout dans un array
                 for (let _godrays of camera.godraysList) { // on empèche les conflits entre godrays i.e ils s'éclairent pas entre eux
                     //godrays.excludedMeshes.push(_godrays.mesh);
-                    _godrays.light.excludedMeshes.push(godrays.mesh); // ils s'éclairent pas entre eux
+                    //_godrays.light.excludedMeshes.push(godrays.mesh); // ils s'éclairent pas entre eux
                 }
             }
 
@@ -517,12 +523,12 @@ export class Solaris {
         let targetChangeEvent = new CustomEvent("targetChange", { detail: newTarget.data });
         document.dispatchEvent(targetChangeEvent);
 
-        this.destinationRadius = (newTarget.data.diametre * 2 + 1) * this.diameterScalingFactor; // distance d'approche de l'astre currentTarget
-
         this.previousTarget = this.currentTarget;
         this.currentTarget = newTarget; // on change la cible
 
-        this.movementVector = this.currentTarget.mesh.absolutePosition;
+        this.destinationRadius = (this.currentTarget.data.diametre * this.diameterScalingFactor) * 4 + 1; // distance d'approche de l'astre currentTarget
+
+        this.movementVector = BABYLON.Vector3.Zero().copyFrom(this.currentTarget.mesh.getAbsolutePosition());
 
         this.step = 1;
     }
@@ -581,8 +587,6 @@ export class Solaris {
     }
 
     update() {
-        //this.scene.getMeshByID("systemNode").position.x += 1;
-
         document.dispatchEvent(this.tickEvent);
 
         this.listenToKeyboard();
@@ -597,9 +601,8 @@ export class Solaris {
                 }
             }
             if (this.step == this.maxStep) {
-                console.log("shit", this.currentTarget.mesh.absolutePosition);
                 for (let camera of this.targetCameras) {
-                    camera.lowerRadiusLimit = (this.currentTarget.data.diametre * this.diameterScalingFactor) * 4 + 1;
+                    camera.lowerRadiusLimit = (this.currentTarget.data.diametre * this.diameterScalingFactor) + 1;
                 }
                 this.step = 0;
             }
@@ -607,7 +610,7 @@ export class Solaris {
             this.updateAstres();
             this.updateClock();
             if (this.scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
-                let previousPosition = this.currentTarget.mesh.absolutePosition;
+                let previousPosition = this.currentTarget.mesh.getAbsolutePosition();
                 let systemNode = this.scene.getMeshByID("systemNode");
                 systemNode.position.subtractInPlace(previousPosition);
             }

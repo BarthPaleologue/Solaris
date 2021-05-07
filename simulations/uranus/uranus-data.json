@@ -1,21 +1,17 @@
 {
     "diameterScalingFactor": 20,
     "distanceScalingFactor": 20,
-
     "timeSpeedFactor": 0.0001,
-
     "firstTarget": "Uranus",
-
     "startDate": {
         "day": 1,
         "month": 1,
         "year": 2020
     },
-
     "diametreConversionFactor": 12756,
     "distanceConversionFactor": 12756,
-
-    "astres": [{
+    "astres": [
+        {
             "id": "Soleil",
             "icon": "soleil.png",
             "diametre": 10.0917999,
@@ -46,8 +42,7 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": -34,
             "atm": {
-                "opacity": 0.4,
-                "textureFileName": "black.png"
+                "size": 1.2
             },
             "angularSelf": 97.8,
             "angularOrbit": 0.7725,
@@ -159,16 +154,18 @@
             "description": "Satellite d'Uranus ayant la particularité de posséder un plan orbital perpendiculaire au plan du système solaire. Obéron est le satellite le plus éloigné d'Uranus."
         }
     ],
-    "belts": [{
-        "id": "rings",
-        "yDivergence": 0.04,
-        "nb": 5000,
-        "size": 0.004,
-        "position": {
-            "nearest": 3.2,
-            "farthest": 4.2
-        },
-        "parentId": "Uranus",
-        "textureType": "diffuse"
-    }]
+    "belts": [
+        {
+            "id": "rings",
+            "yDivergence": 0.04,
+            "nb": 5000,
+            "size": 0.004,
+            "position": {
+                "nearest": 3.2,
+                "farthest": 4.2
+            },
+            "parentId": "Uranus",
+            "textureType": "diffuse"
+        }
+    ]
 }

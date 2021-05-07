@@ -43,7 +43,7 @@ export class AtmosphericScatteringPostProcess extends BABYLON.PostProcess {
         ], [
             "textureSampler",
             "depthSampler",
-        ], 1, camera, BABYLON.Texture.BILINEAR_SAMPLINGMODE, scene.getEngine(), true);
+        ], 1, camera, BABYLON.Texture.BILINEAR_SAMPLINGMODE, scene.getEngine(), false);
 
         this.settings = {
             planetRadius: planetRadius,
@@ -67,7 +67,7 @@ export class AtmosphericScatteringPostProcess extends BABYLON.PostProcess {
         scene.customRenderTargets.push(depthRenderer.getDepthMap());
         let depthMap = depthRenderer.getDepthMap();
 
-        this.onApply = (effect: BABYLON.Effect) => {
+        this.onBeforeRender = (effect: BABYLON.Effect) => {
 
             effect.setTexture("depthSampler", depthMap);
 
@@ -76,8 +76,8 @@ export class AtmosphericScatteringPostProcess extends BABYLON.PostProcess {
 
             effect.setVector3("planetPosition", this.planet.absolutePosition);
 
-            effect.setMatrix("projection", this.camera.getProjectionMatrix());
-            effect.setMatrix("view", this.camera.getViewMatrix());
+            effect.setMatrix("projection", this.camera.getProjectionMatrix(true));
+            effect.setMatrix("view", this.camera.getViewMatrix(true));
 
             effect.setFloat("cameraNear", camera.minZ);
             effect.setFloat("cameraFar", camera.maxZ);

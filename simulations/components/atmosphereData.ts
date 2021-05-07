@@ -1,5 +1,6 @@
 export interface Atmosphere {
-    "opacity": number,
-    "textureFileName": string,
-    "color": Array<number>;
+    "opacity": number;
+    "textureFileName": string;
+    "colors": number[];
+    "size": number;
 }

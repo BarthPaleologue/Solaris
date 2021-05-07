@@ -28,7 +28,7 @@ export class Astre {
         this.parent = parent;
         this.scene = scene;
 
-        let nbSegments = quality == "low" ? 16 : 32;
+        let nbSegments = quality == "low" ? 16 : 48;
 
         this.mesh = BABYLON.Mesh.CreateSphere(astreData.id, nbSegments, astreData.diametre, scene); // création de l'objet astre
         this.mesh.rotation.z = Math.PI; // sinon les astres ont la tête à l'envers mdr
@@ -38,7 +38,7 @@ export class Astre {
         let material = Astre.addMaterialTo(`${astreData.id}Material`, this.mesh, `../data/textures/surfaces/${astreData.textureFileName}`, astreData.textureType, assetsManager); // création du matériel pour l'astre
         if (isDefined(astreData.specular)) material.specularTexture = new BABYLON.Texture(`../data/textures/specular/${astreData.specular}`, scene); // si texture de reflet en plus
         if (isDefined(astreData.emissive)) material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${astreData.emissive}`, scene); // si texture d'émission en plus
-        else material.emissiveColor = BABYLON.Color3.White().scale(.04); /// Ambient light
+        //else material.emissiveColor = BABYLON.Color3.White().scale(.04); /// Ambient light
 
         this.centerNode = new BABYLON.Mesh(`${astreData.id}-center`, scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
         this.centerNode.rotation.z = toRadians(astreData.angularSelf);
@@ -108,26 +108,24 @@ export class Astre {
     }
     addAtmosphere(assetsManager: BABYLON.AssetsManager) { // ajouter une atmosphère à un astre
 
-        if (this.data.atm.textureFileName == "clouds4.jpg") {
+        let epsilon = 1e-3;
 
-            let epsilon = 1e-3;
+        let diametre = this.data.diametre; // diamètre légèrement supérieur
 
-            let diametre = this.data.diametre + epsilon; // diamètre légèrement supérieur
+        let planetRadius = (diametre / 2);
+        let atmRadius = planetRadius;
 
-            let planetRadius = (diametre / 2) + 10 * epsilon;
-            let atmRadius = (diametre / 2) + 100 * epsilon;
+        if (isDefined(this.data.atm.textureFileName)) {
 
-            //@ts-ignore
-            this.atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}`, this.mesh, planetRadius, atmRadius, this.scene.getMeshByID("Soleil")!, this.scene.activeCamera, this.scene);
+            planetRadius = (diametre / 2) + 10 * epsilon;
+            atmRadius = planetRadius * this.data.atm.size;
 
-
-            let clouds = BABYLON.Mesh.CreateSphere(`atmosphereOf${this.id}`, 32, diametre, this.mesh.getScene());
+            let clouds = BABYLON.Mesh.CreateSphere(`atmosphereOf${this.id}`, 48, diametre, this.mesh.getScene());
 
             let cloudMat = new BABYLON.StandardMaterial(`cloudMatOf${this.id}`, this.mesh.getScene());
             let textureTask = assetsManager.addTextureTask(this.id, `../data/textures/atmospheres/${this.data.atm.textureFileName}`);
             textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                 cloudMat.opacityTexture = task.texture;
-                if (isDefined(this.data.atm.color)) cloudMat.diffuseColor = BABYLON.Color3.FromArray(this.data.atm.color).scale(1 / 255);
                 cloudMat.opacityTexture.getAlphaFromRGB = true;
             };
 
@@ -135,10 +133,20 @@ export class Astre {
             clouds.parent = this.mesh; // on attache l'atmosphère à son astre
             this.atmosphereMesh = clouds;
         } else {
-            //@ts-ignore
-            this.atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}`, this.mesh, this.data.diametre / 2, (this.data.diametre / 2) * 1.3, this.scene.getMeshByID("Soleil")!, this.scene.activeCamera, this.scene);
-
+            atmRadius = planetRadius * this.data.atm.size;
         }
+        //@ts-ignore
+        this.atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}`, this.mesh, planetRadius, atmRadius, this.scene.getMeshByID("Soleil")!, this.scene.activeCamera, this.scene);
+
+        if (isDefined(this.data.atm.colors)) {
+            this.atmPostPross.settings.redWaveLength = this.data.atm.colors[0];
+            this.atmPostPross.settings.greenWaveLength = this.data.atm.colors[1];
+            this.atmPostPross.settings.blueWaveLength = this.data.atm.colors[2];
+        }
+        if (isDefined(this.data.atm.opacity)) {
+            this.atmPostPross.settings.densityModifier = this.data.atm.opacity;
+        }
+        this.atmPostPross.settings.intensity = 15;
     }
 
     addPulsarEffect(emitRate = 20000) { // créer un jet d'émission aux pôles d'un astre tel un pulsar
