@@ -8,11 +8,10 @@ import { dataFile } from "./components/dataFile";
 import { BeltData } from "./components/beltData";
 import { AstreData } from "./components/astreData";
 import { Belt } from "./components/belt";
-import { FreeCamera } from "babylonjs";
 
 export class Solaris {
     quality: string; // définit le nombre de polygones et la qualité des effets
-    SCENE_SIZE = 500000; /// Définit la taille de la skybox et les nbDaysPerMonths des caméras
+    SCENE_SIZE = 3000000; /// Définit la taille de la skybox et les maxZ des caméras
 
     audio: HTMLAudioElement; // petite musique d'ambiance
 
@@ -22,9 +21,14 @@ export class Solaris {
 
     keyboard: { [key: string]: boolean; } = {}; // dictionnaire de l'état du clavier
 
+    //@ts-ignore
+    starField: BABYLON.PointsCloudSystem | undefined;
+
     assetsManager: BABYLON.AssetsManager; // l'outil pour charger les textures et affichier la progress bar
     UI: BABYLON.GUI.AdvancedDynamicTexture; // gestionnaire des labels des astres
     pipeline: BABYLON.DefaultRenderingPipeline; // gestionnaire des fx (pas les godrays)
+
+    systemNode: BABYLON.Mesh | undefined;
 
     // données de la simulation
     astresData: AstreData[]; // données des astres
@@ -137,7 +141,8 @@ export class Solaris {
             } else if (/atmosphereOf/.test(target.id)) { /// Si click sur l'atmosphère d'un astre
                 let astreTarget = this.getAstreById(target.id.substring(12)); /// On récupère le nom de l'astre
                 this.goTo(astreTarget); /// On enclenche !
-            } else this.goTo(this.getAstreById(target.id)); /// Si de manière générale on click sur un autre astre, on enclenche !
+            } else if (target.id != "starField") this.goTo(this.getAstreById(target.id)); /// Si de manière générale on click sur un autre astre, on enclenche !
+            else console.log(target.id);
         }, BABYLON.PointerEventTypes.POINTERPICK);
 
         scene.executeWhenReady(() => { /// Quand la scène est prête
@@ -150,14 +155,14 @@ export class Solaris {
         scene.beforeRender = () => this.update();
         this.scene = scene;
 
-        let systemNode = new BABYLON.Mesh("systemNode", scene);
-        let center = BABYLON.Mesh.CreateBox("centre", 1000, scene);
+        this.systemNode = new BABYLON.Mesh("systemNode", scene);
+
+        /*let center = BABYLON.Mesh.CreateBox("centre", 1000, scene);
         let mat = new BABYLON.StandardMaterial("matmat", scene);
         mat.wireframe = true;
         mat.emissiveColor = BABYLON.Color3.White();
         center.material = mat;
-        center.isPickable = false;
-        center.visibility = 0;
+        center.isPickable = false;*/
 
         return this.scene;
     }
@@ -198,8 +203,8 @@ export class Solaris {
         return this.audio;
     }
 
-    initSkybox(): BABYLON.Mesh {
-        let skybox = BABYLON.Mesh.CreateBox("skyBox", 1, this.scene);
+    initSkybox() {
+        /*let skybox = BABYLON.Mesh.CreateBox("skyBox", 1, this.scene);
         skybox.scaling.scaleInPlace(this.SCENE_SIZE);
         skybox.infiniteDistance = true; // impossible d'atteindre en vol libre
         skybox.isPickable = false; // n'est pas clickable
@@ -207,15 +212,38 @@ export class Solaris {
         let skyboxMaterial = new BABYLON.StandardMaterial("skyBoxMat", this.scene);
         skyboxMaterial.backFaceCulling = false; // Texture à l'intérieur de la skybox
         skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../data/textures/skyboxes/7/skybox", this.scene);
-        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-        skyboxMaterial.diffuseColor = BABYLON.Color3.Black();
-        skyboxMaterial.specularColor = BABYLON.Color3.Black();
-        skyboxMaterial.reflectionTexture.level = 5;
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;*/
 
-        skybox.material = skyboxMaterial;
-        skybox.material.freeze(); // économie de ressources
+        function randSphere(scale = 1) {
+            let theta = Math.random() * Math.PI;
+            let phi = Math.random() * 2 * Math.PI;
 
-        return skybox;
+            let x = Math.cos(theta) * Math.sin(phi);
+            let y = Math.sin(theta) * Math.sin(phi);
+            let z = Math.cos(phi);
+
+            return new BABYLON.Vector3(x * scale, y * scale, z * scale);
+        }
+        let positions: BABYLON.Vector3[] = [];
+        for (let i = 0; i < 5000; i++) {
+            positions.push(randSphere(this.SCENE_SIZE / 2));
+        }
+
+        //@ts-ignore
+        this.starField = new BABYLON.PointsCloudSystem("starField", 2, this.scene);
+        this.starField.addPoints(5000, (particle: BABYLON.Particle, i: number) => {
+            particle.position = positions[i];
+            particle.color = new BABYLON.Color4(1, 1, 1, 1).scale(Math.random());
+        });
+        this.starField.updateParticle = (particle: any) => particle.position = positions[particle.idx];
+        this.starField.buildMeshAsync();
+        this.starField.setParticles();
+        this.starField.renderingGroupId = 1e100;
+        this.starField.isPickable = false;
+
+        //skybox.material = skyboxMaterial;
+
+        //return skybox;
     }
 
     initKeyboard(): {} {
@@ -245,36 +273,35 @@ export class Solaris {
         // appuis longs
         let camera = this.scene.activeCamera;
         if (camera instanceof BABYLON.FreeCamera) {
-            let systemNode = this.scene.getMeshByID("systemNode");
             if (this.keyboard["z"] || this.keyboard["w"]) {
-                let dt = this.engine.getDeltaTime();
+                let dt = this.engine.getDeltaTime() * this.freeCameraSpeed;
                 let movement = camera.getDirection(BABYLON.Axis.Z).scale(dt);
-                systemNode.position.subtractInPlace(movement);
+                this.systemNode.position.subtractInPlace(movement);
             }
             if (this.keyboard["s"]) {
-                let dt = this.engine.getDeltaTime();
+                let dt = this.engine.getDeltaTime() * this.freeCameraSpeed;
                 let movement = camera.getDirection(BABYLON.Axis.Z).scale(dt);
-                systemNode.position.addInPlace(movement);
+                this.systemNode.position.addInPlace(movement);
             }
             if (this.keyboard["d"]) {
-                let dt = this.engine.getDeltaTime();
+                let dt = this.engine.getDeltaTime() * this.freeCameraSpeed;
                 let movement = camera.getDirection(BABYLON.Axis.X).scale(dt);
-                systemNode.position.subtractInPlace(movement);
+                this.systemNode.position.subtractInPlace(movement);
             }
             if (this.keyboard["q"] || this.keyboard["a"]) {
-                let dt = this.engine.getDeltaTime();
+                let dt = this.engine.getDeltaTime() * this.freeCameraSpeed;
                 let movement = camera.getDirection(BABYLON.Axis.X).scale(dt);
-                systemNode.position.addInPlace(movement);
+                this.systemNode.position.addInPlace(movement);
             }
             if (this.keyboard[" "]) {
-                let dt = this.engine.getDeltaTime();
+                let dt = this.engine.getDeltaTime() * this.freeCameraSpeed;
                 let movement = camera.getDirection(BABYLON.Axis.Y).scale(dt);
-                systemNode.position.subtractInPlace(movement);
+                this.systemNode.position.subtractInPlace(movement);
             }
             if (this.keyboard["Shift"]) {
-                let dt = this.engine.getDeltaTime();
+                let dt = this.engine.getDeltaTime() * this.freeCameraSpeed;
                 let movement = camera.getDirection(BABYLON.Axis.Y).scale(dt);
-                systemNode.position.addInPlace(movement);
+                this.systemNode.position.addInPlace(movement);
             }
         }
     }
@@ -347,7 +374,7 @@ export class Solaris {
     }
 
     createAstre(astreData: AstreData): Astre {
-        let astre = new Astre(astreData, isDefined(astreData.parentId) ? this.getAstreById(astreData.parentId) : undefined, this.astres.length, this.quality, this.assetsManager, this.scene);
+        let astre = new Astre(astreData, isDefined(astreData.parentId) ? this.getAstreById(astreData.parentId) : undefined, this.astres.length, this.quality, this);
         astre.setDiameterScale(this.diameterScalingFactor);
         astre.setDistanceScale(this.distanceScalingFactor);
 
@@ -357,16 +384,16 @@ export class Solaris {
 
             for (let camera of this.scene.cameras) {
                 let godrays = new BABYLON.VolumetricLightScatteringPostProcess(`godraysOf${astre.id}${camera.id}`, 1.0, camera, astre.mesh, this.quality == "high" ? 100 : 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false); // création du VLS
-                godrays.exposure = isDefined(astreData.exposure) ? astreData.exposure : 0.5; // réglage de l'intensité
-                godrays.decay = isDefined(astreData.decay) ? astreData.decay : .93; // réglage de la couronne stellaire
-                //godrays.light = light;
-                let renderEffect = new BABYLON.PostProcessRenderEffect(this.engine, godrays.name, () => { return godrays; });
-                this.pipeline.addEffect(renderEffect);
-                //camera.godraysList.push(godrays); // on push tout dans un array
+                godrays.exposure = isDefined(astreData.exposure) ? astreData.exposure : 0.8; // réglage de l'intensité
+                godrays.decay = isDefined(astreData.decay) ? astreData.decay : .95; // réglage de la couronne stellaire
+                godrays.light = light;
+
                 for (let _godrays of camera.godraysList) { // on empèche les conflits entre godrays i.e ils s'éclairent pas entre eux
-                    //godrays.excludedMeshes.push(_godrays.mesh);
-                    //_godrays.light.excludedMeshes.push(godrays.mesh); // ils s'éclairent pas entre eux
+                    godrays.excludedMeshes.push(_godrays.mesh);
+                    _godrays.light.excludedMeshes.push(godrays.mesh); // ils s'éclairent pas entre eux
                 }
+                camera.godraysList.push(godrays); // on push tout dans un array
+
             }
 
         }
@@ -431,7 +458,7 @@ export class Solaris {
         mat.freeze();
         mesh.material = mat;
         if (isDefined(beltData.parentId)) mesh.parent = this.scene.getMeshByID(beltData.parentId);
-        else mesh.parent = this.scene.getMeshByID("systemNode");
+        else mesh.parent = this.systemNode;
         mesh.freezeNormals();
         asteroid.dispose();
 
@@ -534,11 +561,9 @@ export class Solaris {
     }
 
     updateCameraPositions() {
-        let systemNode = this.scene.getMeshByID("systemNode");
-
         let offset = this.movementVector.scale(1 / this.maxStep);
 
-        systemNode.position.subtractInPlace(offset);
+        this.systemNode.position.subtractInPlace(offset);
     }
 
     zoom() {
@@ -611,9 +636,12 @@ export class Solaris {
             this.updateClock();
             if (this.scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
                 let previousPosition = this.currentTarget.mesh.getAbsolutePosition();
-                let systemNode = this.scene.getMeshByID("systemNode");
-                systemNode.position.subtractInPlace(previousPosition);
+                this.systemNode.position.subtractInPlace(previousPosition);
             }
+            //@ts-ignore
+            this.starField.parent = this.scene.activeCamera;
+            //this.starField.position = this.scene.activeCamera.position;
+            //console.log(this.starField.position);
         }
 
         /// Gestion dynamique de la précision du zoom roulette

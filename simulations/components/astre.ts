@@ -4,6 +4,7 @@
 import { toRadians, isDefined } from "./tools.js";
 import { AstreData } from "./astreData";
 import { AtmosphericScatteringPostProcess } from "../shaders/atmosphericScattering.js";
+import { Solaris } from "../solaris.js";
 
 export class Astre {
     id: string;
@@ -18,46 +19,48 @@ export class Astre {
     orbitalNode: BABYLON.Mesh;
     centerNode: BABYLON.Mesh;
     scene: BABYLON.Scene;
+    solaris: Solaris;
 
-    atmPostPross: AtmosphericScatteringPostProcess | null = null;
+    atmospherePostProcesses: AtmosphericScatteringPostProcess[] = [];
 
-    constructor(astreData: AstreData, parent: Astre, index: number, quality: string, assetsManager: BABYLON.AssetsManager, scene: BABYLON.Scene) {
+    constructor(astreData: AstreData, parent: Astre, index: number, quality: string, solaris: Solaris) {
         this.data = astreData;
         this.id = astreData.id;
         this.index = index;
         this.parent = parent;
-        this.scene = scene;
+        this.scene = solaris.scene;
+        this.solaris = solaris;
 
         let nbSegments = quality == "low" ? 16 : 48;
 
-        this.mesh = BABYLON.Mesh.CreateSphere(astreData.id, nbSegments, astreData.diametre, scene); // création de l'objet astre
+        this.mesh = BABYLON.Mesh.CreateSphere(astreData.id, nbSegments, astreData.diametre, solaris.scene); // création de l'objet astre
         this.mesh.rotation.z = Math.PI; // sinon les astres ont la tête à l'envers mdr
         if (isDefined(astreData.initialRotation)) this.mesh.rotate(BABYLON.Axis.Y, astreData.initialRotation, BABYLON.Space.LOCAL);
         if (isDefined(astreData.isPickable)) this.mesh.isPickable = astreData.isPickable; /// Astre clickable sauf contre indication
 
-        let material = Astre.addMaterialTo(`${astreData.id}Material`, this.mesh, `../data/textures/surfaces/${astreData.textureFileName}`, astreData.textureType, assetsManager); // création du matériel pour l'astre
-        if (isDefined(astreData.specular)) material.specularTexture = new BABYLON.Texture(`../data/textures/specular/${astreData.specular}`, scene); // si texture de reflet en plus
-        if (isDefined(astreData.emissive)) material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${astreData.emissive}`, scene); // si texture d'émission en plus
+        let material = Astre.addMaterialTo(`${astreData.id}Material`, this.mesh, `../data/textures/surfaces/${astreData.textureFileName}`, astreData.textureType, solaris.assetsManager); // création du matériel pour l'astre
+        if (isDefined(astreData.specular)) material.specularTexture = new BABYLON.Texture(`../data/textures/specular/${astreData.specular}`, solaris.scene); // si texture de reflet en plus
+        if (isDefined(astreData.emissive)) material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${astreData.emissive}`, solaris.scene); // si texture d'émission en plus
         //else material.emissiveColor = BABYLON.Color3.White().scale(.04); /// Ambient light
 
-        this.centerNode = new BABYLON.Mesh(`${astreData.id}-center`, scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
+        this.centerNode = new BABYLON.Mesh(`${astreData.id}-center`, solaris.scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
         this.centerNode.rotation.z = toRadians(astreData.angularSelf);
         this.centerNode.position.x = astreData.distance;
         this.centerNode.isPickable = false;
 
-        this.orbitalNode = new BABYLON.Mesh(`${astreData.id}-centerorbit`, scene); // on crée un point d'attache orbital
+        this.orbitalNode = new BABYLON.Mesh(`${astreData.id}-centerorbit`, solaris.scene); // on crée un point d'attache orbital
         this.orbitalNode.rotation.z = toRadians(astreData.angularOrbit); // prend l'inclinaison de l'orbite
         this.orbitalNode.rotate(BABYLON.Axis.Y, toRadians(astreData.initialOrbitalPosition), BABYLON.Space.LOCAL); // on initialise la position orbitale des astres au 1er janvier 2020
 
         this.mesh.parent = this.centerNode; // mesh sur point d'attache propre
         this.centerNode.parent = this.orbitalNode; // point d'attache propre sur point d'attache orbital
         if (isDefined(astreData.parentId)) this.orbitalNode.parent = this.parent.centerNode; // point d'attache orbital sur point d'attache propre du parent si il existe
-        else this.orbitalNode.parent = scene.getMeshByID("systemNode");
+        else this.orbitalNode.parent = solaris.systemNode;
 
         this.addOrbit(); // on génère un cercle orbital
 
-        if (isDefined(astreData.rings)) this.addRings(assetsManager); // on ajoute des anneaux si besoin
-        if (isDefined(astreData.atm)) this.addAtmosphere(assetsManager); // on ajoute une atmosphère si besoin
+        if (isDefined(astreData.rings)) this.addRings(solaris.assetsManager); // on ajoute des anneaux si besoin
+        if (isDefined(astreData.atm)) this.addAtmosphere(solaris.assetsManager); // on ajoute une atmosphère si besoin
         if (astreData.pulsar) this.addPulsarEffect(); // si souhaité, l'astre devient un pulsar
     }
 
@@ -95,6 +98,7 @@ export class Astre {
         mesh.material = material;
         return material;
     }
+
     addRings(assetsManager: BABYLON.AssetsManager) { // ajouter des anneaux à un astre
         let rings = BABYLON.Mesh.CreateGround(`ringsOf${this.id}`, this.data.rings.size, this.data.rings.size, 2, this.mesh.getScene());
         rings.visibility = this.data.rings.alpha;
@@ -106,6 +110,7 @@ export class Astre {
 
         this.ringMesh = rings;
     }
+
     addAtmosphere(assetsManager: BABYLON.AssetsManager) { // ajouter une atmosphère à un astre
 
         let epsilon = 1e-3;
@@ -136,25 +141,35 @@ export class Astre {
             atmRadius = planetRadius * this.data.atm.size;
         }
         //@ts-ignore
-        this.atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}`, this.mesh, planetRadius, atmRadius, this.scene.getMeshByID("Soleil")!, this.scene.activeCamera, this.scene);
 
-        if (isDefined(this.data.atm.colors)) {
-            this.atmPostPross.settings.redWaveLength = this.data.atm.colors[0];
-            this.atmPostPross.settings.greenWaveLength = this.data.atm.colors[1];
-            this.atmPostPross.settings.blueWaveLength = this.data.atm.colors[2];
+        for (let camera of this.solaris.targetCameras.concat(this.solaris.freeCameras)) {
+            let atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}${camera.id}`, this.mesh, planetRadius, atmRadius, this.solaris.systemNode, camera, this.scene);
+
+            if (isDefined(this.data.atm.colors)) {
+                atmPostPross.settings.redWaveLength = this.data.atm.colors[0];
+                atmPostPross.settings.greenWaveLength = this.data.atm.colors[1];
+                atmPostPross.settings.blueWaveLength = this.data.atm.colors[2];
+            }
+            if (isDefined(this.data.atm.opacity)) {
+                atmPostPross.settings.densityModifier = this.data.atm.opacity;
+            }
+            atmPostPross.settings.intensity = 15;
+            this.atmospherePostProcesses.push(atmPostPross);
         }
-        if (isDefined(this.data.atm.opacity)) {
-            this.atmPostPross.settings.densityModifier = this.data.atm.opacity;
-        }
-        this.atmPostPross.settings.intensity = 15;
+
+
     }
 
     addPulsarEffect(emitRate = 20000) { // créer un jet d'émission aux pôles d'un astre tel un pulsar
         let particleSystem = new BABYLON.ParticleSystem(`particlesOf${this.id}`, 100000, this.mesh.getScene());
         particleSystem.particleTexture = new BABYLON.Texture("../data/textures/particles/flare.png", this.mesh.getScene());
         particleSystem.emitter = this.mesh; // objet émétteur
-        //particleSystem.minEmitBox = new BABYLON.Vector3(-1, 0, 0).scale(.2); // Définition de
-        //particleSystem.maxEmitBox = new BABYLON.Vector3(1, 0, 0).scale(.2); // la zone d'apparition
+
+        particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ADD;
+
+        particleSystem.minLifeTime = 2;
+        particleSystem.maxLifeTime = 3;
+
         particleSystem.color1 = new BABYLON.Color4(.7, .8, 1, 1); // Définition
         particleSystem.color2 = new BABYLON.Color4(.2, .5, 1, 1); // des couleurs
         particleSystem.minSize = .5; // taille des
@@ -179,6 +194,7 @@ export class Astre {
         lines.isPickable = false;
         lines.setEnabled(false);
         if (isDefined(this.data.parentId)) lines.parent = this.parent.centerNode;
+        else lines.parent = this.solaris.systemNode;
 
         this.orbitMesh = lines;
     }
@@ -212,9 +228,10 @@ export class Astre {
     setDiameterScale(diameterScalingFactor: number) {
         this.mesh.scaling = this.mesh.scaling.scale(diameterScalingFactor);
         if (isDefined(this.data.rings)) this.ringMesh.scaling = this.ringMesh.scaling.scale(diameterScalingFactor);
-        if (this.atmPostPross != null) {
-            this.atmPostPross.settings.atmosphereRadius *= diameterScalingFactor;
-            this.atmPostPross.settings.planetRadius *= diameterScalingFactor;
+
+        for (let atmosphere of this.atmospherePostProcesses) {
+            atmosphere.settings.atmosphereRadius *= diameterScalingFactor;
+            atmosphere.settings.planetRadius *= diameterScalingFactor;
         }
     }
 

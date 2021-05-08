@@ -1,6 +1,6 @@
 {
     "diameterScalingFactor": 5,
-    "distanceScalingFactor": 2000,
+    "distanceScalingFactor": 14659,
     "timeSpeedFactor": 0.0001,
     "firstTarget": "Soleil",
     "startDate": {
@@ -84,7 +84,7 @@
             "atm": {
                 "opacity": 0.4,
                 "textureFileName": "clouds4.jpg",
-                "size": 1.15
+                "size": 1.2
             },
             "angularOrbit": 0,
             "angularSelf": -23.43,
