@@ -204,46 +204,26 @@ export class Solaris {
     }
 
     initSkybox() {
-        /*let skybox = BABYLON.Mesh.CreateBox("skyBox", 1, this.scene);
-        skybox.scaling.scaleInPlace(this.SCENE_SIZE);
-        skybox.infiniteDistance = true; // impossible d'atteindre en vol libre
-        skybox.isPickable = false; // n'est pas clickable
-
-        let skyboxMaterial = new BABYLON.StandardMaterial("skyBoxMat", this.scene);
-        skyboxMaterial.backFaceCulling = false; // Texture à l'intérieur de la skybox
-        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../data/textures/skyboxes/7/skybox", this.scene);
-        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;*/
 
         function randSphere(scale = 1) {
-            let theta = Math.random() * Math.PI;
+            let theta = Math.random() * 2 * Math.PI;
             let phi = Math.random() * 2 * Math.PI;
 
-            let x = Math.cos(theta) * Math.sin(phi);
+            let x = Math.sin(theta) * Math.cos(phi);
             let y = Math.sin(theta) * Math.sin(phi);
-            let z = Math.cos(phi);
+            let z = Math.cos(theta);
 
             return new BABYLON.Vector3(x * scale, y * scale, z * scale);
         }
-        let positions: BABYLON.Vector3[] = [];
-        for (let i = 0; i < 5000; i++) {
-            positions.push(randSphere(this.SCENE_SIZE / 2));
-        }
 
         //@ts-ignore
-        this.starField = new BABYLON.PointsCloudSystem("starField", 2, this.scene);
+        this.starField = new BABYLON.PointsCloudSystem("starField", 1.99, this.scene);
         this.starField.addPoints(5000, (particle: BABYLON.Particle, i: number) => {
-            particle.position = positions[i];
+            particle.position = randSphere(this.SCENE_SIZE / 2);
             particle.color = new BABYLON.Color4(1, 1, 1, 1).scale(Math.random());
         });
-        this.starField.updateParticle = (particle: any) => particle.position = positions[particle.idx];
         this.starField.buildMeshAsync();
-        this.starField.setParticles();
-        this.starField.renderingGroupId = 1e100;
         this.starField.isPickable = false;
-
-        //skybox.material = skyboxMaterial;
-
-        //return skybox;
     }
 
     initKeyboard(): {} {
@@ -324,13 +304,13 @@ export class Solaris {
             case "target":
                 newCamera = new BABYLON.ArcRotateCamera(name, .3, Math.PI / 4, 400 * this.diameterScalingFactor, BABYLON.Vector3.Zero(), this.scene);
                 newCamera.upperRadiusLimit = (this.SCENE_SIZE / 15) * this.diameterScalingFactor; // Dézoom Max pour rester dans la skybox
-                newCamera.fov = (30 / 360) * Math.PI * 2;
+                newCamera.fov = (25 / 360) * Math.PI * 2;
                 this.targetCameras.push(newCamera);
                 break;
             case "targetAnaglyph":
                 newCamera = new BABYLON.AnaglyphArcRotateCamera(name, .3, Math.PI / 4, 400 * this.diameterScalingFactor, BABYLON.Vector3.Zero(), .33, this.scene);
                 newCamera.upperRadiusLimit = (this.SCENE_SIZE / 15) * this.diameterScalingFactor;
-                newCamera.fov = (30 / 360) * Math.PI * 2;
+                newCamera.fov = (25 / 360) * Math.PI * 2;
                 this.targetCameras.push(newCamera);
                 break;
             case "free":
@@ -561,6 +541,11 @@ export class Solaris {
     }
 
     updateCameraPositions() {
+
+        function interpolate(partial: number, total: number) {
+            return (partial / total) / partial;
+        }
+
         let offset = this.movementVector.scale(1 / this.maxStep);
 
         this.systemNode.position.subtractInPlace(offset);

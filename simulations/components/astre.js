@@ -2,6 +2,7 @@
 /// <reference path="../../ts/babylon.gui.d.ts" />
 import { toRadians, isDefined } from "./tools.js";
 import { AtmosphericScatteringPostProcess } from "../shaders/atmosphericScattering.js";
+import { PlanetMaterial } from "./planetMaterial.js";
 export class Astre {
     constructor(astreData, parent, index, quality, solaris) {
         this.atmospherePostProcesses = [];
@@ -18,10 +19,24 @@ export class Astre {
             this.mesh.rotate(BABYLON.Axis.Y, astreData.initialRotation, BABYLON.Space.LOCAL);
         if (isDefined(astreData.isPickable))
             this.mesh.isPickable = astreData.isPickable; /// Astre clickable sauf contre indication
-        let material = this.addMaterialTo(`${astreData.id}Material`, this.mesh, `../data/textures/surfaces/${astreData.textureFileName}`, astreData.textureType, solaris.assetsManager); // création du matériel pour l'astre
         //if (isDefined(astreData.specular)) material.specularTexture = new BABYLON.Texture(`../data/textures/specular/${astreData.specular}`, solaris.scene); // si texture de reflet en plus
         //if (isDefined(astreData.emissive)) material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${astreData.emissive}`, solaris.scene); // si texture d'émission en plus
-        //else material.emissiveColor = BABYLON.Color3.White().scale(.04); /// Ambient light
+        //@ts-ignore
+        //let newTrail = new BABYLON.TrailMesh("test", this.mesh, this.scene, 5, 100, true);
+        //newTrail.material = new BABYLON.StandardMaterial("testMat", this.scene);
+        //newTrail.material.emissiveColor = BABYLON.Color3.White();
+        if (!this.data.godrays) {
+            this.material = new PlanetMaterial(`${astreData.id}Material`, this.mesh, this.data, solaris.assetsManager, this.scene);
+        }
+        else {
+            let material = new BABYLON.StandardMaterial(`${astreData.id}Material`, this.scene);
+            let emissiveTextureTask = new BABYLON.TextureAssetTask(`${astreData.id}Task`, `../data/textures/surfaces/${this.data.textureFileName}`);
+            emissiveTextureTask.onSuccess = (task) => {
+                material.emissiveTexture = task.texture;
+            };
+            material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${this.data.textureFileName}`, this.scene);
+            this.mesh.material = material;
+        }
         this.centerNode = new BABYLON.Mesh(`${astreData.id}-center`, solaris.scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
         this.centerNode.rotation.z = toRadians(astreData.angularSelf);
         this.centerNode.position.x = astreData.distance;
@@ -36,69 +51,27 @@ export class Astre {
         else
             this.orbitalNode.parent = solaris.systemNode;
         this.addOrbit(); // on génère un cercle orbital
-        if (isDefined(astreData.rings))
-            this.addRings(solaris.assetsManager); // on ajoute des anneaux si besoin
+        if (isDefined(astreData.rings)) {
+            let rings = BABYLON.Mesh.CreateGround(`ringsOf${this.id}`, this.data.rings.size, this.data.rings.size, 2, this.scene);
+            rings.visibility = this.data.rings.alpha;
+            rings.parent = this.centerNode;
+            let material = new BABYLON.StandardMaterial(`ringMatOf${this.id}`, this.scene);
+            let diffuseTextureTask = solaris.assetsManager.addTextureTask(`ringMatOf${this.id}`, `../data/textures/rings/${this.data.rings.textureFileName}`);
+            diffuseTextureTask.onSuccess = (task) => {
+                material.diffuseTexture = task.texture;
+                material.diffuseTexture.hasAlpha = true;
+                material.useAlphaFromDiffuseTexture = true;
+            };
+            material.specularColor = BABYLON.Color3.Black();
+            material.emissiveColor = BABYLON.Color3.White().scale(0.9);
+            material.backFaceCulling = false;
+            rings.material = material;
+            this.ringMesh = rings;
+        }
         if (isDefined(astreData.atm))
             this.addAtmosphere(solaris.assetsManager); // on ajoute une atmosphère si besoin
         if (astreData.pulsar)
             this.addPulsarEffect(); // si souhaité, l'astre devient un pulsar
-    }
-    addMaterialTo(id, mesh, textureFileName, textureType, assetsManager, alpha = false) {
-        let material = new BABYLON.StandardMaterial(id, mesh.getScene());
-        let shaderMaterial = new BABYLON.ShaderMaterial(id, mesh.getScene(), "../shaders/planetMaterial", {
-            attributes: [
-                "position", "normal", "uv"
-            ],
-            uniforms: [
-                "world", "worldView", "worldViewProjection", "view", "projection",
-                "sunPosition", "planetPosition",
-            ],
-            samplers: [
-                "diffuseTexture", "cloudTexture"
-            ]
-        });
-        this.diffuseTexture = new BABYLON.Texture(textureFileName, this.scene);
-        let textureTask = assetsManager.addTextureTask(id, textureFileName);
-        switch (textureType) {
-            case "diffuse":
-                textureTask.onSuccess = (task) => {
-                    material.diffuseTexture = task.texture;
-                    material.diffuseTexture.hasAlpha = alpha;
-                    if (alpha)
-                        material.opacityTexture = task.texture;
-                    this.mesh.material.setTexture("diffuseTexture", task.texture);
-                };
-                break;
-            case "emissive":
-                textureTask.onSuccess = (task) => {
-                    material.emissiveTexture = task.texture;
-                };
-                break;
-            case "ambient":
-                textureTask.onSuccess = (task) => {
-                    material.ambientTexture = task.texture;
-                    material.ambientTexture.hasAlpha = alpha;
-                };
-                break;
-            case "opacity":
-                textureTask.onSuccess = (task) => {
-                    material.opacityTexture = task.texture;
-                    material.opacityTexture.getAlphaFromRGB = alpha;
-                };
-                break;
-        }
-        material.specularColor = BABYLON.Color3.Black();
-        mesh.material = shaderMaterial;
-        return shaderMaterial;
-    }
-    addRings(assetsManager) {
-        let rings = BABYLON.Mesh.CreateGround(`ringsOf${this.id}`, this.data.rings.size, this.data.rings.size, 2, this.mesh.getScene());
-        rings.visibility = this.data.rings.alpha;
-        rings.parent = this.centerNode;
-        let material = this.addMaterialTo(`ringMatOf${this.id}`, rings, `../data/textures/rings/${this.data.rings.textureFileName}`, "diffuse", assetsManager, true);
-        //material.emissiveColor = BABYLON.Color3.White().scale(.6);
-        material.backFaceCulling = false;
-        this.ringMesh = rings;
     }
     addAtmosphere(assetsManager) {
         let epsilon = 1e-3;
@@ -108,25 +81,13 @@ export class Astre {
         if (isDefined(this.data.atm.textureFileName)) {
             planetRadius = (diametre / 2) + 10 * epsilon;
             atmRadius = planetRadius * this.data.atm.size;
-            let clouds = BABYLON.Mesh.CreateSphere(`atmosphereOf${this.id}`, 48, diametre, this.mesh.getScene());
-            let cloudMat = new BABYLON.StandardMaterial(`cloudMatOf${this.id}`, this.mesh.getScene());
-            let textureTask = assetsManager.addTextureTask(this.id, `../data/textures/atmospheres/${this.data.atm.textureFileName}`);
-            textureTask.onSuccess = (task) => {
-                cloudMat.opacityTexture = task.texture;
-                cloudMat.opacityTexture.getAlphaFromRGB = true;
-                this.mesh.material.setTexture("cloudTexture", task.texture);
-            };
-            clouds.material = cloudMat; // on applique la matériel
-            clouds.parent = this.mesh; // on attache l'atmosphère à son astre
-            this.atmosphereMesh = clouds;
-            clouds.setEnabled(false);
         }
         else {
             atmRadius = planetRadius * this.data.atm.size;
         }
         //@ts-ignore
         for (let camera of this.solaris.targetCameras.concat(this.solaris.freeCameras)) {
-            let atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}${camera.id}`, this.mesh, planetRadius, atmRadius, this.solaris.systemNode, camera, this.scene);
+            let atmPostPross = new AtmosphericScatteringPostProcess(`atmScat${this.id}${camera.id}`, this.mesh, planetRadius * 1.015, atmRadius, this.solaris.systemNode, camera, this.scene);
             if (isDefined(this.data.atm.colors)) {
                 atmPostPross.settings.redWaveLength = this.data.atm.colors[0];
                 atmPostPross.settings.greenWaveLength = this.data.atm.colors[1];
@@ -211,8 +172,9 @@ export class Astre {
     }
     updateRotation(timeUnit) {
         /// provisoirement pour le shader material
-        this.mesh.material.setVector3("sunPosition", this.solaris.systemNode.absolutePosition);
-        this.mesh.material.setVector3("planetPosition", this.mesh.absolutePosition);
+        if (!this.data.godrays) {
+            this.material.update(this.solaris.systemNode.absolutePosition, this.mesh.absolutePosition);
+        }
         if (this.data.dayDuration != 0) { /// Si n'est pas un satellite synchrnone
             if (this.data.pulsar)
                 this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.WORLD); // rotation des pulsars
