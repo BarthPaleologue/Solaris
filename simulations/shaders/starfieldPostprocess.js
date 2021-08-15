@@ -23,7 +23,7 @@ export class StarfieldPostprocess extends BABYLON.PostProcess {
         this.starRadiuses = [];
         for (let i = 0; i < nbStars; i++) {
             let radius = 500 + Math.random() * 100;
-            this.starPositions = this.starPositions.concat(randSphere(camera.maxZ).concat([radius]));
+            this.starPositions = this.starPositions.concat(randSphere(10).concat([radius]));
         }
         let depthRenderer = camera.getScene().enableDepthRenderer();
         let depthMap = depthRenderer.getDepthMap();

@@ -105,7 +105,7 @@ vec3 calculateLight(vec3 rayOrigin, vec3 rayDir, float rayLength) {
 
     vec3 samplePoint = rayOrigin; // first sampling point coming from camera ray
 
-    vec3 sunDir = normalize(sunPosition - samplePoint); // direction to the light source
+    vec3 sunDir = normalize(sunPosition - planetPosition); // direction to the light source (parallel rays)
     
     vec3 wavelength = vec3(redWaveLength, greenWaveLength, blueWaveLength); // the wavelength that will be scattered (rgb so we get everything)
     vec3 scatteringCoeffs = pow(400.0 / wavelength.xyz, vec3(4.0)) * scatteringStrength; // the scattering is inversely proportional to the fourth power of the wave length
