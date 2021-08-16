@@ -44,7 +44,8 @@
             "initialOrbitalPosition": -101,
             "atm": {
                 "opacity": 0.4,
-                "textureFileName": "clouds4.jpg"
+                "textureFileName": "clouds4.jpg",
+                "size": 1.2
             },
             "angularOrbit": 0,
             "angularSelf": -23.43,

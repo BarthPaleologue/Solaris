@@ -256,8 +256,11 @@ export class Solaris {
     }
     switchTo(newCamera) {
         this.scene.activeCamera.detachControl(this.canvas);
-        newCamera.attachControl(this.canvas);
         this.scene.activeCamera = newCamera;
+        newCamera.attachControl(this.canvas);
+        // stupid fix for : godrays not showing up on camera change
+        this.toggleGodrays();
+        this.toggleGodrays();
         if (newCamera instanceof BABYLON.FreeCamera) { // afficher aide à la navigation
             document.getElementById("zqsd").classList.toggle("visibleZQSD");
             setTimeout(() => document.getElementById("zqsd").classList.toggle("visibleZQSD"), 3000);
@@ -280,7 +283,7 @@ export class Solaris {
             let light = new BABYLON.PointLight(`lightOf${astre.id}`, BABYLON.Vector3.Zero(), this.scene); // création d'une lumière
             light.parent = astre.mesh; // attachement de la lumière à l'astre
             for (let camera of this.scene.cameras) {
-                let godrays = new BABYLON.VolumetricLightScatteringPostProcess(`godraysOf${astre.id}${camera.id}`, 1.0, camera, astre.mesh, this.quality == "high" ? 100 : 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false); // création du VLS
+                let godrays = new BABYLON.VolumetricLightScatteringPostProcess(`godraysOf${astre.id}${camera.id}`, 5.0, camera, astre.mesh, this.quality == "high" ? 100 : 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, true); // création du VLS
                 godrays.exposure = isDefined(astreData.exposure) ? astreData.exposure : 0.8; // réglage de l'intensité
                 godrays.decay = isDefined(astreData.decay) ? astreData.decay : .95; // réglage de la couronne stellaire
                 godrays.light = light;
@@ -496,6 +499,10 @@ export class Solaris {
     update() {
         document.dispatchEvent(this.tickEvent);
         this.listenToKeyboard();
+        for (let godrays of this.scene.activeCamera.godraysList) {
+            let distance = this.scene.activeCamera.globalPosition.subtract(godrays.mesh.absolutePosition).length();
+            godrays.exposure = distance / 10000;
+        }
         if (this.step > 0) { /// Mise à jour de la position des caméras lors du changement de cible
             this.step += 1;
             this.updateCameraPositions();
@@ -517,14 +524,10 @@ export class Solaris {
             this.updateClock();
             if (this.scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
                 let previousPosition = this.currentTarget.mesh.getAbsolutePosition();
-                this.systemNode.position.subtractInPlace(previousPosition);
+                this.systemNode.setAbsolutePosition(this.systemNode.position.subtract(previousPosition));
             }
-            //@ts-ignore
-            this.starField.parent = this.scene.activeCamera;
-            //this.starField.position = this.scene.activeCamera.position;
-            //console.log(this.starField.position);
         }
-        /// Gestion dynamique de la précision du zoom roulette
+        // Gestion dynamique de la précision du zoom roulette
         for (let camera of this.targetCameras) {
             camera.wheelPrecision = this.precisionFactor * 100 / camera.radius;
             camera.pinchPrecision = camera.wheelPrecision;

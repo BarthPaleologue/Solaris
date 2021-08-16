@@ -11,6 +11,7 @@ varying vec2 vUV; // screen coordinates
 varying vec3 vNormal;
 varying vec3 vNormalW;
 varying vec3 vPosition;
+varying vec3 vPositionW;
 
 uniform mat4 worldViewProjection;
 uniform mat4 view;
@@ -25,8 +26,12 @@ void main() {
     gl_Position = outPosition;
 	
 	vPosition = position;
-	vNormal = normal;
+	vPositionW = vec3(world * vec4(position, 0.0));
+
+    vNormal = normal;
     vNormalW = normalize(vec3(world * vec4(normal, 0.0)));
 	
+
+
     vUV = uv;
 }

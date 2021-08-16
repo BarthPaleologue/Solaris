@@ -42,7 +42,7 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": -34,
             "atm": {
-                "size": 1.2
+                "size": 1.1
             },
             "angularSelf": 97.8,
             "angularOrbit": 0.7725,

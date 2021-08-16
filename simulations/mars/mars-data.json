@@ -1,24 +1,20 @@
 {
     "diameterScalingFactor": 5,
     "distanceScalingFactor": 5,
-
     "timeSpeedFactor": 0.0001,
-
     "firstTarget": "Mars",
-
     "startDate": {
         "day": 1,
         "month": 1,
         "year": 2020
     },
-
     "diametreConversionFactor": 12756,
     "distanceConversionFactor": 12756,
-
-    "astres": [{
+    "astres": [
+        {
             "id": "Soleil",
             "icon": "soleil.png",
-            "diametre": 109.17999,
+            "diametre": 10.917999,
             "distance": 0,
             "textureFileName": "sun.jpg",
             "textureType": "emissive",
@@ -38,14 +34,16 @@
             "id": "Mars",
             "icon": "mars-life.png",
             "diametre": 0.53144,
-            "distance": 17826.2278,
+            "distance": 1782.62278,
+            "realdistance": 228000000,
             "textureFileName": "mars2.jpg",
             "textureType": "diffuse",
             "specular": "mars2_specular.png",
             "initialOrbitalPosition": 148,
             "atm": {
-                "opacity": 0.4,
-                "textureFileName": "clouds4.jpg"
+                "opacity": 0.2,
+                "textureFileName": "clouds4.jpg",
+                "size": 1.25
             },
             "angularOrbit": 1.8506,
             "angularSelf": 25.19,

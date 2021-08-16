@@ -6,6 +6,7 @@ import { AstreData } from "./astreData";
 import { AtmosphericScatteringPostProcess } from "../shaders/atmosphericScattering.js";
 import { Solaris } from "../solaris.js";
 import { PlanetMaterial } from "./planetMaterial.js";
+import { StarCorona } from "../shaders/starCorona.js";
 
 export class Astre {
     id: string;
@@ -25,6 +26,8 @@ export class Astre {
     material: PlanetMaterial;
 
     atmospherePostProcesses: AtmosphericScatteringPostProcess[] = [];
+
+    coronaPostProcesses: StarCorona[] = [];
 
     constructor(astreData: AstreData, parent: Astre, index: number, quality: string, solaris: Solaris) {
         this.data = astreData;
@@ -52,6 +55,8 @@ export class Astre {
 
         if (!this.data.godrays) {
             this.material = new PlanetMaterial(`${astreData.id}Material`, this.mesh, this.data, solaris.assetsManager, this.scene);
+
+
         } else {
             let material = new BABYLON.StandardMaterial(`${astreData.id}Material`, this.scene);
 
@@ -62,6 +67,10 @@ export class Astre {
             material.emissiveTexture = new BABYLON.Texture(`../data/textures/surfaces/${this.data.textureFileName}`, this.scene);
 
             this.mesh.material = material;
+
+            //let corona = new StarCorona("test", this.mesh, astreData.diametre / 2, (astreData.diametre / 2) + 50, solaris.systemNode, this.scene.activeCamera, this.scene);
+
+            //this.coronaPostProcesses.push(corona);
         }
 
         this.centerNode = new BABYLON.Mesh(`${astreData.id}-center`, solaris.scene); // on crée un autre point d'attache au centre de l'astre pour les satellites
@@ -117,7 +126,7 @@ export class Astre {
 
         if (isDefined(this.data.atm.textureFileName)) {
             planetRadius = (diametre / 2) + 10 * epsilon;
-            atmRadius = planetRadius * this.data.atm.size;
+            atmRadius = planetRadius * this.data.atm.size - 10 * epsilon;
         } else {
             atmRadius = planetRadius * this.data.atm.size;
         }
@@ -213,6 +222,10 @@ export class Astre {
             atmosphere.settings.atmosphereRadius *= diameterScalingFactor;
             atmosphere.settings.planetRadius *= diameterScalingFactor;
         }
+        for (let corona of this.coronaPostProcesses) {
+            corona.settings.atmosphereRadius *= diameterScalingFactor;
+            corona.settings.planetRadius *= diameterScalingFactor;
+        }
     }
 
     setDistanceScale(distanceScalingFactor: number) {
@@ -225,7 +238,7 @@ export class Astre {
         /// provisoirement pour le shader material
 
         if (!this.data.godrays) {
-            this.material.update(this.solaris.systemNode.absolutePosition, this.mesh.absolutePosition);
+            this.material.update(this.solaris.systemNode.absolutePosition, this.mesh.absolutePosition, this.scene.activeCamera.globalPosition, this.solaris.clock);
         }
 
         if (this.data.dayDuration != 0) { /// Si n'est pas un satellite synchrnone
@@ -233,7 +246,6 @@ export class Astre {
             else this.mesh.rotate(BABYLON.Axis.Y, timeUnit / this.data.dayDuration, BABYLON.Space.LOCAL); // rotation des planètes sur elles-mêmes
             if (this.data.yearDuration != 0) this.centerNode.rotate(BABYLON.Axis.Y, - timeUnit / this.data.yearDuration, BABYLON.Space.WORLD); // Saisons aussi
         }
-        //if (isDefined(this.data.atm)) this.atmosphereMesh.rotation.y += .2 * timeUnit;
     }
 
     updateOrbitalPosition(timeUnit: number) { // Rotation autour du parent

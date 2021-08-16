@@ -1,21 +1,17 @@
 {
     "diameterScalingFactor": 20,
     "distanceScalingFactor": 20,
-
     "timeSpeedFactor": 0.0001,
-
     "firstTarget": "Saturne",
-
     "startDate": {
         "day": 1,
         "month": 1,
         "year": 2020
     },
-
     "diametreConversionFactor": 12756,
     "distanceConversionFactor": 12756,
-
-    "astres": [{
+    "astres": [
+        {
             "id": "Soleil",
             "icon": "soleil.png",
             "diametre": 27.295,
@@ -45,7 +41,12 @@
             "initialOrbitalPosition": 65,
             "atm": {
                 "opacity": 0.4,
-                "textureFileName": "black.png"
+                "colors": [
+                    520,
+                    520,
+                    520
+                ],
+                "size": 1.1
             },
             "angularOrbit": 2.4845,
             "angularSelf": 26.73,
@@ -167,8 +168,12 @@
             "initialOrbitalPosition": 200,
             "parentId": "Saturne",
             "atm": {
-                "opacity": 0.2,
-                "textureFileName": "black.png"
+                "colors": [
+                    380,
+                    380,
+                    380
+                ],
+                "size": 1.15
             },
             "angularOrbit": 0.280,
             "angularSelf": 0,
@@ -199,16 +204,18 @@
             "description": "Satellite de Saturne possédant une coloration différente entre son hémisphère nord et son hémisphère sud. De plus, Japet possède une crête équatoriale haute de 10km."
         }
     ],
-    "belts": [{
-        "id": "rings",
-        "yDivergence": 0.001,
-        "nb": 40000,
-        "size": 0.004,
-        "position": {
-            "nearest": 6,
-            "farthest": 10
-        },
-        "parentId": "Saturne",
-        "textureType": "diffuse"
-    }]
+    "belts": [
+        {
+            "id": "rings",
+            "yDivergence": 0.001,
+            "nb": 40000,
+            "size": 0.004,
+            "position": {
+                "nearest": 6,
+                "farthest": 10
+            },
+            "parentId": "Saturne",
+            "textureType": "diffuse"
+        }
+    ]
 }
