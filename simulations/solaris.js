@@ -501,7 +501,7 @@ export class Solaris {
         this.listenToKeyboard();
         for (let godrays of this.scene.activeCamera.godraysList) {
             let distance = this.scene.activeCamera.globalPosition.subtract(godrays.mesh.absolutePosition).length();
-            godrays.exposure = distance / 10000;
+            godrays.exposure = Math.max(distance / 10000, 0.3);
         }
         if (this.step > 0) { /// Mise à jour de la position des caméras lors du changement de cible
             this.step += 1;

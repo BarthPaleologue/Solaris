@@ -20,7 +20,7 @@ export class Solaris {
     canvas: HTMLCanvasElement; // le canvas de rendu
     scene: BABYLON.Scene; // la scène contenant le système
 
-    keyboard: { [key: string]: boolean; } = {}; // dictionnaire de l'état du clavier
+    keyboard: { [key: string]: boolean; } = { }; // dictionnaire de l'état du clavier
 
     //@ts-ignore
     starField: BABYLON.PointsCloudSystem | undefined;
@@ -228,7 +228,7 @@ export class Solaris {
     }
 
     initKeyboard(): {} {
-        this.keyboard = {};
+        this.keyboard = { };
         document.addEventListener("keydown", e => {
             this.keyboard[e.key] = true;
             // appuis ponctuels
@@ -608,7 +608,7 @@ export class Solaris {
 
         for (let godrays of this.scene.activeCamera.godraysList) {
             let distance = this.scene.activeCamera.globalPosition.subtract(godrays.mesh.absolutePosition).length();
-            godrays.exposure = distance / 10000;
+            godrays.exposure = Math.max(distance / 10000, 0.3);
         }
 
         if (this.step > 0) { /// Mise à jour de la position des caméras lors du changement de cible

@@ -165,7 +165,7 @@ export class Astre {
         particleSystem.emitRate = emitRate; // Nb de particules émises par secondes
         particleSystem.direction1 = new BABYLON.Vector3(0, 100, 0); // Emission pôle nord
         particleSystem.direction2 = new BABYLON.Vector3(0, -100, 0); // Emission pôle sud
-        particleSystem.updateSpeed = .008;
+        particleSystem.updateSpeed = .05;
         particleSystem.start();
     }
 

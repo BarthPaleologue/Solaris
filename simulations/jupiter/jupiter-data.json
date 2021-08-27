@@ -1,21 +1,17 @@
 {
     "diameterScalingFactor": 30,
     "distanceScalingFactor": 30,
-
     "timeSpeedFactor": 0.0001,
-
     "firstTarget": "Jupiter",
-
     "startDate": {
         "day": 1,
         "month": 1,
         "year": 2020
     },
-
     "diametreConversionFactor": 12756,
     "distanceConversionFactor": 12756,
-
-    "astres": [{
+    "astres": [
+        {
             "id": "Soleil",
             "icon": "soleil.png",
             "diametre": 10.917999,
@@ -48,7 +44,12 @@
             "initialOrbitalPosition": 83,
             "atm": {
                 "opacity": 0.4,
-                "textureFileName": "black.png"
+                "colors": [
+                    900,
+                    900,
+                    900
+                ],
+                "size": 1.1
             },
             "rings": {
                 "textureFileName": "jupiter_rings.png",
@@ -141,16 +142,18 @@
             "description": "Callisto est le quatrième et dernier satellite Galiléen. Comme Europe, Callisto possède un océan, environ 100km sous sa surface, et donc potentiellement de la vie"
         }
     ],
-    "belts": [{
-        "id": "ceintureAsteroides",
-        "yDivergence": 0.001,
-        "nb": 5000,
-        "size": 0.001,
-        "position": {
-            "nearest": 9.7,
-            "farthest": 9.9
-        },
-        "parentId": "Jupiter",
-        "textureType": "diffuse"
-    }]
+    "belts": [
+        {
+            "id": "ceintureAsteroides",
+            "yDivergence": 0.001,
+            "nb": 5000,
+            "size": 0.001,
+            "position": {
+                "nearest": 9.7,
+                "farthest": 9.9
+            },
+            "parentId": "Jupiter",
+            "textureType": "diffuse"
+        }
+    ]
 }

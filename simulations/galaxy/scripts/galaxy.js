@@ -225,7 +225,6 @@ export function createGalaxy(nb) {
         document.getElementById("menu").classList.toggle("hiddenMenu"); // On affiche le menu
         document.getElementById("toolbar").style.display = "block";
         document.getElementById("setters").classList.toggle("hiddenSetters");
-        document.getElementById("babylonjs").remove();
         canvas.style.zIndex = "1";
         canvas.style.opacity = "1";
         engine.runRenderLoop(() => {
