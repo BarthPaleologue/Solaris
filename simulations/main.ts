@@ -106,9 +106,9 @@ export function initSolaris(pathToData: string, quality: string = "high") {
 
     document.getElementById("tscreen").addEventListener("click", () => system.takeScreenshot()); // Screenshot avec la caméra active
     document.getElementById("torbit").addEventListener("click", () => system.toggleOrbits()); // Toggle Orbits
-    document.getElementById("tasteroids").addEventListener("click", () => system.toggleAsteroidBelts()); // Toggle Asteroids
-    document.getElementById("tfxaa").addEventListener("click", () => system.toggleFXAA()); // Toggle FXAA
-    document.getElementById("tgodrays").addEventListener("click", () => system.toggleGodrays()); // Toggle Godrays
+    //document.getElementById("tasteroids").addEventListener("click", () => system.toggleAsteroidBelts()); // Toggle Asteroids
+    //document.getElementById("tfxaa").addEventListener("click", () => system.toggleFXAA()); // Toggle FXAA
+    //document.getElementById("tgodrays").addEventListener("click", () => system.toggleGodrays()); // Toggle Godrays
     document.getElementById("tlabel").addEventListener("click", () => system.toggleLabels()); // Toggle Labels
     //document.getElementById("tzoom").addEventListener("click", () => system.zooming = true);
     document.getElementById("tsound").addEventListener("click", () => system.toggleSound()); // Toggle sound

@@ -1,5 +1,5 @@
-/// <reference path="babylon.d.ts" />
-/// <reference path="../ts/babylon.gui.d.ts" />
+/// <ref/erence path="babylon.d.ts" />
+/// <ref/erence path="../ts/babylon.gui.d.ts" />
 
 
 import { isDefined, rand } from "./components/tools.js";
@@ -8,7 +8,6 @@ import { dataFile } from "./components/dataFile";
 import { BeltData } from "./components/beltData";
 import { AstreData } from "./components/astreData";
 import { Belt } from "./components/belt";
-import { StarCorona } from "./shaders/starCorona.js";
 
 export class Solaris {
     quality: string; // définit le nombre de polygones et la qualité des effets
@@ -20,7 +19,7 @@ export class Solaris {
     canvas: HTMLCanvasElement; // le canvas de rendu
     scene: BABYLON.Scene; // la scène contenant le système
 
-    keyboard: { [key: string]: boolean; } = { }; // dictionnaire de l'état du clavier
+    keyboard: { [key: string]: boolean; } = {}; // dictionnaire de l'état du clavier
 
     //@ts-ignore
     starField: BABYLON.PointsCloudSystem | undefined;
@@ -29,7 +28,7 @@ export class Solaris {
     UI: BABYLON.GUI.AdvancedDynamicTexture; // gestionnaire des labels des astres
     pipeline: BABYLON.DefaultRenderingPipeline; // gestionnaire des fx (pas les godrays)
 
-    systemNode: BABYLON.Mesh | undefined;
+    systemNode: BABYLON.Mesh;
 
     // données de la simulation
     astresData: AstreData[]; // données des astres
@@ -71,8 +70,8 @@ export class Solaris {
 
     //#endregion
 
-    step: number = 0;
-    maxStep: number = 200;
+    step = 0;
+    maxStep = 200;
     previousTarget: Astre;
     currentTarget: Astre;
     movementVector = BABYLON.Vector3.Zero();
@@ -80,7 +79,7 @@ export class Solaris {
 
     //#region Flag pour togglers
 
-    areOrbitsEnabled = false;
+    areOrbitsEnabled = true;
     areAsteroidsEnabled = true;
     areGodraysEnabled = true;
     areLabelsEnabled = true;
@@ -100,6 +99,11 @@ export class Solaris {
 
     //#endregion
 
+    /**
+     * Créé un nouveau système Solaris
+     * @param engine Le moteur BabylonJS
+     * @param quality Le niveau de détail voulu
+     */
     constructor(engine: BABYLON.Engine, quality = "high") {
         this.quality = quality;
         this.engine = engine;
@@ -109,6 +113,11 @@ export class Solaris {
         BABYLON.Camera.prototype.godraysList = []; // une caméra a accès aux godrays qui lui sont attachés
     }
 
+    /**
+     * Charge les données du système Solaris
+     * @param path chemin vers le fichier de données
+     * @returns Les données formatées
+     */
     loadConfiguration(path: string): dataFile { // load json configuration file
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", path, false);
@@ -130,19 +139,25 @@ export class Solaris {
         return data;
     }
 
+    /**
+     * Initialise la scène du système Solaris
+     * @returns la scène
+     */
     initScene(): BABYLON.Scene { // init empty scene
         let scene = new BABYLON.Scene(this.engine);
         scene.clearColor = new BABYLON.Color4(0, 0, 0, 1); // Couleur par défaut du fond de la scène
 
-        scene.onPointerObservable.add((pointerInfo, eventState) => { /// Click sur un astre
+        scene.onPointerObservable.add((pointerInfo, eventState) => { // Click sur un astre
             let target = pointerInfo.pickInfo.pickedMesh;
-            if (/ringsOf/.test(target.id)) { /// Si click sur les anneaux d'un astre
-                let astreTarget = this.getAstreById(target.id.substring(7)); /// On récupère le nom de l'astre
-                this.goTo(astreTarget); /// On enclenche !
-            } else if (/atmosphereOf/.test(target.id)) { /// Si click sur l'atmosphère d'un astre
-                let astreTarget = this.getAstreById(target.id.substring(12)); /// On récupère le nom de l'astre
-                this.goTo(astreTarget); /// On enclenche !
-            } else if (target.id != "starField") this.goTo(this.getAstreById(target.id)); /// Si de manière générale on click sur un autre astre, on enclenche !
+            if (/ringsOf/.test(target.id)) {
+                // Si click sur les anneaux d'un astre
+                let astreTarget = this.getAstreById(target.id.substring(7)); // On récupère le nom de l'astre
+                this.goTo(astreTarget); // On enclenche !
+            } else if (/atmosphereOf/.test(target.id)) {
+                // Si click sur l'atmosphère d'un astre
+                let astreTarget = this.getAstreById(target.id.substring(12)); // On récupère le nom de l'astre
+                this.goTo(astreTarget); // On enclenche !
+            } else if (target.id != "starField") this.goTo(this.getAstreById(target.id)); // Si de manière générale on click sur un autre astre, on enclenche !
             else console.log(target.id);
         }, BABYLON.PointerEventTypes.POINTERPICK);
 
@@ -158,16 +173,13 @@ export class Solaris {
 
         this.systemNode = new BABYLON.Mesh("systemNode", scene);
 
-        /*let center = BABYLON.Mesh.CreateBox("centre", 1000, scene);
-        let mat = new BABYLON.StandardMaterial("matmat", scene);
-        mat.wireframe = true;
-        mat.emissiveColor = BABYLON.Color3.White();
-        center.material = mat;
-        center.isPickable = false;*/
-
         return this.scene;
     }
 
+    /**
+     * Initialise le gestionnaire d'assets
+     * @returns le gestionnaire d'assets
+     */
     initAssetsManager(): BABYLON.AssetsManager {
         let assetsManager = new BABYLON.AssetsManager(this.scene); // Va contenir tous les matériaux
         assetsManager.useDefaultLoadingScreen = false;
@@ -180,21 +192,34 @@ export class Solaris {
         return this.assetsManager;
     }
 
+    /**
+     * Initialise le conatainer pour les étiquettes nominatives des astres
+     * @returns Le dit container
+     */
     initUI(): BABYLON.GUI.AdvancedDynamicTexture {
         this.UI = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI"); // gestion des labels des astres
         return this.UI;
     }
 
+    /**
+     * Initialise la pipeline de postprocess (penser à faire ma propre pipeline)
+     * @returns La dite pipeline
+     */
     initPipeline(): BABYLON.DefaultRenderingPipeline {
         this.pipeline = new BABYLON.DefaultRenderingPipeline("pipeline", false, this.scene, this.scene.cameras); /// name, hdrEnabled, scene, cameras
         this.pipeline.fxaa = new BABYLON.FxaaPostProcess('fxaa', 1, null, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
         this.pipeline.fxaaEnabled = true;
-        //this.pipeline.
-        //this.pipeline.imageProcessing.contrast = 1.2;
 
         return this.pipeline;
     }
 
+    /**
+     * Initialise la musique de fond
+     * @param path Chemin vers le fichier audio
+     * @param autoplay Activer la lecture automatique
+     * @param loop Activer la lecture en boucle
+     * @returns Renvoie l'objet audio
+     */
     initAudio(path: string, autoplay = true, loop = true): HTMLAudioElement {
         this.audio = new Audio(path);
         this.audio.autoplay = autoplay;
@@ -204,6 +229,9 @@ export class Solaris {
         return this.audio;
     }
 
+    /**
+     * Créé une skybox étoilée avec un pointCloud
+     */
     initSkybox() {
 
         function randSphere(scale = 1) {
@@ -227,31 +255,37 @@ export class Solaris {
         this.starField.isPickable = false;
     }
 
+    /**
+     * Initialise l'écoute clavier des évènements ponctuels
+     * @returns Un dictionnaire de l'état du clavier
+     */
     initKeyboard(): {} {
-        this.keyboard = { };
+        this.keyboard = {};
         document.addEventListener("keydown", e => {
             this.keyboard[e.key] = true;
-            // appuis ponctuels
-            if (this.keyboard["f"]) this.toggleFXAA(); // [F]
-            if (this.keyboard["g"]) this.toggleGodrays(); // [G]
-            if (this.keyboard["h"]) this.toggleAsteroidBelts(); // [H]
-            if (this.keyboard["i"]) document.getElementById("infos").classList.toggle("hiddenInfos"); // Toggle Information pannel [I]
-            if (this.keyboard["k"]) document.getElementById("fps").classList.toggle("hiddenFPS"); // Toggle FPS [K]
-            if (this.keyboard["m"]) this.toggleSound(); // [M]
-            if (this.keyboard["n"]) this.toggleLabels(); // [N]
-            if (this.keyboard["o"]) this.toggleOrbits(); // [O]
-            if (this.keyboard["p"]) this.takeScreenshot(); // [P]
-            if (this.keyboard["t"]) document.getElementById("dateSelectorContainer").classList.toggle("hiddenDateSelector"); // Toggle time travel pannel [T]
 
-            //if (this.keyboard["c"]) this.zooming = true; /// Zoom sur l'astre courant [C]
+            // appuis ponctuels
+            if (e.key == "f") this.toggleFXAA(); // [F]
+            if (e.key == "g") this.toggleGodrays(); // [G]
+            if (e.key == "h") this.toggleAsteroidBelts(); // [H]
+            if (e.key == "i") document.getElementById("infos").classList.toggle("hiddenInfos"); // Toggle Information pannel [I]
+            if (e.key == "k") document.getElementById("fps").classList.toggle("hiddenFPS"); // Toggle FPS [K]
+            if (e.key == "m") this.toggleSound(); // [M]
+            if (e.key == "n") this.toggleLabels(); // [N]
+            if (e.key == "o") this.toggleOrbits(); // [O]
+            if (e.key == "p") this.takeScreenshot(); // [P]
+            if (e.key == "t") document.getElementById("dateSelectorContainer").classList.toggle("hiddenDateSelector"); // Toggle time travel pannel [T]
+            if (e.key == "c") this.zoom();/// Zoom sur l'astre courant [C]
         });
         document.addEventListener("keyup", e => this.keyboard[e.key] = false); // Lorsque l'on relache une touche
 
         return this.keyboard;
     }
 
-    listenToKeyboard() {
-        // appuis longs
+    /**
+     * Ecoute le clavier pour les appuis longs (éviter le problème des appuis longs en JS)
+     */
+    listenToKeyboard(): void {
         let camera = this.scene.activeCamera;
         if (camera instanceof BABYLON.FreeCamera) {
             if (this.keyboard["z"] || this.keyboard["w"]) {
@@ -287,11 +321,19 @@ export class Solaris {
         }
     }
 
+    /**
+     * Initialise les astres et les renvoie sous forme de liste
+     * @returns La liste des astres
+     */
     initAstres(): Astre[] {
         for (let astreData of this.astresData) this.astres.push(this.createAstre(astreData)); // Générations des astres selon la tables des données
         return this.astres;
     }
 
+    /**
+     * Initialise les ceintures d'astéroides et les renvoie sous forme de liste
+     * @returns La liste des ceintures d'astéroides
+     */
     initBelts(): Belt[] {
         for (let beltData of this.beltsData) this.belts.push(this.createBelt(beltData)); // on crée une ceinture d'astéroides
         return this.belts;
@@ -299,6 +341,12 @@ export class Solaris {
 
     //#region Caméras
 
+    /**
+     * Créé une nouvelle Caméra
+     * @param name Nom de la caméra
+     * @param type Type de la caméra (penser à faire un enum)
+     * @returns La caméra
+     */
     addCamera(name: string, type: string): BABYLON.FreeCamera | BABYLON.ArcRotateCamera | BABYLON.AnaglyphFreeCamera | BABYLON.AnaglyphArcRotateCamera | BABYLON.VRDeviceOrientationFreeCamera {
         let newCamera: BABYLON.FreeCamera | BABYLON.ArcRotateCamera | BABYLON.AnaglyphFreeCamera | BABYLON.AnaglyphArcRotateCamera | BABYLON.VRDeviceOrientationFreeCamera;
         switch (type) {
@@ -333,6 +381,10 @@ export class Solaris {
         return newCamera;
     }
 
+    /**
+     * Gère le changement de caméra
+     * @param newCamera Nouvelle caméra
+     */
     switchTo(newCamera: BABYLON.FreeCamera | BABYLON.ArcRotateCamera): void { /// fonction permettant de switch de caméra facilement
         this.scene.activeCamera.detachControl(this.canvas);
         this.scene.activeCamera = newCamera;
@@ -352,13 +404,23 @@ export class Solaris {
 
     //#region Mesh creation
 
+    /**
+     * Tente de récupérer l'astre par son nom unique
+     * @param id Nom unique de l'astre
+     * @returns L'astre si il est trouvé, sinon erreur
+     */
     getAstreById(id: string): Astre {
         for (let astre of this.astres) {
             if (astre.id == id) return astre;
         }
-        console.error(`Could not find ${id} in astres`);
+        throw `Could not find ${id} in astres`;
     }
 
+    /**
+     * Crée un nouvel astre selon des donnée formatées
+     * @param astreData Données formatées de l'astre
+     * @returns L'objet Astre
+     */
     createAstre(astreData: AstreData): Astre {
         let astre = new Astre(astreData, isDefined(astreData.parentId) ? this.getAstreById(astreData.parentId) : undefined, this.astres.length, this.quality, this);
         astre.setDiameterScale(this.diameterScalingFactor);
@@ -385,7 +447,7 @@ export class Solaris {
 
         if (astreData.id == this.firstTarget) this.currentTarget = astre;
 
-        let label = astre.addLabel(this.UI);
+        let label = astre.addLabel();
 
         if (astre.mesh.isPickable) {
             label.onPointerUpObservable.add(() => this.goTo(astre)); // on attache un event click sur les étiquettes
@@ -401,6 +463,11 @@ export class Solaris {
         return astre;
     }
 
+    /**
+     * Crée une ceinture d'astéroide selon des données formatées
+     * @param beltData Données formatées de la ceinture
+     * @returns L'objet Belt
+     */
     createBelt(beltData: BeltData): Belt {
         let asteroid = BABYLON.Mesh.CreateSphere("asteroid", 1, 1, this.scene);
 
@@ -454,7 +521,11 @@ export class Solaris {
 
     //#endregion
 
-    takeScreenshot(precision = 2) {
+    /**
+     * Prend un screenshot avec un supersampling optionel
+     * @param precision Facteur de supersampling
+     */
+    takeScreenshot(precision = 2): void {
         BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.scene.activeCamera, {
             precision: precision
         });
@@ -462,19 +533,28 @@ export class Solaris {
 
     //#region Togglers
 
-    toggleOrbits() {
+    /**
+     * Change l'état d'affichage des trajectoires orbitales et envoie l'évènement au document
+     */
+    toggleOrbits(): void {
         this.areOrbitsEnabled = !this.areOrbitsEnabled;
         for (let astre of this.astres) astre.orbitMesh.setEnabled(this.areOrbitsEnabled);
         document.dispatchEvent(this.toggleOrbitsEvent);
     }
 
+    /**
+     * Change l'état d'affichage des ceintures d'astéroides et envoie l'évènement au document (à titre de debug)
+     */
     toggleAsteroidBelts() {
         this.areAsteroidsEnabled = !this.areAsteroidsEnabled;
         for (let belt of this.beltsData) this.scene.getMeshByID(belt.id).setEnabled(this.areAsteroidsEnabled);
         document.dispatchEvent(this.toggleAsteroidsBeltsEvent);
     }
 
-    toggleGodrays() {
+    /**
+     * Change l'état d'affichage des lumières volumétriques et envoie l'évènement au document (à titre de debug)
+     */
+    toggleGodrays(): void {
         this.areGodraysEnabled = !this.areGodraysEnabled;
         if (!this.areGodraysEnabled) {
             for (let camera of this.scene.cameras) {
@@ -488,7 +568,10 @@ export class Solaris {
         document.dispatchEvent(this.toggleGodraysEvent);
     }
 
-    toggleLabels() {
+    /**
+     * Change l'état d'affichage des étiquettes nominales des astres et envie l'évènement au document
+     */
+    toggleLabels(): void {
         this.areLabelsEnabled = !this.areLabelsEnabled;
         if (!this.areLabelsEnabled) for (let astre of this.astres) this.UI.removeControl(astre.label);
         else {
@@ -500,24 +583,31 @@ export class Solaris {
         document.dispatchEvent(this.toggleLabelsEvent);
     }
 
-    toggleSound() {
+    /**
+     * Change l'état du son et envoie l'évènement au document
+     */
+    toggleSound(): void {
         if (this.audio.volume == 1) for (let i = 0; i < 100; i++) setTimeout(() => this.audio.volume = 1 - i / 100, i * 20); // the sound fades out
         else for (let i = 0; i < 100; i++) setTimeout(() => this.audio.volume = i / 100, i * 20); // the sound fades in
         document.dispatchEvent(this.toggleSoundEvent);
     }
 
-    toggleFXAA() {
+    /**
+     * Change l'état de l'antialiasing et envoie l'évènement (à titre de debug)
+     */
+    toggleFXAA(): void {
         this.pipeline.fxaaEnabled = !this.pipeline.fxaaEnabled;
         document.dispatchEvent(this.toggleFXAAEvent);
     }
 
     //#endregion
 
+    /**
+     * Fait avancer le temps d'une durée définie
+     * @param timeLeap unité de temps à sauter
+     */
     timeJump(timeLeap: number) { /// Prise en compte du bond temporel (en jours)
-        for (let astre of this.astres) {
-            astre.updateRotation(2 * Math.PI * timeLeap);
-            astre.updateOrbitalPosition(2 * Math.PI * timeLeap);
-        }
+        for (let astre of this.astres) astre.update(2 * Math.PI * timeLeap);
     }
 
     goTo(newTarget: Astre) {
@@ -563,13 +653,16 @@ export class Solaris {
         }
     }
 
+    /**
+     * Update chaque astre du système
+     */
     updateAstres() {
-        for (let astre of this.astres) {
-            astre.updateRotation(this.timeUnit);
-            astre.updateOrbitalPosition(this.timeUnit);
-        }
+        for (let astre of this.astres) astre.update(this.timeUnit);
     }
 
+    /**
+     * Update l'horloge interne et calcule la date
+     */
     updateClock() {
         this.clock += this.timeUnit;
         if (this.clock >= Math.PI * 2) {
