@@ -56,9 +56,9 @@
             "initialOrbitalPosition": -3,
             "atm": {
                 "colors": [
-                    450,
-                    400,
-                    400
+                    800,
+                    800,
+                    800
                 ],
                 "size": 1.15
             },
@@ -82,7 +82,7 @@
             "emissive": "night2.jpg",
             "initialOrbitalPosition": -101,
             "atm": {
-                "opacity": 0.4,
+                "opacity": 2000000,
                 "textureFileName": "clouds4.jpg",
                 "size": 1.2
             },
@@ -124,13 +124,13 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": 148,
             "atm": {
-                "opacity": 1.5,
+                "opacity": 0.2,
                 "colors": [
                     600,
                     750,
                     900
                 ],
-                "size": 1.3
+                "size": 1.15
             },
             "angularOrbit": 1.8506,
             "angularSelf": 25.19,
@@ -152,9 +152,9 @@
             "atm": {
                 "opacity": 0.4,
                 "colors": [
-                    488,
-                    530,
-                    530
+                    1000,
+                    1000,
+                    1000
                 ],
                 "size": 1.15
             },
@@ -254,9 +254,9 @@
             "atm": {
                 "opacity": 0.4,
                 "colors": [
-                    520,
-                    520,
-                    520
+                    1000,
+                    1000,
+                    1000
                 ],
                 "size": 1.15
             },
@@ -381,9 +381,9 @@
             "parentId": "Saturne",
             "atm": {
                 "colors": [
-                    380,
-                    380,
-                    380
+                    700,
+                    700,
+                    700
                 ],
                 "size": 1.15
             },
@@ -424,7 +424,7 @@
             "textureType": "diffuse",
             "initialOrbitalPosition": -34,
             "atm": {
-                "size": 1.25
+                "size": 1.1
             },
             "angularSelf": 97.8,
             "angularOrbit": 0.7725,

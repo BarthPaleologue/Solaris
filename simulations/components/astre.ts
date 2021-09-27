@@ -124,20 +124,11 @@ export class Astre {
      */
     addAtmosphere() {
 
-        let epsilon = 1e-3;
-
         let diametre = this.data.diametre;
 
         let planetRadius = diametre / 2;
-        let atmRadius = planetRadius;
 
-        /// Doit être revu car non nécessaire
-        if (isDefined(this.data.atm.textureFileName)) {
-            planetRadius = (diametre / 2) + 10 * epsilon;
-            atmRadius = planetRadius * this.data.atm.size - 10 * epsilon;
-        } else {
-            atmRadius = planetRadius * this.data.atm.size;
-        }
+        let atmRadius = planetRadius * this.data.atm.size;
 
         //@ts-ignore
         for (let camera of this.solaris.targetCameras.concat(this.solaris.freeCameras)) {
@@ -152,6 +143,7 @@ export class Astre {
                 atmPostPross.settings.densityModifier = this.data.atm.opacity;
             }
             atmPostPross.settings.intensity = 15;
+            atmPostPross.settings.scatteringStrength = 10;
             this.atmospherePostProcesses.push(atmPostPross);
         }
     }

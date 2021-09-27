@@ -1,4 +1,4 @@
-precision highp float;
+precision lowp float;
 
 // varying
 varying vec2 vUV; // screen coordinates

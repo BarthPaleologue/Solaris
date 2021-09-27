@@ -20,12 +20,14 @@ export class PlanetMaterial {
         let diffuseTextureTask = assetsManager.addTextureTask(id, `../data/textures/surfaces/${planetData.textureFileName}`);
         diffuseTextureTask.onSuccess = (task) => {
             this.diffuseTexture = task.texture;
+            this.material.setTexture("diffuseTexture", this.diffuseTexture);
         };
         if (isDefined(planetData.atm) && isDefined(planetData.atm.textureFileName)) {
             this.hasClouds = true;
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/${planetData.atm.textureFileName}`);
             textureTask.onSuccess = (task) => {
                 this.cloudTexture = task.texture;
+                this.material.setTexture("cloudTexture", this.cloudTexture);
             };
         }
         else {
@@ -33,6 +35,7 @@ export class PlanetMaterial {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/black.png`);
             textureTask.onSuccess = (task) => {
                 this.cloudTexture = task.texture;
+                this.material.setTexture("cloudTexture", this.cloudTexture);
             };
         }
         if (isDefined(planetData.emissive)) {
@@ -45,18 +48,21 @@ export class PlanetMaterial {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/black.png`);
             textureTask.onSuccess = (task) => {
                 this.emissiveTexture = task.texture;
+                this.material.setTexture("emissiveTexture", this.emissiveTexture);
             };
         }
         if (isDefined(planetData.specular)) {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/specular/${planetData.specular}`);
             textureTask.onSuccess = (task) => {
                 this.specularTexture = task.texture;
+                this.material.setTexture("specularTexture", this.specularTexture);
             };
         }
         else {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/black.png`);
             textureTask.onSuccess = (task) => {
                 this.specularTexture = task.texture;
+                this.material.setTexture("specularTexture", this.specularTexture);
             };
         }
     }
@@ -65,9 +71,9 @@ export class PlanetMaterial {
         this.material.setVector3("sunPosition", sunPosition);
         this.material.setVector3("planetPosition", planetPosition);
         this.material.setVector3("cameraPosition", cameraPosition);
-        this.material.setTexture("diffuseTexture", this.diffuseTexture);
-        this.material.setTexture("cloudTexture", this.cloudTexture);
-        this.material.setTexture("emissiveTexture", this.emissiveTexture);
-        this.material.setTexture("specularTexture", this.specularTexture);
+        //this.material.setTexture("diffuseTexture", this.diffuseTexture);
+        //this.material.setTexture("cloudTexture", this.cloudTexture);
+        //this.material.setTexture("emissiveTexture", this.emissiveTexture);
+        //this.material.setTexture("specularTexture", this.specularTexture);
     }
 }

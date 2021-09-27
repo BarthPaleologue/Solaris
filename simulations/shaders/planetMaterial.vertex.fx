@@ -1,4 +1,4 @@
-precision highp float;
+precision lowp float;
 
 // attributes
 attribute vec2 uv;

@@ -36,6 +36,7 @@ export class PlanetMaterial {
         let diffuseTextureTask = assetsManager.addTextureTask(id, `../data/textures/surfaces/${planetData.textureFileName}`);
         diffuseTextureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
             this.diffuseTexture = task.texture;
+            this.material.setTexture("diffuseTexture", this.diffuseTexture);
         };
 
 
@@ -44,12 +45,14 @@ export class PlanetMaterial {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/${planetData.atm.textureFileName}`);
             textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                 this.cloudTexture = task.texture;
+                this.material.setTexture("cloudTexture", this.cloudTexture);
             };
         } else {
             this.hasClouds = false;
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/black.png`);
             textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                 this.cloudTexture = task.texture;
+                this.material.setTexture("cloudTexture", this.cloudTexture);
             };
         }
 
@@ -62,6 +65,7 @@ export class PlanetMaterial {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/black.png`);
             textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                 this.emissiveTexture = task.texture;
+                this.material.setTexture("emissiveTexture", this.emissiveTexture);
             };
         }
 
@@ -69,11 +73,13 @@ export class PlanetMaterial {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/specular/${planetData.specular}`);
             textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                 this.specularTexture = task.texture;
+                this.material.setTexture("specularTexture", this.specularTexture);
             };
         } else {
             let textureTask = assetsManager.addTextureTask(id, `../data/textures/atmospheres/black.png`);
             textureTask.onSuccess = (task: BABYLON.TextureAssetTask) => {
                 this.specularTexture = task.texture;
+                this.material.setTexture("specularTexture", this.specularTexture);
             };
         }
     }
@@ -86,9 +92,9 @@ export class PlanetMaterial {
 
         this.material.setVector3("cameraPosition", cameraPosition);
 
-        this.material.setTexture("diffuseTexture", this.diffuseTexture);
-        this.material.setTexture("cloudTexture", this.cloudTexture);
-        this.material.setTexture("emissiveTexture", this.emissiveTexture);
-        this.material.setTexture("specularTexture", this.specularTexture);
+        //this.material.setTexture("diffuseTexture", this.diffuseTexture);
+        //this.material.setTexture("cloudTexture", this.cloudTexture);
+        //this.material.setTexture("emissiveTexture", this.emissiveTexture);
+        //this.material.setTexture("specularTexture", this.specularTexture);
     }
 }

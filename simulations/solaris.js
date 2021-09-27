@@ -169,7 +169,8 @@ export class Solaris {
         }
         //@ts-ignore
         this.starField = new BABYLON.PointsCloudSystem("starField", 1.99, this.scene);
-        this.starField.addPoints(5000, (particle, i) => {
+        let nbStars = (this.quality == "high") ? 5000 : 0;
+        this.starField.addPoints(nbStars, (particle, i) => {
             particle.position = randSphere(this.SCENE_SIZE / 2);
             particle.color = new BABYLON.Color4(1, 1, 1, 1).scale(Math.random());
         });
