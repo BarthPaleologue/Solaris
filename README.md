@@ -7,8 +7,10 @@ tweak the amount of stars, of spirals and more. You will also find a visual comp
 the most gigantic of red giants.
 
 You can access Solaris in two versions :
-- English version : http://barth.paleologue.fr/solaris/en.php
-- Version Française : http://barth.paleologue.fr/solaris/
+- English version : https://barth.paleologue.fr/solaris/en.php
+- Version Française : https://barth.paleologue.fr/solaris/
+
+- Debug version : https://barth.paleologue.fr/solaris3/
 
 ![The red planet : Mars](http://barth.paleologue.fr/solaris/bg/background78.png)
 
